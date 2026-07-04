@@ -189,7 +189,7 @@ jobs:
           cat SHA256SUMS-windows.txt
       - name: Attest build provenance (signed, releases only)
         if: needs.version.outputs.is_release == 'true'
-        uses: actions/attest-build-provenance@v4.1.0
+        uses: actions/attest-build-provenance@v4.1.1
         with:
           subject-path: |
             out/*.zip
@@ -278,7 +278,7 @@ jobs:
           cat SHA256SUMS-linux.txt
       - name: Attest build provenance (signed, releases only)
         if: needs.version.outputs.is_release == 'true'
-        uses: actions/attest-build-provenance@v4.1.0
+        uses: actions/attest-build-provenance@v4.1.1
         with:
           subject-path: out/*.AppImage
       - uses: actions/upload-artifact@v7
