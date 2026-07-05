@@ -241,11 +241,11 @@ def make_cut_icon(color: str, size: int = 18) -> QIcon:
     pix.fill(Qt.transparent)
 
     p = QPainter(pix)
-    p.setRenderHint(QPainter.Antialiasing)
+    p.setRenderHint(QPainter.Antialiasing, True)
 
     pen = QPen(
         QColor(color),
-        max(1.8, size * 0.10),
+        max(2.0, size * 0.10),
         Qt.SolidLine,
         Qt.RoundCap,
         Qt.RoundJoin,
@@ -254,15 +254,24 @@ def make_cut_icon(color: str, size: int = 18) -> QIcon:
     p.setPen(pen)
     p.setBrush(Qt.NoBrush)
 
-    r = size * 0.10
+    # Handles
+    r = size * 0.12
 
-    p.drawEllipse(QPointF(size*0.30, size*0.35), r, r)
-    p.drawEllipse(QPointF(size*0.30, size*0.65), r, r)
+    upper = QPointF(size * 0.30, size * 0.34)
+    lower = QPointF(size * 0.30, size * 0.66)
 
-    p.drawLine(size*0.38, size*0.40, size*0.78, size*0.18)
-    p.drawLine(size*0.38, size*0.60, size*0.78, size*0.82)
+    p.drawEllipse(upper, r, r)
+    p.drawEllipse(lower, r, r)
 
-    p.drawLine(size*0.44, size*0.48, size*0.78, size*0.50)
+    # Pivot
+    pivot = QPointF(size * 0.47, size * 0.50)
+
+    p.drawLine(upper, pivot)
+    p.drawLine(lower, pivot)
+
+    # Blades
+    p.drawLine(pivot, QPointF(size * 0.82, size * 0.22))
+    p.drawLine(pivot, QPointF(size * 0.82, size * 0.78))
 
     p.end()
 
