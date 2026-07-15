@@ -1,67 +1,120 @@
-# Changelog
+# Darkelf Shadow v7.0.1
 
-All notable changes to **Darkelf Shadow** are documented in this file.
+## Overview
 
-The project follows **Semantic Versioning (SemVer)**.
+Darkelf Shadow 7.0.1 is a stability, performance, and security-focused update that refines several core browser components while improving overall reliability. This release includes enhancements to the Quantum Refresh system, filter management, browser stability, and numerous internal optimizations.
 
-------------------------------------------------------------------------
+---
 
-# \[7.0.0\] - 2026-07-14
+# ✨ New & Improved
 
-## 🎉 First Public Release
+## Quantum Refresh
 
-Darkelf Shadow 7.0.0 is the first public macOS release.
+* Improved Quantum Refresh reliability and internal state management.
+* Enhanced browser refresh lifecycle.
+* Better cleanup of temporary browser resources.
+* Reduced stale runtime state after refresh operations.
+* Improved consistency during multiple refresh cycles.
 
-## Added
+## Filter Engine
 
--   Darkelf Inspector
--   JavaScript runtime console
--   Live Network Monitor
--   Darkelf Quantum dashboard
--   MiniAI dashboard
--   Keyboard Shortcuts tab
--   Integrated Help tab
--   Snapshot support
--   Multi-tab browsing
--   Address bar search
--   Find in Page
--   Browser zoom controls
--   Fullscreen support
--   Privacy-focused browser interface
--   Apple Developer ID signing
--   Apple notarization
--   Hardened Runtime
--   DMG installer with Applications shortcut
+* Enhanced filter list loading and initialization.
+* Improved filter refresh behavior.
+* Better synchronization between settings and active filter lists.
+* Improved handling of missing or unavailable filter lists.
+* Reduced unnecessary reloads.
+* Improved startup performance when filters are enabled.
+* Better filter diagnostics and logging.
 
-## Improved
+## Browser Engine
 
--   Inspector user interface
--   Browser stability
--   Keyboard shortcut handling
--   macOS integration
--   Application bundle naming
--   Release build pipeline
--   DMG packaging workflow
--   Code signing workflow
--   Notarization workflow
--   Release automation
+* Improved browser initialization sequence.
+* Faster startup consistency.
+* Improved tab stability.
+* Better internal resource cleanup.
+* Enhanced page lifecycle management.
+* Improved handling of navigation edge cases.
+* General performance optimizations.
 
-## Security
+## User Interface
 
--   Apple Developer ID signed
--   Hardened Runtime enabled
--   Apple notarized
--   Gatekeeper compatible
+* Improved responsiveness throughout the application.
+* Better settings synchronization.
+* Improved configuration persistence.
+* Enhanced runtime feedback.
+* Improved Darkelf Inspector integration.
+* Numerous UI polish improvements.
 
-------------------------------------------------------------------------
+---
 
-# \[6.0.7\]
+# 🛡 Security Improvements
 
-## Internal Development Release
+* Improved request filtering reliability.
+* Enhanced protection pipeline consistency.
+* Better handling of blocked network requests.
+* Improved internal browser protection logic.
+* Additional hardening of browser runtime.
+* Improved compatibility with privacy and filtering features.
 
--   Internal development build.
--   Inspector improvements.
--   MiniAI enhancements.
--   Quantum runtime improvements.
--   Packaging and signing work.
--   Not publicly released.
+---
+
+# ⚡ Performance
+
+* Reduced unnecessary internal processing.
+* Improved memory cleanup.
+* Faster browser refresh operations.
+* Reduced redundant initialization work.
+* General runtime optimizations.
+* Improved responsiveness during heavy browsing sessions.
+
+---
+
+# 🐞 Bug Fixes
+
+* Fixed Quantum Refresh edge cases.
+* Fixed filter refresh inconsistencies.
+* Fixed several initialization timing issues.
+* Fixed settings persistence edge cases.
+* Fixed multiple UI inconsistencies.
+* Fixed several internal browser lifecycle issues.
+* Improved compatibility with BrowserAudit testing.
+* Fixed numerous minor issues discovered during testing.
+
+---
+
+# 👨‍💻 Developer Improvements
+
+* Large internal code cleanup.
+* Extensive Ruff linting cleanup.
+* Improved project organization.
+* Refactored several browser components.
+* Reduced technical debt.
+* Improved diagnostics and debugging output.
+* Better maintainability across core modules.
+* Additional preparation for future 7.x releases.
+
+---
+
+# 📦 Packaging
+
+* Improved macOS packaging workflow.
+* Improved application signing preparation.
+* Improved release pipeline reliability.
+* Additional groundwork for future notarized releases.
+
+---
+
+# Compatibility
+
+* macOS
+* Windows
+* Linux
+
+---
+
+## Thank You
+
+Thank you to everyone testing Darkelf Shadow and providing feedback. Your testing continues to improve browser stability, privacy, and overall user experience.
+
+As always, security, privacy, and performance remain the primary goals of Darkelf Shadow.
+
