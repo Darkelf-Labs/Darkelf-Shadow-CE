@@ -1,8 +1,8 @@
-# Darkelf Shadow v7.0.1
+# Darkelf Shadow v7.0.2
 
 ## Overview
 
-Darkelf Shadow 7.0.1 is a stability, performance, and security-focused update that refines several core browser components while improving overall reliability. This release includes enhancements to the Quantum Refresh system, filter management, browser stability, and numerous internal optimizations.
+Darkelf Shadow is a stability, performance, and security-focused update that refines several core browser components while improving overall reliability. This release includes enhancements to the Quantum Refresh system, filter management, browser stability, and numerous internal optimizations.
 
 ---
 
