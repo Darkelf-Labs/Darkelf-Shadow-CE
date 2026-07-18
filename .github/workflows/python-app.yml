@@ -37,13 +37,12 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install flake8 build
+          pip install ruff build
           pip install .
 
-      - name: Lint with flake8
+      - name: Lint with Ruff
         run: |
-          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+          ruff check .
 
       - name: Build package
         run: |
@@ -76,7 +75,8 @@ jobs:
 
       - name: Build source and wheel
         run: |
-          python -m pip install --upgrade pip build
+          python -m pip install --upgrade pip
+          pip install build
           python -m build
 
       - name: Publish package to PyPI
