@@ -7,17 +7,9 @@ from PySide6.QtGui import QPalette, QColor
 # --- Standard ---
 import sys
 
-print("[MAIN] Python started", flush=True)
-
-print("[MAIN] Importing BootSplash...", flush=True)
 from shadow.splash import BootSplash
-print("[MAIN] BootSplash OK", flush=True)
 
-print("[MAIN] Importing BootWorker...", flush=True)
 from shadow.boot import BootWorker, update_progress, boot_done
-print("[MAIN] BootWorker OK", flush=True)
-
-print("[MAIN] All startup imports completed.", flush=True)
 
 # --- Chromium flags MUST be before Qt ---
 from shadow.utils import apply_chromium_flags
