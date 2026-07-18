@@ -23,8 +23,6 @@ print("[MAIN] All startup imports completed.", flush=True)
 from shadow.utils import apply_chromium_flags
 apply_chromium_flags()
 
-import sys
-
 # --- Create app ---
 app = QApplication(sys.argv)
 
