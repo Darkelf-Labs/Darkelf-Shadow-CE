@@ -1309,7 +1309,6 @@ class DarkelfInspector(QWidget):
             stats = ai.get_statistics()
             panic = bool(getattr(ai, "panic_mode_active", False))
             lockdown = bool(getattr(ai, "lockdown_active", False))
-            threshold = getattr(ai, "threshold", "unknown")
 
             if panic:
                 state = "PANIC"
