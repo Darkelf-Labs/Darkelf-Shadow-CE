@@ -651,7 +651,14 @@ TOP 10 THREAT DOMAINS:
                 "medium": "🟡",
                 "low": "⚪",
             }.get(threats["risk_level"], "⚪")
-            report += f"\n{i:2d}. {risk_color} {dom[:45]:<45}\n    Track: {tracker_icon} {threats['trackers']:2d} | FP: {fp_icon} {threats['fingerprinting']:2d} | Mal: {malware_icon} {threats['malware']:2d} | Intru: {intrusion_icon} {threats['intrusions']:2d} | HTTP: {http_icon} {threats['http_blocks']:2d}"
+            report += (
+                f"\n{i:2d}. {risk_color} {dom[:45]:<45}\n"
+                f"    Track: {tracker_icon} {threats['trackers']:2d}"
+                f" | FP: {fp_icon} {threats['fingerprinting']:2d}"
+                f" | Mal: {malware_icon} {threats['malware']:2d}"
+                f" | Intru: {intrusion_icon} {threats['intrusions']:2d}"
+                f" | HTTP: {http_icon} {threats['http_blocks']:2d}"
+            )
         report += f"\n\nRECENT HIGH-RISK EVENTS: {len(stats['recent_threats'])}"
         for event in stats["recent_threats"][-5:]:
             report += f"\n  • {event['datetime']} | {event['risk_level'].upper()} | {', '.join(event['threats'][:2])}"
