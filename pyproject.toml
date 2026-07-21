@@ -19,7 +19,7 @@ shadow = [
 
  [project]
  name = "darkelf-shadow"
- version = "7.0.3"
+ version = "7.0.4"
  description = "Darkelf Shadow — Private hardened browser with MiniAI Sentinel"
 
  authors = [
