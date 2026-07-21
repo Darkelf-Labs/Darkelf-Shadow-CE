@@ -1,6 +1,6 @@
 # shadow/boot.py
 
-from PySide6.QtCore import QThread, Signal, QPropertyAnimation
+from PySide6.QtCore import QThread, Signal, QPropertyAnimation, QUrl
 from PySide6.QtWebEngineCore import (
     QWebEngineProfile,
     QWebEngineSettings,
@@ -12,6 +12,8 @@ from shadow.miniai import DarkelfMiniAISentinel
 from shadow.browser import DarkelfBrowser
 from shadow.interceptor import StealthInterceptor
 
+
+import sys
 import traceback
 
 # ------------------ BOOT WORKER ------------------
@@ -132,14 +134,26 @@ def boot_done(splash, app, engine, ai):
         # -----------------------------
 
         browser = DarkelfBrowser(profile, ai, engine)
-        
+
         interceptor.browser = browser
-        
+
+        # Existing reference
         app._browser = browser
+
+        # Reference used by BrowserApplication.event()
+        app.browser_window = browser
+
+        # Handle URLs passed on initial launch
+
+        for arg in sys.argv[1:]:
+            if arg.startswith(("http://", "https://")):
+                browser.open_url(QUrl(arg))
+                break
 
         # -----------------------------
         # SHOW WINDOW
         # -----------------------------
+
         browser.show()
         browser.raise_()
         browser.activateWindow()
@@ -166,7 +180,9 @@ def boot_done(splash, app, engine, ai):
         fade.start()
 
         splash._fade = fade
+        
 
     except Exception as e:
         print("BROWSER CRASH:", e)
         traceback.print_exc()
+
