@@ -211,7 +211,7 @@ This release includes a SHA-256 checksum to help verify the integrity of the dow
 ### Verify on macOS or Linux
 
 ```bash
-shasum -a 256 -c Darkelf-Cocoa-4.4.4.dmg.sha256
+shasum -a 256 -c Darkelf-Shadow-7.0.4.dmg.sha256
 ```
 
 Darkelf-Cocoa-4.4.4.dmg: OK
