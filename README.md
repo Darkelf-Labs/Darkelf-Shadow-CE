@@ -202,6 +202,22 @@ For maximum protection, combine Darkelf Shadow with:
 
 ---
 
+---
+
+## 🔒 Security & Verification
+
+This release includes a SHA-256 checksum to help verify the integrity of the downloaded DMG.
+
+### Verify on macOS or Linux
+
+```bash
+shasum -a 256 -c Darkelf-Cocoa-4.4.4.dmg.sha256
+```
+
+Darkelf-Cocoa-4.4.4.dmg: OK
+
+---
+
 ## 📜 LICENSE
 
 Licensed under **LGPL-3.0-or-later**
