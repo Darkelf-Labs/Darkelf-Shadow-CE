@@ -14,25 +14,18 @@ EASYLIST_URLS = [
     # Core
     "https://easylist.to/easylist/easylist.txt",
     "https://easylist.to/easylist/easyprivacy.txt",
-
     # Annoyances
     "https://secure.fanboy.co.nz/fanboy-annoyance.txt",
-
     # Social widgets
     "https://easylist.to/easylist/fanboy-social.txt",
-
     # Anti-adblock
     "https://easylist-downloads.adblockplus.org/antiadblockfilters.txt",
-
     # AdGuard Tracking Protection
     "https://filters.adtidy.org/extension/chromium/filters/3.txt",
-
     # ✅ uBlock Origin — Privacy
     "https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/privacy.txt",
-
     # ✅ uBlock Origin — Unbreak (fixes site breakage)
     "https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/unbreak.txt",
-
     # ✅ uBlock Origin — Badware
     "https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/badware.txt",
 ]
@@ -76,8 +69,10 @@ MAX_LIST_BYTES = 16 * 1024 * 1024  # 16 MiB
 
 # ===================== ABP -> regex helpers =====================
 
+
 def _now() -> float:
     return time.time()
+
 
 def _safe_host(u: str) -> str:
     try:
@@ -85,6 +80,7 @@ def _safe_host(u: str) -> str:
     except Exception as e:
         print(e)
         return ""
+
 
 def _wildcard_to_re(s: str) -> str:
     # ABP wildcard "*" -> ".*"
@@ -99,10 +95,12 @@ def _wildcard_to_re(s: str) -> str:
             out.append(ch)
     return "".join(out)
 
+
 def _abp_anchor_boundary() -> str:
     # ABP '^' = separator boundary (end of host, or non-alnum/._%-)
     # A common approximation:
     return r"(?:[^A-Za-z0-9_\-.%]|$)"
+
 
 def _abp_rule_to_regex(rule: str) -> str | None:
     """
@@ -132,7 +130,6 @@ def _abp_rule_to_regex(rule: str) -> str | None:
         core_re = core_re.replace("{ABP_BOUNDARY}", _abp_anchor_boundary())
         return r"^(?:[^:/?#]+:)?//(?:[^/?#]*\.)?" + core_re + _abp_anchor_boundary()
 
-        
     if rule.startswith("|"):
         anchored_start = True
         rule = rule[1:]
@@ -151,6 +148,7 @@ def _abp_rule_to_regex(rule: str) -> str | None:
     if anchored_end:
         return core_re + r"$"
     return core_re
+
 
 def _split_rule_and_options(line: str) -> tuple[str, dict]:
     """
@@ -174,6 +172,7 @@ def _split_rule_and_options(line: str) -> tuple[str, dict]:
             opts[raw] = True
     return rule.strip(), opts
 
+
 def _parse_domain_list(v: str) -> tuple[set[str], set[str]]:
     """
     domain=example.com|~foo.com
@@ -190,10 +189,12 @@ def _parse_domain_list(v: str) -> tuple[set[str], set[str]]:
             allow.add(part.lower())
     return allow, deny
 
+
 def _host_matches_domain(host: str, domain: str) -> bool:
     host = host.lower()
     domain = domain.lower()
     return host == domain or host.endswith("." + domain)
+
 
 def _domain_option_allows(first_party_host: str, opts: dict) -> bool:
     """
@@ -214,7 +215,8 @@ def _domain_option_allows(first_party_host: str, opts: dict) -> bool:
         if bad:
             return False
     return True
-    
+
+
 def base_domain(host: str) -> str:
     """
     Returns the eTLD+1 (base domain) for a given host.
@@ -226,6 +228,7 @@ def base_domain(host: str) -> str:
         return ".".join(parts[-2:])
     return host.lower()
 
+
 def _third_party_check(req_host: str, first_party_host: str) -> bool:
     """
     Use base domains for robust first-party check across subdomains.
@@ -233,19 +236,25 @@ def _third_party_check(req_host: str, first_party_host: str) -> bool:
     if not req_host or not first_party_host:
         return True
     return base_domain(req_host) != base_domain(first_party_host)
-    
+
+
 def is_domain(host: str, domain: str) -> bool:
     host = (host or "").lower()
     domain = domain.lower()
     return host == domain or host.endswith("." + domain)
+
+
 # ===================== Filter structures =====================
+
 
 class _NetRule:
     __slots__ = ("re", "is_exception", "opts")
+
     def __init__(self, pattern: re.Pattern, is_exception: bool, opts: dict):
         self.re = pattern
         self.is_exception = is_exception
         self.opts = opts
+
 
 class EasyListEngine:
     """
@@ -254,6 +263,7 @@ class EasyListEngine:
       - cosmetic rules: dict[domain or "*"] -> list[selectors]
       - cosmetic exceptions: dict[domain] -> set[selectors]
     """
+
     def __init__(self):
         self.network_rules: list[_NetRule] = []
         self.cosmetic: dict[str, list[str]] = {"*": []}
@@ -269,7 +279,7 @@ class EasyListEngine:
             return True
         age = _now() - os.path.getmtime(path)
         return age > EASYLIST_REFRESH_EVERY
-    
+
     @staticmethod
     def _is_private_host(host: str) -> bool:
         """
@@ -286,10 +296,7 @@ class EasyListEngine:
             ip = ipaddress.ip_address(host)
             return not ip.is_global
         except ValueError:
-            return (
-                host.endswith(".local")
-                or host.endswith(".internal")
-            )
+            return host.endswith(".local") or host.endswith(".internal")
 
     def fetch_lists(self, urls: list[str]) -> list[str]:
         texts = []
@@ -311,7 +318,7 @@ class EasyListEngine:
                     if self._is_private_host(host):
                         print("[EasyList] Blocked internal address:", url)
                         continue
-                        
+
                     # 🔥 NO urllib — use http.client instead
                     if parsed.scheme == "https":
                         conn = http.client.HTTPSConnection(host, timeout=15)
@@ -363,7 +370,7 @@ class EasyListEngine:
                 texts.append(text)
 
         return texts
-        
+
     def load_and_build(self, urls: list[str]):
         texts = self.fetch_lists(urls)
         self._parse_texts(texts)
@@ -446,7 +453,7 @@ class EasyListEngine:
 
     def _finalize(self):
         # Put exceptions first for fast allow-pass.
-        self.network_rules.sort(key=lambda r: (not r.is_exception))
+        self.network_rules.sort(key=lambda r: not r.is_exception)
 
         # De-dup cosmetic selectors per domain (keep stable order)
         for d, sels in list(self.cosmetic.items()):
@@ -458,13 +465,8 @@ class EasyListEngine:
                 seen.add(s)
                 out.append(s)
             self.cosmetic[d] = out
-            
-    def should_block(
-        self,
-        url: str,
-        first_party_url: str,
-        req_type: str | None = None
-    ) -> bool:
+
+    def should_block(self, url: str, first_party_url: str, req_type: str | None = None) -> bool:
 
         u = (url or "").lower()
 
@@ -477,10 +479,10 @@ class EasyListEngine:
 
         if not req_host or not req_type:
             return False
-            
+
         if req_type == "document":
             return False
-            
+
         # --------------------------------------------------
         # CONSERVATIVE SUPPLEMENTAL BLOCKING
         # --------------------------------------------------
@@ -497,7 +499,8 @@ class EasyListEngine:
         # Block exact known tracker hosts.
         # This is intentionally narrow and does not block all AWS traffic.
         if (
-            req_type in (
+            req_type
+            in (
                 "script",
                 "xmlhttprequest",
                 "subdocument",
@@ -509,30 +512,25 @@ class EasyListEngine:
         # Block local bait scripts only on known ad-block test pages.
         # This avoids breaking legitimate websites that happen to use
         # filenames such as analytics.js.
-        is_adblock_test_page = any(
-            is_domain(fp_host, domain)
-            for domain in ADBLOCK_TEST_DOMAINS
-        )
+        is_adblock_test_page = any(is_domain(fp_host, domain) for domain in ADBLOCK_TEST_DOMAINS)
 
-        if (
-            is_adblock_test_page
-            and req_type == "script"
-            and request_filename in ADBLOCK_TEST_BAIT_FILES
-        ):
+        if is_adblock_test_page and req_type == "script" and request_filename in ADBLOCK_TEST_BAIT_FILES:
             return True
-            
+
         # --------------------------------------------------
         # INTERNAL / DEVTOOLS BYPASS
         # --------------------------------------------------
 
-        if u.startswith((
-            "devtools://",
-            "chrome://",
-            "chrome-devtools://",
-            "chrome-extension://",
-            "blob:",
-            "about:",
-        )):
+        if u.startswith(
+            (
+                "devtools://",
+                "chrome://",
+                "chrome-devtools://",
+                "chrome-extension://",
+                "blob:",
+                "about:",
+            )
+        ):
             return False
 
         # --------------------------------------------------
@@ -544,22 +542,16 @@ class EasyListEngine:
             "browseraudit.com",
             "browseraudit.org",
             "browserleaks.com",
-
             # Benchmarks
             "browserbench.org",
             "speedometer.dev",
             "motionmark.io",
             "jetstream2.net",
-
             # Web platform tests
             "web-platform-tests.org",
         )
 
-        if any(
-            is_domain(fp_host, domain)
-            or is_domain(req_host, domain)
-            for domain in TEST_DOMAINS
-        ):
+        if any(is_domain(fp_host, domain) or is_domain(req_host, domain) for domain in TEST_DOMAINS):
             return False
 
         # --------------------------------------------------
@@ -568,41 +560,22 @@ class EasyListEngine:
 
         def _site_key(host: str) -> str:
 
-            parts = [
-                p
-                for p in (host or "").split(".")
-                if p
-            ]
+            parts = [p for p in (host or "").split(".") if p]
 
-            return (
-                ".".join(parts[-2:])
-                if len(parts) >= 2
-                else (host or "")
-            )
+            return ".".join(parts[-2:]) if len(parts) >= 2 else (host or "")
 
         fp_site = _site_key(fp_host)
         req_site = _site_key(req_host)
 
-        same_site = bool(
-            fp_site
-            and
-            req_site
-            and
-            fp_site == req_site
-        )
-    
-        is_third_party = (
-            not same_site
-            and
-            _third_party_check(req_host, fp_host)
-        )
+        same_site = bool(fp_site and req_site and fp_site == req_site)
+
+        is_third_party = not same_site and _third_party_check(req_host, fp_host)
 
         # --------------------------------------------------
         # RELATED DOMAIN FAMILIES
         # --------------------------------------------------
 
         RELATED_FAMILIES = (
-
             (
                 "youtube.com",
                 "googlevideo.com",
@@ -610,19 +583,16 @@ class EasyListEngine:
                 "youtubei.googleapis.com",
                 "gstatic.com",
             ),
-
             (
                 "wikipedia.org",
                 "wikimedia.org",
                 "wmfusercontent.org",
             ),
-
             (
                 "github.com",
                 "githubusercontent.com",
                 "githubassets.com",
             ),
-
             (
                 "amazon.com",
                 "media-amazon.com",
@@ -639,11 +609,7 @@ class EasyListEngine:
                 "a6.awsstatic.com",
                 "a7.awsstatic.com",
             ),
-
-            (
-                "walmart.com",
-            ),
-
+            ("walmart.com",),
             (
                 "ebay.com",
                 # X / Twitter
@@ -651,32 +617,24 @@ class EasyListEngine:
                 "twitter.com",
                 "twimg.com",
                 "t.co",
-
                 # Reddit
                 "reddit.com",
                 "redd.it",
                 "redditmedia.com",
                 "redditstatic.com",
-
                 # Instagram
                 "instagram.com",
                 "cdninstagram.com",
                 "fbcdn.net",
-
                 # Facebook
                 "facebook.com",
                 "fbcdn.net",
-                "fbsbx.com",            ),
+                "fbsbx.com",
+            ),
         )
 
         for family in RELATED_FAMILIES:
-
-            if (
-                any(fp_host.endswith(x) for x in family)
-                and
-                any(req_host.endswith(x) for x in family)
-            ):
-
+            if any(fp_host.endswith(x) for x in family) and any(req_host.endswith(x) for x in family):
                 same_site = True
                 is_third_party = False
                 break
@@ -685,17 +643,13 @@ class EasyListEngine:
         # NEVER BLOCK SAME-SITE CORE RESOURCES
         # --------------------------------------------------
 
-        if (
-            same_site
-            and
-            req_type in (
-                "script",
-                "xmlhttprequest",
-                "stylesheet",
-                "font",
-                "media",
-                "image",
-            )
+        if same_site and req_type in (
+            "script",
+            "xmlhttprequest",
+            "stylesheet",
+            "font",
+            "media",
+            "image",
         ):
             return False
 
@@ -716,7 +670,6 @@ class EasyListEngine:
         # --------------------------------------------------
 
         YOUTUBE_SAFE = (
-
             "youtube.com",
             "youtu.be",
             "youtubei.googleapis.com",
@@ -727,12 +680,7 @@ class EasyListEngine:
             "i.ytimg.com",
         )
 
-        if any(
-            req_host == d
-            or
-            req_host.endswith("." + d)
-            for d in YOUTUBE_SAFE
-        ):
+        if any(req_host == d or req_host.endswith("." + d) for d in YOUTUBE_SAFE):
             return False
 
         # --------------------------------------------------
@@ -742,15 +690,12 @@ class EasyListEngine:
         SAFE_INFRA = (
             # AWS CDN / delivery
             "cloudfront.net",
-
             # AWS WAF
             "awswaf.com",
             "token.awswaf.com",
-
             # Google infrastructure
             "gstatic.com",
             "googleapis.com",
-
             # Cloudflare
             "cloudflare.com",
         )
@@ -765,11 +710,7 @@ class EasyListEngine:
             return False
 
         # Skip other trusted infrastructure.
-        if any(
-            req_host == domain
-            or req_host.endswith("." + domain)
-            for domain in SAFE_INFRA
-        ):
+        if any(req_host == domain or req_host.endswith("." + domain) for domain in SAFE_INFRA):
             return False
 
         # --------------------------------------------------
@@ -777,15 +718,11 @@ class EasyListEngine:
         # --------------------------------------------------
 
         SAFE_DOMAINS = (
-
             "bbc.co.uk",
             "bbci.co.uk",
-
             "github.com",
             "githubusercontent.com",
-
             "walmart.com",
-
             "youtube.com",
         )
 
@@ -797,7 +734,6 @@ class EasyListEngine:
         # --------------------------------------------------
 
         HARD_TRACKERS = (
-
             "adnxs.com",
             "criteo.com",
             "taboola.com",
@@ -805,33 +741,18 @@ class EasyListEngine:
             "quantserve.com",
         )
 
-        if (
-            is_third_party
-            and
-            any(
-                req_host == t
-                or
-                req_host.endswith("." + t)
-                for t in HARD_TRACKERS
-            )
-        ):
+        if is_third_party and any(req_host == t or req_host.endswith("." + t) for t in HARD_TRACKERS):
             return True
 
         # --------------------------------------------------
         # LIGHT HEURISTICS
         # --------------------------------------------------
 
-        if (
-            is_third_party
-            and
-            req_type in (
-                "script",
-                "xmlhttprequest",
-            )
+        if is_third_party and req_type in (
+            "script",
+            "xmlhttprequest",
         ):
-
             high_signal = (
-
                 "pagead",
                 "adsystem",
                 "adservice",
@@ -845,14 +766,7 @@ class EasyListEngine:
                 "adnxs",
             )
 
-            if (
-                any(k in req_host for k in high_signal)
-                and
-                not (
-                    fp_host == "youtube.com"
-                    or fp_host.endswith(".youtube.com")
-                )
-            ):
+            if any(k in req_host for k in high_signal) and not (fp_host == "youtube.com" or fp_host.endswith(".youtube.com")):
                 return True
 
         # --------------------------------------------------
@@ -873,47 +787,28 @@ class EasyListEngine:
         matched = False
 
         for rule in self.network_rules:
-
-            if not _domain_option_allows(
-                fp_host,
-                rule.opts
-            ):
+            if not _domain_option_allows(fp_host, rule.opts):
                 continue
 
-            if (
-                "third-party" in rule.opts
-                and
-                not is_third_party
-            ):
+            if "third-party" in rule.opts and not is_third_party:
                 continue
 
-            if (
-                "~third-party" in rule.opts
-                and
-                is_third_party
-            ):
+            if "~third-party" in rule.opts and is_third_party:
                 continue
 
             type_flags = {
-
                 "script",
                 "xmlhttprequest",
                 "subdocument",
             }
 
-            specified = [
-                t
-                for t in type_flags
-                if t in rule.opts
-            ]
+            specified = [t for t in type_flags if t in rule.opts]
 
             if specified and req_type not in specified:
                 continue
 
             try:
-
                 if rule.re.search(u):
-
                     # Exceptions ALWAYS WIN
 
                     if rule.is_exception:
@@ -924,9 +819,9 @@ class EasyListEngine:
             except re.error:
                 # Ignore malformed regex rules and continue checking others
                 continue
-                
+
         return matched
-        
+
     def css_for_host(self, host: str) -> str:
         host = (host or "").lower()
         selectors = []
@@ -954,10 +849,6 @@ class EasyListEngine:
         lines = []
         for sel in selectors:
             sel = sel.replace("`", "")
-            lines.append(
-                f"{sel} {{ display: none !important; visibility: hidden !important; }}"
-            )
+            lines.append(f"{sel} {{ display: none !important; visibility: hidden !important; }}")
 
         return "\n".join(lines)
-
-

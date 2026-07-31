@@ -176,14 +176,12 @@ class BrowserFeaturesMixin:
             self.bookmarks = []
 
         while self.bookmark_cards.count() > 1:
-
             item = self.bookmark_cards.takeAt(0)
 
             if item.widget():
                 item.widget().deleteLater()
 
         if not getattr(self, "bookmarks", None):
-
             empty = QLabel("No bookmarks yet.\n\nSave your favorite websites here.")
 
             empty.setAlignment(Qt.AlignCenter)
@@ -199,7 +197,6 @@ class BrowserFeaturesMixin:
             return
 
         for bm in self.bookmarks:
-
             card = self._create_bookmark_card(bm)
 
             self.bookmark_cards.insertWidget(0, card)
@@ -354,21 +351,13 @@ class BrowserFeaturesMixin:
         view = self.current_view()
 
         if view is None:
-            QMessageBox.warning(
-                self,
-                "Bookmark",
-                "No active page to bookmark."
-            )
+            QMessageBox.warning(self, "Bookmark", "No active page to bookmark.")
             return
 
         url = view.url().toString().strip()
 
         if not url or url == "about:blank":
-            QMessageBox.warning(
-                self,
-                "Bookmark",
-                "Nothing to bookmark."
-            )
+            QMessageBox.warning(self, "Bookmark", "Nothing to bookmark.")
             return
 
         title = view.title().strip() or url
@@ -380,18 +369,17 @@ class BrowserFeaturesMixin:
 
         for bm in self.bookmarks:
             if bm["url"] == url:
-                QMessageBox.information(
-                    self,
-                    "Bookmark",
-                    "That bookmark already exists.\n\nSession-Only Bookmarks"
-                )
+                QMessageBox.information(self, "Bookmark", "That bookmark already exists.\n\nSession-Only Bookmarks")
                 return
 
-        self.bookmarks.insert(0, {
-            "title": title,
-            "url": url,
-            "icon": icon,
-        })
+        self.bookmarks.insert(
+            0,
+            {
+                "title": title,
+                "url": url,
+                "icon": icon,
+            },
+        )
 
         self.refresh_bookmark_manager()
 
@@ -411,11 +399,7 @@ class BrowserFeaturesMixin:
             self.bookmarks = []
             return
 
-        self.bookmarks = [
-            bm
-            for bm in self.bookmarks
-            if not (bm["title"] == title and bm["url"] == url)
-        ]
+        self.bookmarks = [bm for bm in self.bookmarks if not (bm["title"] == title and bm["url"] == url)]
 
         if card is not None:
             card.deleteLater()
@@ -630,9 +614,7 @@ class BrowserFeaturesMixin:
         """
         library_dir = self._ensure_private_dir(self._darkelf_library_dir())
 
-        download_dir = self._ensure_private_dir(
-            os.path.join(library_dir, "Darkelf Temp Folder")
-        )
+        download_dir = self._ensure_private_dir(os.path.join(library_dir, "Darkelf Temp Folder"))
 
         self._download_dir = download_dir
         return download_dir
@@ -643,9 +625,7 @@ class BrowserFeaturesMixin:
         """
         library_dir = self._ensure_private_dir(self._darkelf_library_dir())
 
-        return self._ensure_private_dir(
-            os.path.join(library_dir, "Darkelf Snap Folder")
-        )
+        return self._ensure_private_dir(os.path.join(library_dir, "Darkelf Snap Folder"))
 
     def _hook_secure_downloads(self):
 
@@ -683,9 +663,7 @@ class BrowserFeaturesMixin:
         Deletes the per-session temp download directory (best-effort).
         """
         try:
-            if getattr(self, "_download_dir", None) and os.path.isdir(
-                self._download_dir
-            ):
+            if getattr(self, "_download_dir", None) and os.path.isdir(self._download_dir):
                 shutil.rmtree(self._download_dir, ignore_errors=True)
         except Exception as e:
             print(e)
@@ -813,10 +791,7 @@ class BrowserFeaturesMixin:
         title = QLabel("Delete browsing data")
         title.setObjectName("title")
 
-        text = QLabel(
-            "This wipes all cookies, cache and visited links, "
-            "then closes the browser."
-        )
+        text = QLabel("This wipes all cookies, cache and visited links, then closes the browser.")
         text.setWordWrap(True)
         text.setObjectName("text")
 
@@ -856,12 +831,10 @@ class BrowserFeaturesMixin:
 
                 if isinstance(view, QWebEngineView):
                     try:
-                        view.page().triggerAction(
-                            QWebEnginePage.Stop
-                        )
+                        view.page().triggerAction(QWebEnginePage.Stop)
                     except Exception as e:
                         print("Error stopping page:", e)
-    
+
             profile = self.shared_profile
 
             profile.cookieStore().deleteAllCookies()

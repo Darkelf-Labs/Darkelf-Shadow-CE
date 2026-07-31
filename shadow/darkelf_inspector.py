@@ -27,7 +27,6 @@ from PySide6.QtWidgets import (
 )
 
 
-
 # ------------------------------------------------------------
 # Darkelf Console Theme
 # ------------------------------------------------------------
@@ -52,6 +51,7 @@ DARKELF_INFO = "#38bdf8"
 FONT_UI = '"Inter", "SF Pro Display", "Segoe UI", Arial'
 FONT_MONO = '"Menlo", "Monaco", monospace'
 
+
 def now_stamp() -> str:
     return datetime.now().strftime("%H:%M:%S")
 
@@ -66,6 +66,7 @@ def safe_text(value) -> str:
 # ------------------------------------------------------------
 # Small UI Helpers
 # ------------------------------------------------------------
+
 
 class PillLabel(QLabel):
     def __init__(self, text="", color=DARKELF_ACCENT, parent=None):
@@ -124,6 +125,7 @@ class DarkelfCard(QFrame):
 # Console Output
 # ------------------------------------------------------------
 
+
 class ConsoleWidget(QPlainTextEdit):
     """
     Main console log area.
@@ -134,7 +136,7 @@ class ConsoleWidget(QPlainTextEdit):
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        
+
         self.history = []
         self.setReadOnly(True)
         self.setLineWrapMode(QPlainTextEdit.LineWrapMode.NoWrap)
@@ -164,17 +166,17 @@ class ConsoleWidget(QPlainTextEdit):
         stamp = now_stamp()
 
         prefixes = {
-            "system":   "[SYSTEM]",
-            "info":     "[INFO]",
-            "warn":     "[WARN]",
-            "error":    "[ERROR]",
+            "system": "[SYSTEM]",
+            "info": "[INFO]",
+            "warn": "[WARN]",
+            "error": "[ERROR]",
             "security": "[SECURITY]",
-            "quantum":  "[QUANTUM]",
-            "miniai":   "[MINIAI]",
-            "network":  "[NETWORK]",
-            "js":       "[JS]",
-            "cmd":      ">",
-            "log":      "[LOG]",
+            "quantum": "[QUANTUM]",
+            "miniai": "[MINIAI]",
+            "network": "[NETWORK]",
+            "js": "[JS]",
+            "cmd": ">",
+            "log": "[LOG]",
         }
 
         prefix = prefixes.get(level.lower(), "[LOG]")
@@ -208,6 +210,7 @@ class ConsoleWidget(QPlainTextEdit):
 # Command Input
 # ------------------------------------------------------------
 
+
 class InputLine(QLineEdit):
     """
     Command input with history navigation.
@@ -225,9 +228,7 @@ class InputLine(QLineEdit):
         self.history_index = -1
 
         self.setFont(QFont("Menlo", 11))
-        self.setPlaceholderText(
-            "Enter a Darkelf command..."
-        )
+        self.setPlaceholderText("Enter a Darkelf command...")
         self.setMinimumHeight(34)
 
         self.setStyleSheet(f"""
@@ -277,10 +278,12 @@ class InputLine(QLineEdit):
             return
 
         super().keyPressEvent(event)
-        
+
+
 # ------------------------------------------------------------
 # Main Darkelf Inspector
 # ------------------------------------------------------------
+
 
 class DarkelfInspector(QWidget):
     """
@@ -338,11 +341,11 @@ class DarkelfInspector(QWidget):
         self.init_ui()
         self.init_theme()
         self.seed_console()
-        
+
         self.refresh_timer = QTimer(self)
         self.refresh_timer.timeout.connect(self._refresh_runtime)
         self.refresh_timer.start(2000)
-    
+
     def _refresh_runtime(self):
         """
         Silent periodic refresh.
@@ -359,9 +362,7 @@ class DarkelfInspector(QWidget):
         except RuntimeError as e:
             if "destroyed" in str(e).lower():
                 self.quantum_pill.setText("QUANTUM: DESTROYED")
-                self.quantum_pill.setStyleSheet(
-                    self._pill_style(DARKELF_WARN)
-                )
+                self.quantum_pill.setStyleSheet(self._pill_style(DARKELF_WARN))
 
                 self.q_status.setText("DESTROYED")
                 self.q_generation.setText("--")
@@ -395,7 +396,7 @@ class DarkelfInspector(QWidget):
             )
 
         self.status_label.setText("Status: Monitoring")
-    
+
     # --------------------------------------------------------
     # UI
     # --------------------------------------------------------
@@ -420,9 +421,7 @@ class DarkelfInspector(QWidget):
         self.title_label = QLabel("Darkelf Inspector")
         self.title_label.setObjectName("DevToolsTitle")
 
-        self.subtitle_label = QLabel(
-            "Console • Network • Quantum • MiniAI"
-        )
+        self.subtitle_label = QLabel("Console • Network • Quantum • MiniAI")
         self.subtitle_label.setObjectName("DevToolsSubtitle")
 
         title_box.addWidget(self.title_label)
@@ -466,7 +465,7 @@ class DarkelfInspector(QWidget):
 
         self._build_console_tab()
         self._build_placeholder_tabs()
-        
+
         for editor in self.findChildren(QPlainTextEdit):
             editor.setContextMenuPolicy(Qt.NoContextMenu)
         # -------------------------
@@ -541,14 +540,14 @@ class DarkelfInspector(QWidget):
         self.run_button.clicked.connect(self.execute_command)
         self.clear_button.clicked.connect(self.console.clear_console)
         self.input_line.returnPressed.connect(self.execute_command)
-        
+
     def _build_placeholder_tabs(self):
         self._build_network_tab()
         self._build_quantum_tab()
         self._build_miniai_tab()
         self._build_shortcuts_tab()
         self._build_help_tab()
-        
+
     def _clear_network_log(self):
         self.network_log.clear()
 
@@ -558,7 +557,7 @@ class DarkelfInspector(QWidget):
         self.net_total.setText("Requests: 0")
         self.net_blocked.setText("Blocked: 0")
         self.net_active.setText("Events: 0")
-        
+
     # --------------------------------------------------------
     # Network
     # --------------------------------------------------------
@@ -568,12 +567,7 @@ class DarkelfInspector(QWidget):
         layout.setContentsMargins(10, 10, 10, 10)
         layout.setSpacing(10)
 
-        layout.addWidget(
-            SectionTitle(
-                "Network Monitor",
-                "Live Security / Network Events"
-            )
-        )
+        layout.addWidget(SectionTitle("Network Monitor", "Live Security / Network Events"))
 
         toolbar = QHBoxLayout()
 
@@ -600,7 +594,7 @@ class DarkelfInspector(QWidget):
         layout.addWidget(self.network_log, 1)
 
         self.net_clear.clicked.connect(self._clear_network_log)
-            
+
     # --------------------------------------------------------
     # Quantum
     # --------------------------------------------------------
@@ -610,12 +604,7 @@ class DarkelfInspector(QWidget):
         layout.setContentsMargins(12, 12, 12, 12)
         layout.setSpacing(10)
 
-        layout.addWidget(
-            SectionTitle(
-                "Darkelf Quantum",
-                "Runtime Telemetry Dashboard"
-            )
-        )
+        layout.addWidget(SectionTitle("Darkelf Quantum", "Runtime Telemetry Dashboard"))
 
         dashboard = DarkelfCard()
 
@@ -665,11 +654,9 @@ class DarkelfInspector(QWidget):
             ("Status", "q_status"),
             ("Generation", "q_generation"),
             ("Requests", "q_requests"),
-
             ("Observed", "q_observed"),
             ("Rekeys", "q_rekeys"),
             ("Seed Age", "q_seed_age"),
-
             ("Runtime", "q_runtime"),
             ("Health", "q_health"),
             ("Chain", "q_chain_short"),
@@ -679,7 +666,6 @@ class DarkelfInspector(QWidget):
 
         for row in range(3):
             for col in range(3):
-
                 title, attr = labels[index]
 
                 card, value = create_stat_card(title)
@@ -698,12 +684,7 @@ class DarkelfInspector(QWidget):
         chain_layout.setContentsMargins(12, 12, 12, 12)
         chain_layout.setSpacing(8)
 
-        chain_layout.addWidget(
-            SectionTitle(
-                "Quantum Chain",
-                "Current post-quantum chain"
-            )
-        )
+        chain_layout.addWidget(SectionTitle("Quantum Chain", "Current post-quantum chain"))
 
         self.quantum_chain = QPlainTextEdit()
         self.quantum_chain.setReadOnly(True)
@@ -737,12 +718,7 @@ class DarkelfInspector(QWidget):
         layout.setContentsMargins(12, 12, 12, 12)
         layout.setSpacing(10)
 
-        layout.addWidget(
-            SectionTitle(
-                "MiniAI",
-                "Threat Intelligence Dashboard"
-            )
-        )
+        layout.addWidget(SectionTitle("MiniAI", "Threat Intelligence Dashboard"))
 
         dashboard = DarkelfCard()
         grid = QGridLayout(dashboard)
@@ -791,15 +767,12 @@ class DarkelfInspector(QWidget):
             ("State", "ai_state"),
             ("Threat Score", "ai_threat"),
             ("Trackers", "ai_trackers"),
-
             ("Intrusions", "ai_intrusions"),
             ("Fingerprinting", "ai_fingerprint"),
             ("HTTP Blocks", "ai_blocks"),
-
             ("Malware", "ai_malware"),
             ("Exploits", "ai_exploits"),
             ("Unique Domains", "ai_domains"),
-
             ("Lockdown", "ai_lockdown"),
             ("Panic Mode", "ai_panic"),
             ("Uptime", "ai_uptime"),
@@ -809,7 +782,6 @@ class DarkelfInspector(QWidget):
 
         for row in range(4):
             for col in range(3):
-
                 title, attr = labels[index]
 
                 card, value = create_stat_card(title)
@@ -822,17 +794,12 @@ class DarkelfInspector(QWidget):
 
         layout.addWidget(dashboard)
         layout.addStretch()
-        
+
     def _build_shortcuts_tab(self):
         layout = QVBoxLayout(self.shortcuts_tab)
         layout.setContentsMargins(10, 10, 10, 10)
 
-        layout.addWidget(
-            SectionTitle(
-                "Keyboard Shortcuts",
-                "Darkelf Shadow Browser Hotkeys"
-            )
-        )
+        layout.addWidget(SectionTitle("Keyboard Shortcuts", "Darkelf Shadow Browser Hotkeys"))
 
         shortcuts = QPlainTextEdit()
         shortcuts.setReadOnly(True)
@@ -933,17 +900,12 @@ class DarkelfInspector(QWidget):
         """)
 
         layout.addWidget(shortcuts)
-        
+
     def _build_help_tab(self):
         layout = QVBoxLayout(self.help_tab)
         layout.setContentsMargins(10, 10, 10, 10)
 
-        layout.addWidget(
-            SectionTitle(
-                "Darkelf Inspector",
-                "Integrated Runtime Diagnostics"
-            )
-        )
+        layout.addWidget(SectionTitle("Darkelf Inspector", "Integrated Runtime Diagnostics"))
 
         help_text = QPlainTextEdit()
         help_text.setReadOnly(True)
@@ -1093,6 +1055,7 @@ class DarkelfInspector(QWidget):
         """)
 
         layout.addWidget(help_text)
+
     # --------------------------------------------------------
     # Command Engine
     # --------------------------------------------------------
@@ -1136,10 +1099,10 @@ class DarkelfInspector(QWidget):
             self.console.log(traceback.format_exc(), "error")
 
         self.status_label.setText("Status: Idle")
-        
+
     def show_help(self):
         self.tabs.setCurrentWidget(self.help_tab)
-        
+
     def show_history(self):
         if not self.console.history:
             self.console.log("No history yet.", "info")
@@ -1147,7 +1110,6 @@ class DarkelfInspector(QWidget):
 
         for index, line in enumerate(self.console.history[-50:], 1):
             self.console.log(f"{index}: {line}", "log")
-
 
     def show_runtime_info(self):
         self.console.log("Runtime information:", "system")
@@ -1216,7 +1178,7 @@ class DarkelfInspector(QWidget):
                 return None
 
         return None
-        
+
     # --------------------------------------------------------
     # Darkelf Runtime Integration
     # --------------------------------------------------------
@@ -1256,32 +1218,24 @@ class DarkelfInspector(QWidget):
             self.q_runtime.setText(runtime)
             self.q_health.setText(runtime)
             self.q_chain_short.setText(self._short_chain(chain))
-            self.quantum_chain.setPlainText(
-                chain if chain else "Unavailable"
-            )
+            self.quantum_chain.setPlainText(chain if chain else "Unavailable")
 
             if status == "ACTIVE":
                 self.quantum_pill.setText("QUANTUM: ACTIVE")
-                self.quantum_pill.setStyleSheet(
-                self._pill_style(DARKELF_SUCCESS)
-                )
+                self.quantum_pill.setStyleSheet(self._pill_style(DARKELF_SUCCESS))
             else:
                 self.quantum_pill.setText(f"QUANTUM: {status}")
-                self.quantum_pill.setStyleSheet(
-                    self._pill_style(DARKELF_INFO)
-                )
+                self.quantum_pill.setStyleSheet(self._pill_style(DARKELF_INFO))
 
         except RuntimeError as e:
             if "destroyed" in str(e).lower():
                 self._set_quantum_unavailable("DESTROYED")
                 return
             raise
-            
+
     def _set_quantum_unavailable(self, state="UNAVAILABLE"):
         self.quantum_pill.setText(f"QUANTUM: {state}")
-        self.quantum_pill.setStyleSheet(
-            self._pill_style(DARKELF_WARN)
-        )
+        self.quantum_pill.setStyleSheet(self._pill_style(DARKELF_WARN))
 
         self.q_status.setText(state)
         self.q_generation.setText("--")
@@ -1292,10 +1246,8 @@ class DarkelfInspector(QWidget):
         self.q_runtime.setText("STOPPED")
         self.q_health.setText("UNAVAILABLE")
         self.q_chain_short.setText("--")
-        self.quantum_chain.setPlainText(
-            "Quantum runtime is unavailable."
-        )
-        
+        self.quantum_chain.setPlainText("Quantum runtime is unavailable.")
+
     def refresh_miniai(self):
 
         ai = self._resolve_miniai()
@@ -1331,45 +1283,25 @@ class DarkelfInspector(QWidget):
 
             self.ai_threat.setText(str(stats["threat_score"]))
 
-            self.ai_trackers.setText(
-                str(stats["threats"]["trackers"])
-            )
+            self.ai_trackers.setText(str(stats["threats"]["trackers"]))
 
-            self.ai_intrusions.setText(
-                str(stats["threats"]["intrusions"])
-            )
+            self.ai_intrusions.setText(str(stats["threats"]["intrusions"]))
 
-            self.ai_fingerprint.setText(
-                str(stats["threats"]["fingerprinting"])
-            )
+            self.ai_fingerprint.setText(str(stats["threats"]["fingerprinting"]))
 
-            self.ai_blocks.setText(
-                str(stats["threats"]["http_blocks"])
-            )
+            self.ai_blocks.setText(str(stats["threats"]["http_blocks"]))
 
-            self.ai_malware.setText(
-                str(stats["threats"]["malware"])
-            )
+            self.ai_malware.setText(str(stats["threats"]["malware"]))
 
-            self.ai_exploits.setText(
-                str(stats["threats"]["exploits"])
-            )
+            self.ai_exploits.setText(str(stats["threats"]["exploits"]))
 
-            self.ai_domains.setText(
-                str(stats["unique_domains"])
-            )
+            self.ai_domains.setText(str(stats["unique_domains"]))
 
-            self.ai_lockdown.setText(
-                "ON" if stats["lockdown"]["active"] else "OFF"
-            )
+            self.ai_lockdown.setText("ON" if stats["lockdown"]["active"] else "OFF")
 
-            self.ai_panic.setText(
-                "ON" if stats["panic"]["active"] else "OFF"
-            )
+            self.ai_panic.setText("ON" if stats["panic"]["active"] else "OFF")
 
-            self.ai_uptime.setText(
-                f"{int(stats['uptime_seconds'])} s"
-            )
+            self.ai_uptime.setText(f"{int(stats['uptime_seconds'])} s")
 
             # Log one summary line
 
@@ -1389,22 +1321,21 @@ class DarkelfInspector(QWidget):
         self.request_label.setText(f"Requests: {self._request_count}")
         self.net_total.setText(f"Requests: {self._request_count}")
         self.net_active.setText(f"Events: {self._request_count}")
-        
+
     def log_security_event(self, message, level="security"):
         self.console.log(message, level)
-        
+
     def log_blocked_event(self, url="", reason="Blocked by Darkelf"):
         self._blocked_count += 1
-    
+
         self.blocked_label.setText(f"Blocked: {self._blocked_count}")
         self.net_blocked.setText(f"Blocked: {self._blocked_count}")
 
         self.log_network_event(f"{reason}: {url}")
-        
+
     def update_status(self, message="Idle"):
         self.status_label.setText(f"Status: {message}")
         self.status_pill.setText(message.upper()[:18])
-
 
     # --------------------------------------------------------
     # Runtime Resolution Helpers
@@ -1439,7 +1370,6 @@ class DarkelfInspector(QWidget):
 
         return None
 
-
     def _resolve_miniai(self):
         if self.mini_ai:
             return self.mini_ai
@@ -1456,7 +1386,6 @@ class DarkelfInspector(QWidget):
                 )
 
         return None
-
 
     def _short_chain(self, chain):
         chain = safe_text(chain)
@@ -1482,6 +1411,7 @@ class DarkelfInspector(QWidget):
                 font-weight: 700;
             }}
         """
+
     # --------------------------------------------------------
     # Theme / Styling
     # --------------------------------------------------------

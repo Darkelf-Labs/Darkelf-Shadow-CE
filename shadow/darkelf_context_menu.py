@@ -2,8 +2,8 @@ from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QMenu
 from PySide6.QtGui import QColor
 
-class DarkelfContextMenu(QMenu):
 
+class DarkelfContextMenu(QMenu):
     def __init__(self, browser, parent=None):
         super().__init__(parent)
 
@@ -46,13 +46,6 @@ class DarkelfContextMenu(QMenu):
             margin:8px 10px;
         }}
         """)
-        
+
     def section(self):
         self.addSeparator()
-
-
-
-
-
-
-

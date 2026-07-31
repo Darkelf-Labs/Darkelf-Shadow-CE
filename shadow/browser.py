@@ -174,7 +174,7 @@ class DarkelfBrowser(BrowserUIMixin, BrowserFeaturesMixin, QMainWindow):
         self.tabs.setCornerWidget(self.plus_btn, Qt.TopRightCorner)
 
         self.tabs.tabCloseRequested.connect(self.close_tab)
-        
+
         self._apply_global_stylesheet()
         # -----------------------------
         # DOWNLOAD SHELF
@@ -257,16 +257,16 @@ class DarkelfBrowser(BrowserUIMixin, BrowserFeaturesMixin, QMainWindow):
         self.renderer_cleanup_timer = QTimer(self)
         self.renderer_cleanup_timer.timeout.connect(self.release_renderer_memory)
         self.renderer_cleanup_timer.start(600000)
-        
+
         self.darkelf_inspector = None
-            
+
     def new_tab(self):
         self._add_tab(home=True)
         self.debounce_cleanup()
 
         if self.darkelf_inspector is not None:
             self.darkelf_inspector.webview = self.current_view()
-            
+
     def reload_page(self):
         view = self.tabs.currentWidget()
         if view:
@@ -279,10 +279,7 @@ class DarkelfBrowser(BrowserUIMixin, BrowserFeaturesMixin, QMainWindow):
             return
         has_scheme = re.match(r"^[a-zA-Z][a-zA-Z0-9+.-]*://", text) is not None
         looks_like_domain = re.match(r"^[\w.-]+\.[A-Za-z]{2,}(/|$)", text) is not None
-        looks_like_ip_or_local = (
-            re.match(r"^(localhost|(?:\d{1,3}\.){3}\d{1,3})(:\d+)?(/|$)?$", text)
-            is not None
-        )
+        looks_like_ip_or_local = re.match(r"^(localhost|(?:\d{1,3}\.){3}\d{1,3})(:\d+)?(/|$)?$", text) is not None
         if has_scheme:
             url = text
         elif looks_like_domain or looks_like_ip_or_local:
@@ -342,9 +339,7 @@ class DarkelfBrowser(BrowserUIMixin, BrowserFeaturesMixin, QMainWindow):
             if ctrl and key == Qt.Key_Tab:
                 if self.tabs.count():
                     delta = -1 if shift else 1
-                    self.tabs.setCurrentIndex(
-                        (self.tabs.currentIndex() + delta) % self.tabs.count()
-                    )
+                    self.tabs.setCurrentIndex((self.tabs.currentIndex() + delta) % self.tabs.count())
                 return True
 
             # Zoom
@@ -434,9 +429,7 @@ class DarkelfBrowser(BrowserUIMixin, BrowserFeaturesMixin, QMainWindow):
         page.fullScreenRequested.connect(self.handle_fullscreen)
 
         view.setContextMenuPolicy(Qt.CustomContextMenu)
-        view.customContextMenuRequested.connect(
-            lambda pos, v=view: self.show_page_context_menu(v, pos)
-        )
+        view.customContextMenuRequested.connect(lambda pos, v=view: self.show_page_context_menu(v, pos))
 
         # --------------------------------
         # Keep bookmark icon synchronized
@@ -447,7 +440,7 @@ class DarkelfBrowser(BrowserUIMixin, BrowserFeaturesMixin, QMainWindow):
         view.loadFinished.connect(lambda *_: self.update_bookmark_icon())
 
         view.titleChanged.connect(lambda *_: self.update_bookmark_icon())
-            
+
         # ---- EasyList Cosmetic Injection ----
         def apply_easylist_cosmetics(v=view):
             try:
@@ -477,9 +470,7 @@ class DarkelfBrowser(BrowserUIMixin, BrowserFeaturesMixin, QMainWindow):
             v.page().runJavaScript(js)
 
         # Inject once after page load
-        view.loadFinished.connect(
-            lambda ok, v=view: apply_easylist_cosmetics(v) if ok else None
-        )
+        view.loadFinished.connect(lambda ok, v=view: apply_easylist_cosmetics(v) if ok else None)
 
         idx = self.tabs.addTab(view, "New Tab")
         self.tabs.setCurrentIndex(idx)
@@ -500,34 +491,22 @@ class DarkelfBrowser(BrowserUIMixin, BrowserFeaturesMixin, QMainWindow):
             if i != -1:
                 self.tabs.setTabIcon(i, icon)
 
-        view.iconChanged.connect(
-            lambda _, v=view: self.update_tab_icon(v)
-        )
+        view.iconChanged.connect(lambda _, v=view: self.update_tab_icon(v))
 
-        view.urlChanged.connect(
-            lambda _, v=view: self.update_tab_icon(v)
-        )
+        view.urlChanged.connect(lambda _, v=view: self.update_tab_icon(v))
 
         if home:
-            bg1, bg2, bg3 = HOMEPAGE_THEMES.get(
-                self.homepage_theme, HOMEPAGE_THEMES["Nebula"]
-            )
+            bg1, bg2, bg3 = HOMEPAGE_THEMES.get(self.homepage_theme, HOMEPAGE_THEMES["Nebula"])
 
             html = (
-                HOMEPAGE.replace("ACCENT_COLOR", self.accent_color)
-                .replace("BG1", bg1)
-                .replace("BG2", bg2)
-                .replace("BG3", bg3)
+                HOMEPAGE.replace("ACCENT_COLOR", self.accent_color).replace("BG1", bg1).replace("BG2", bg2).replace("BG3", bg3)
             )
 
             view.setHtml(html)
             view._is_homepage = True
 
-            view.loadFinished.connect(
-                lambda *_,
-                v=view: self.update_tab_icon(v)
-            )
-            
+            view.loadFinished.connect(lambda *_, v=view: self.update_tab_icon(v))
+
         elif url and url.startswith("view-source:"):
             real_url = url.replace("view-source:", "")
             view.load(QUrl(real_url))
@@ -550,9 +529,7 @@ class DarkelfBrowser(BrowserUIMixin, BrowserFeaturesMixin, QMainWindow):
 
     def _show_source_tab(self, html):
         view = QWebEngineView(self)
-        view.setHtml(
-            f"<pre style='white-space:pre-wrap;font-family:monospace'>{html.replace('<','&lt;')}</pre>"
-        )
+        view.setHtml(f"<pre style='white-space:pre-wrap;font-family:monospace'>{html.replace('<', '&lt;')}</pre>")
         idx = self.tabs.addTab(view, "Source")
         self.tabs.setCurrentIndex(idx)
 
@@ -606,7 +583,7 @@ class DarkelfBrowser(BrowserUIMixin, BrowserFeaturesMixin, QMainWindow):
                 w.setUrl(QUrl("about:blank"))
             except Exception as e:
                 print(f"[Darkelf] Failed to clean up WebEngine page: {e}")
-                
+
             w.page().deleteLater()
             w.deleteLater()
 
@@ -673,13 +650,9 @@ class DarkelfBrowser(BrowserUIMixin, BrowserFeaturesMixin, QMainWindow):
 
         self._shortcut(["Ctrl+PgDown", "Meta+Right", "Alt+Right"], self.next_tab)
 
-        self._shortcut(
-            ["F11", "Alt+Return", "Alt+Enter", "Meta+Return"], self.toggle_fullscreen
-        )
+        self._shortcut(["F11", "Alt+Return", "Alt+Enter", "Meta+Return"], self.toggle_fullscreen)
 
-        self._shortcut(
-            ["Ctrl+Tab", "Meta+Right", "Alt+Right", "Ctrl+PgDown"], self.next_tab
-        )
+        self._shortcut(["Ctrl+Tab", "Meta+Right", "Alt+Right", "Ctrl+PgDown"], self.next_tab)
 
     def _shortcut(self, keys, callback):
         if isinstance(keys, str):
@@ -739,16 +712,9 @@ class DarkelfBrowser(BrowserUIMixin, BrowserFeaturesMixin, QMainWindow):
         if not v:
             return
 
-        bg1, bg2, bg3 = HOMEPAGE_THEMES.get(
-            self.homepage_theme, HOMEPAGE_THEMES["Nebula"]
-        )
+        bg1, bg2, bg3 = HOMEPAGE_THEMES.get(self.homepage_theme, HOMEPAGE_THEMES["Nebula"])
 
-        html = (
-            HOMEPAGE.replace("ACCENT_COLOR", self.accent_color)
-            .replace("BG1", bg1)
-            .replace("BG2", bg2)
-            .replace("BG3", bg3)
-        )
+        html = HOMEPAGE.replace("ACCENT_COLOR", self.accent_color).replace("BG1", bg1).replace("BG2", bg2).replace("BG3", bg3)
 
         v.setHtml(html)
         v._is_homepage = True
@@ -758,10 +724,7 @@ class DarkelfBrowser(BrowserUIMixin, BrowserFeaturesMixin, QMainWindow):
             view = self.tabs.widget(i)
 
             if getattr(view, "_is_homepage", False):
-
-                bg1, bg2, bg3 = HOMEPAGE_THEMES.get(
-                    self.homepage_theme, HOMEPAGE_THEMES["Aurora"]
-                )
+                bg1, bg2, bg3 = HOMEPAGE_THEMES.get(self.homepage_theme, HOMEPAGE_THEMES["Aurora"])
 
                 html = (
                     HOMEPAGE.replace("ACCENT_COLOR", self.accent_color)
@@ -816,4 +779,3 @@ class DarkelfBrowser(BrowserUIMixin, BrowserFeaturesMixin, QMainWindow):
             print("[MiniAI] shutdown error:", e)
 
         super().closeEvent(event)
-

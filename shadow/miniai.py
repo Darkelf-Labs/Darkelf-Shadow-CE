@@ -5,6 +5,7 @@ import re
 from collections import deque
 from urllib.parse import urlparse, unquote
 
+
 class DarkelfMiniAISentinel:
     """
     Aggressive + Expanded Edition for Darkelf Shadow (PyQt5) - Enhanced for modern trackers,
@@ -195,11 +196,7 @@ class DarkelfMiniAISentinel:
         if not haystack or not token:
             return False
         # Treat these as separators: / ? & = # : . - _ +
-        pattern = (
-            r"(?:^|[\/\?\&\=\#\:\.\-\_\+])"
-            + re.escape(token)
-            + r"(?:$|[\/\?\&\=\#\:\.\-\_\+])"
-        )
+        pattern = r"(?:^|[\/\?\&\=\#\:\.\-\_\+])" + re.escape(token) + r"(?:$|[\/\?\&\=\#\:\.\-\_\+])"
         return re.search(pattern, haystack) is not None
 
     def monitor_network(self, url, headers=None):
@@ -357,8 +354,7 @@ class DarkelfMiniAISentinel:
         # Exploit: "exploit" and "payload" are common benign words; only escalate if combined with other exploit indicators.
         exploit_indicators = ("shellcode", "metasploit", "exploit-db", "cve-", "0day")
         if any(x in focus for x in exploit_indicators) or (
-            ("payload" in focus or "exploit" in focus)
-            and ("cve-" in focus or "shellcode" in focus)
+            ("payload" in focus or "exploit" in focus) and ("cve-" in focus or "shellcode" in focus)
         ):
             self.exploit_attempts += 1
             event["threats"].append("EXPLOIT")
@@ -408,9 +404,7 @@ class DarkelfMiniAISentinel:
         # Reduce false positives: check in focus first; fallback to full URL if needed.
         fp_focus = focus if focus else url_norm_l
         for k in self.fingerprint_apis:
-            if self._token_present(fp_focus, k) or (
-                k in fp_focus and k in ("webgl", "webrtc", "canvas")
-            ):
+            if self._token_present(fp_focus, k) or (k in fp_focus and k in ("webgl", "webrtc", "canvas")):
                 self.fingerprint_apis[k] += 1
                 event["threats"].append(f"FINGERPRINT:{k}")
                 if event["risk_level"] == "low":
@@ -424,18 +418,12 @@ class DarkelfMiniAISentinel:
 
         last1s = sum(1 for t in self.request_timestamps if (now - t) < 1.0)
 
-        trusted_domain = any(
-            self._domain_matches(domain, d) for d in self.trusted_cdn_domains
-        )
+        trusted_domain = any(self._domain_matches(domain, d) for d in self.trusted_cdn_domains)
 
         is_static_asset = any(path.endswith(ext) for ext in self.static_extensions)
 
         # Burst detection
-        if (
-            last1s > self.anomaly_threshold
-            and not trusted_domain
-            and not is_static_asset
-        ):
+        if last1s > self.anomaly_threshold and not trusted_domain and not is_static_asset:
             event["threats"].append("ANOMALY:burst")
             if event["risk_level"] in ("low", "medium"):
                 event["risk_level"] = "high"
@@ -456,27 +444,19 @@ class DarkelfMiniAISentinel:
         # 5) Lockdown trigger
         # -------------------------
         real_attack = any(
-            kw in t.upper()
-            for t in event.get("threats", [])
-            for kw in ("INTRUSION", "MALWARE", "EXPLOIT", "TOOL")
+            kw in t.upper() for t in event.get("threats", []) for kw in ("INTRUSION", "MALWARE", "EXPLOIT", "TOOL")
         )
 
         if event.get("risk_level") == "critical" and real_attack:
-
             self.critical_events.append(now)
 
             print("\n🔴 [MiniAI] CRITICAL threat detected!")
             print("Threats:", event.get("threats"))
 
-            recent = [
-                t
-                for t in self.critical_events
-                if (now - t) < self.CRITICAL_WINDOW_SECONDS
-            ]
+            recent = [t for t in self.critical_events if (now - t) < self.CRITICAL_WINDOW_SECONDS]
 
             # Trigger lockdown only after threshold
             if len(recent) >= self.lockdown_threshold:
-
                 if not self.lockdown_active:
                     self.lockdown_active = True
                     self.lockdown_triggered_at = now
@@ -545,11 +525,7 @@ class DarkelfMiniAISentinel:
                 "http_blocks": self.http_blocks_attempts,
             },
             "fingerprinting_apis": dict(self.fingerprint_apis),
-            "recent_threats": [
-                e
-                for e in list(self.events)[-10:]
-                if e["risk_level"] in ("high", "critical")
-            ],
+            "recent_threats": [e for e in list(self.events)[-10:] if e["risk_level"] in ("high", "critical")],
             "panic": {
                 "active": self.panic_mode_active,
                 "triggered_at": self.panic_triggered_at,
@@ -591,24 +567,14 @@ class DarkelfMiniAISentinel:
                     domain_stats[dom]["http_blocks"] += 1
             if event["risk_level"] == "critical":
                 domain_stats[dom]["risk_level"] = "critical"
-            elif (
-                event["risk_level"] == "high"
-                and domain_stats[dom]["risk_level"] != "critical"
-            ):
+            elif event["risk_level"] == "high" and domain_stats[dom]["risk_level"] != "critical":
                 domain_stats[dom]["risk_level"] = "high"
-            elif (
-                event["risk_level"] == "medium"
-                and domain_stats[dom]["risk_level"] == "low"
-            ):
+            elif event["risk_level"] == "medium" and domain_stats[dom]["risk_level"] == "low":
                 domain_stats[dom]["risk_level"] = "medium"
         sorted_domains = sorted(
             domain_stats.items(),
             key=lambda x: (
-                x[1]["trackers"]
-                + x[1]["fingerprinting"]
-                + x[1]["malware"]
-                + x[1]["intrusions"]
-                + x[1]["http_blocks"]
+                x[1]["trackers"] + x[1]["fingerprinting"] + x[1]["malware"] + x[1]["intrusions"] + x[1]["http_blocks"]
             ),
             reverse=True,
         )
@@ -617,26 +583,26 @@ class DarkelfMiniAISentinel:
 ║         DARKELF MiniAI - THREAT REPORT                   ║
 ╚══════════════════════════════════════════════════════════╝
 Session Uptime:     {uptime_min:.1f} min
-Total Events:       {stats['total_events']}
-Unique Domains:     {stats['unique_domains']}
+Total Events:       {stats["total_events"]}
+Unique Domains:     {stats["unique_domains"]}
 Lockdown Status:    {lockdown_status}
 THREAT SUMMARY:
-├─ Trackers:        {stats['threats']['trackers']}
-├─ Suspicious:      {stats['threats']['suspicious']}
-├─ Malware:         {stats['threats']['malware']}
-├─ Exploits:        {stats['threats']['exploits']}
-├─ Intrusions:      {stats['threats']['intrusions']}
-├─ HTTP Blocks:     {stats['threats'].get('http_blocks', 0)}
-└─ Fingerprinting:  {stats['threats']['fingerprinting']}
+├─ Trackers:        {stats["threats"]["trackers"]}
+├─ Suspicious:      {stats["threats"]["suspicious"]}
+├─ Malware:         {stats["threats"]["malware"]}
+├─ Exploits:        {stats["threats"]["exploits"]}
+├─ Intrusions:      {stats["threats"]["intrusions"]}
+├─ HTTP Blocks:     {stats["threats"].get("http_blocks", 0)}
+└─ Fingerprinting:  {stats["threats"]["fingerprinting"]}
 FINGERPRINTING DEFENSE STATUS:
-├─ Canvas:          {stats['fingerprinting_apis']['canvas']} attempts → NOISE
-├─ WebGL:           {stats['fingerprinting_apis']['webgl']} attempts → SPOOFED
-├─ Audio:           {stats['fingerprinting_apis']['audio']} attempts → ZEROED
-├─ Font:            {stats['fingerprinting_apis']['font']} attempts → HIDDEN
-├─ Battery:         {stats['fingerprinting_apis']['battery']} attempts → SPOOFED
-├─ Geolocation:     {stats['fingerprinting_apis']['geolocation']} attempts → BLOCKED
-├─ Media Devices:   {stats['fingerprinting_apis']['media_devices']} attempts → EMPTY
-└─ WebRTC:          {stats['fingerprinting_apis']['webrtc']} attempts → DISABLED
+├─ Canvas:          {stats["fingerprinting_apis"]["canvas"]} attempts → NOISE
+├─ WebGL:           {stats["fingerprinting_apis"]["webgl"]} attempts → SPOOFED
+├─ Audio:           {stats["fingerprinting_apis"]["audio"]} attempts → ZEROED
+├─ Font:            {stats["fingerprinting_apis"]["font"]} attempts → HIDDEN
+├─ Battery:         {stats["fingerprinting_apis"]["battery"]} attempts → SPOOFED
+├─ Geolocation:     {stats["fingerprinting_apis"]["geolocation"]} attempts → BLOCKED
+├─ Media Devices:   {stats["fingerprinting_apis"]["media_devices"]} attempts → EMPTY
+└─ WebRTC:          {stats["fingerprinting_apis"]["webrtc"]} attempts → DISABLED
 TOP 10 THREAT DOMAINS:
 """
         for i, (dom, threats) in enumerate(sorted_domains[:10], 1):
@@ -726,11 +692,7 @@ TOP 10 THREAT DOMAINS:
         # -------------------------
         # Auto-release LOCKDOWN
         # -------------------------
-        if (
-            self.lockdown_active
-            and self.lockdown_triggered_at
-            and now - self.lockdown_triggered_at > 300
-        ):
+        if self.lockdown_active and self.lockdown_triggered_at and now - self.lockdown_triggered_at > 300:
             print("[MiniAI] 🟢 Lockdown auto-released")
 
             self.lockdown_active = False
@@ -742,11 +704,7 @@ TOP 10 THREAT DOMAINS:
         # -------------------------
         # Auto-release PANIC MODE
         # -------------------------
-        if (
-            self.panic_mode_active
-            and self.panic_triggered_at
-            and now - self.panic_triggered_at > 300
-        ):
+        if self.panic_mode_active and self.panic_triggered_at and now - self.panic_triggered_at > 300:
             print("[MiniAI] 🟢 Panic auto-released")
 
             self.panic_mode_active = False

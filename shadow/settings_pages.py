@@ -32,16 +32,18 @@ from PySide6.QtWidgets import (
 
 from importlib.resources import files
 
+
 def accent(browser):
     return browser.accent_color if hasattr(browser, "accent_color") else "#A855F7"
-    
+
+
 # ============================================================
 # Reusable Settings Widgets
 # Paste below ThemeCard
 # ============================================================
 
-class SettingsLabel(QLabel):
 
+class SettingsLabel(QLabel):
     def __init__(self, text):
         super().__init__(text)
 
@@ -56,7 +58,6 @@ class SettingsLabel(QLabel):
 
 
 class DescriptionLabel(QLabel):
-
     def __init__(self, text):
         super().__init__(text)
 
@@ -72,7 +73,6 @@ class DescriptionLabel(QLabel):
 
 
 class SettingsChip(QFrame):
-
     def __init__(self, text, color="#A855F7"):
         super().__init__()
 
@@ -85,7 +85,7 @@ class SettingsChip(QFrame):
         """)
 
         layout = QHBoxLayout(self)
-        layout.setContentsMargins(10,4,10,4)
+        layout.setContentsMargins(10, 4, 10, 4)
 
         lbl = QLabel(text)
 
@@ -99,7 +99,6 @@ class SettingsChip(QFrame):
 
 
 class Divider(QFrame):
-
     def __init__(self):
         super().__init__()
 
@@ -114,7 +113,6 @@ class Divider(QFrame):
 
 
 class StatusBadge(QFrame):
-
     def __init__(self, text=""):
 
         super().__init__()
@@ -175,19 +173,13 @@ class StatusBadge(QFrame):
 
 
 class SettingsRow(QFrame):
-
     """
     Reusable:
 
     Label.....................Widget
     """
 
-    def __init__(
-        self,
-        title,
-        description="",
-        widget=None
-    ):
+    def __init__(self, title, description="", widget=None):
         super().__init__()
 
         layout = QHBoxLayout(self)
@@ -215,24 +207,17 @@ class SettingsRow(QFrame):
         # Keep the badge aligned on the right
         #
         if widget:
-            widget.setSizePolicy(
-                QSizePolicy.Fixed,
-                QSizePolicy.Fixed
-            )
+            widget.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
 
-            layout.addWidget(
-                widget,
-                0,
-                Qt.AlignRight | Qt.AlignVCenter
-            )
+            layout.addWidget(widget, 0, Qt.AlignRight | Qt.AlignVCenter)
 
 
 # ============================================================
 # Animated Switch
 # ============================================================
 
-class ToggleSwitch(QAbstractButton):
 
+class ToggleSwitch(QAbstractButton):
     toggledAnimated = Signal(bool)
 
     def __init__(self):
@@ -243,24 +228,17 @@ class ToggleSwitch(QAbstractButton):
 
         self.setCheckable(True)
 
-        self.setFixedSize(58,32)
+        self.setFixedSize(58, 32)
 
         self._offset = 3
 
-        self.anim = QPropertyAnimation(
-            self,
-            b"offset"
-        )
+        self.anim = QPropertyAnimation(self, b"offset")
 
         self.anim.setDuration(140)
 
-        self.anim.setEasingCurve(
-            QEasingCurve.OutCubic
-        )
+        self.anim.setEasingCurve(QEasingCurve.OutCubic)
 
-        self.clicked.connect(
-            self.startAnimation
-        )
+        self.clicked.connect(self.startAnimation)
 
     #
     # Property
@@ -269,15 +247,11 @@ class ToggleSwitch(QAbstractButton):
     def getOffset(self):
         return self._offset
 
-    def setOffset(self,value):
-        self._offset=value
+    def setOffset(self, value):
+        self._offset = value
         self.update()
 
-    offset = Property(
-        float,
-        getOffset,
-        setOffset
-    )
+    offset = Property(float, getOffset, setOffset)
 
     #
     #
@@ -289,76 +263,51 @@ class ToggleSwitch(QAbstractButton):
         self.anim.setStartValue(self._offset)
 
         if self.isChecked():
-
             self.anim.setEndValue(29)
 
         else:
-
             self.anim.setEndValue(3)
 
         self.anim.start()
 
-        self.toggledAnimated.emit(
-            self.isChecked()
-        )
+        self.toggledAnimated.emit(self.isChecked())
 
     #
     #
 
-    def paintEvent(self,event):
+    def paintEvent(self, event):
 
         p = QPainter(self)
 
-        p.setRenderHint(
-            QPainter.Antialiasing
-        )
+        p.setRenderHint(QPainter.Antialiasing)
 
         rect = self.rect()
 
-        bg = QColor(
-            "#A855F7"
-            if self.isChecked()
-            else "#394150"
-        )
+        bg = QColor("#A855F7" if self.isChecked() else "#394150")
 
         p.setBrush(bg)
 
         p.setPen(Qt.NoPen)
 
-        p.drawRoundedRect(
-            rect,
-            16,
-            16
-        )
+        p.drawRoundedRect(rect, 16, 16)
 
         p.setBrush(Qt.white)
 
-        p.drawEllipse(
-            QRectF(
-                self._offset,
-                3,
-                26,
-                26
-            )
-        )
+        p.drawEllipse(QRectF(self._offset, 3, 26, 26))
 
 
 # ============================================================
 # Section Header
 # ============================================================
 
-class SectionHeader(QWidget):
 
-    def __init__(
-        self,
-        title,
-        subtitle=""
-    ):
+class SectionHeader(QWidget):
+    def __init__(self, title, subtitle=""):
         super().__init__()
 
         layout = QVBoxLayout(self)
 
-        layout.setContentsMargins(0,0,0,0)
+        layout.setContentsMargins(0, 0, 0, 0)
 
         lbl = QLabel(title)
 
@@ -371,7 +320,6 @@ class SectionHeader(QWidget):
         layout.addWidget(lbl)
 
         if subtitle:
-
             sub = QLabel(subtitle)
 
             sub.setStyleSheet("""
@@ -380,13 +328,14 @@ class SectionHeader(QWidget):
             """)
 
             layout.addWidget(sub)
-            
+
+
 # ============================================================
 # Privacy & Security
 # ============================================================
 
-class PrivacyPage(QWidget):
 
+class PrivacyPage(QWidget):
     def __init__(self, browser):
 
         super().__init__()
@@ -420,12 +369,7 @@ class PrivacyPage(QWidget):
         # Header
         # =====================================================
 
-        self.layout.addWidget(
-            SectionHeader(
-                "Privacy & Security",
-                "Darkelf permanently enforces the protections below."
-            )
-        )
+        self.layout.addWidget(SectionHeader("Privacy & Security", "Darkelf permanently enforces the protections below."))
 
         # =====================================================
         # Browser Security
@@ -435,49 +379,27 @@ class PrivacyPage(QWidget):
 
         self.javascript_badge = StatusBadge("Enabled")
 
-        security.layout.addWidget(
-            SettingsRow(
-                "JavaScript",
-                "Secure JavaScript engine.",
-                self.javascript_badge
-            )
-        )
+        security.layout.addWidget(SettingsRow("JavaScript", "Secure JavaScript engine.", self.javascript_badge))
 
         security.layout.addWidget(Divider())
 
         self.fp_badge = StatusBadge("Active")
 
         security.layout.addWidget(
-            SettingsRow(
-                "Fingerprint Defense",
-                "Canvas, WebGL, AudioContext and Navigator protection.",
-                self.fp_badge
-            )
+            SettingsRow("Fingerprint Defense", "Canvas, WebGL, AudioContext and Navigator protection.", self.fp_badge)
         )
 
         security.layout.addWidget(Divider())
 
         self.https_badge = StatusBadge("Always On")
 
-        security.layout.addWidget(
-            SettingsRow(
-                "HTTPS Upgrade",
-                "Automatically upgrade insecure requests.",
-                self.https_badge
-            )
-        )
+        security.layout.addWidget(SettingsRow("HTTPS Upgrade", "Automatically upgrade insecure requests.", self.https_badge))
 
         security.layout.addWidget(Divider())
 
         self.webrtc_badge = StatusBadge("Blocked")
 
-        security.layout.addWidget(
-            SettingsRow(
-                "WebRTC",
-                "Prevent local and public IP address leaks.",
-                self.webrtc_badge
-            )
-        )
+        security.layout.addWidget(SettingsRow("WebRTC", "Prevent local and public IP address leaks.", self.webrtc_badge))
 
         self.layout.addWidget(security)
 
@@ -489,52 +411,28 @@ class PrivacyPage(QWidget):
 
         self.cookies_badge = StatusBadge("Memory")
 
-        private.layout.addWidget(
-            SettingsRow(
-                "Cookies",
-                "Stored only for the current session.",
-                self.cookies_badge
-            )
-        )
+        private.layout.addWidget(SettingsRow("Cookies", "Stored only for the current session.", self.cookies_badge))
 
         private.layout.addWidget(Divider())
 
         self.cache_badge = StatusBadge("Memory")
 
-        private.layout.addWidget(
-            SettingsRow(
-                "Disk Cache",
-                "Ephemeral in-memory cache.",
-                self.cache_badge
-            )
-        )
+        private.layout.addWidget(SettingsRow("Disk Cache", "Ephemeral in-memory cache.", self.cache_badge))
 
         private.layout.addWidget(Divider())
 
         self.history_badge = StatusBadge("Disabled")
 
-        private.layout.addWidget(
-            SettingsRow(
-                "Browsing History",
-                "Never written to disk.",
-                self.history_badge
-            )
-        )
+        private.layout.addWidget(SettingsRow("Browsing History", "Never written to disk.", self.history_badge))
 
         private.layout.addWidget(Divider())
 
         self.profile_badge = StatusBadge("Private")
 
-        private.layout.addWidget(
-            SettingsRow(
-                "Browser Profile",
-                "Off-the-record profile.",
-                self.profile_badge
-            )
-        )
+        private.layout.addWidget(SettingsRow("Browser Profile", "Off-the-record profile.", self.profile_badge))
 
         self.layout.addWidget(private)
-        
+
         private.layout.addWidget(Divider())
 
         # -------------------------------------------------
@@ -543,13 +441,7 @@ class PrivacyPage(QWidget):
 
         self.bookmarks_badge = StatusBadge("Session")
 
-        private.layout.addWidget(
-            SettingsRow(
-                "Bookmarks",
-                "Session-only bookmarks stored in memory.",
-                self.bookmarks_badge
-            )
-        )
+        private.layout.addWidget(SettingsRow("Bookmarks", "Session-only bookmarks stored in memory.", self.bookmarks_badge))
 
         private.layout.addWidget(Divider())
 
@@ -561,14 +453,12 @@ class PrivacyPage(QWidget):
 
         private.layout.addWidget(
             SettingsRow(
-                "Darkelf Quantum",
-                "PQ chaining provides session hardening and enhanced memory tokens.",
-                self.quantum_badge
+                "Darkelf Quantum", "PQ chaining provides session hardening and enhanced memory tokens.", self.quantum_badge
             )
         )
 
         self.layout.addWidget(private)
-        
+
         # =====================================================
         # Network Protection
         # =====================================================
@@ -577,37 +467,21 @@ class PrivacyPage(QWidget):
 
         self.tracker_badge = StatusBadge("Active")
 
-        network.layout.addWidget(
-            SettingsRow(
-                "Tracker Blocking",
-                "EasyList and heuristic filtering.",
-                self.tracker_badge
-            )
-        )
+        network.layout.addWidget(SettingsRow("Tracker Blocking", "EasyList and heuristic filtering.", self.tracker_badge))
 
         network.layout.addWidget(Divider())
 
         self.referrer_badge = StatusBadge("Protected")
 
         network.layout.addWidget(
-            SettingsRow(
-                "Referrer Protection",
-                "Limit cross-site information leakage.",
-                self.referrer_badge
-            )
+            SettingsRow("Referrer Protection", "Limit cross-site information leakage.", self.referrer_badge)
         )
 
         network.layout.addWidget(Divider())
 
         self.miniai_badge = StatusBadge("Monitoring")
 
-        network.layout.addWidget(
-            SettingsRow(
-                "MiniAI Sentinel",
-                "Real-time network monitoring.",
-                self.miniai_badge
-            )
-        )
+        network.layout.addWidget(SettingsRow("MiniAI Sentinel", "Real-time network monitoring.", self.miniai_badge))
 
         self.layout.addWidget(network)
 
@@ -619,28 +493,16 @@ class PrivacyPage(QWidget):
 
         self.rules_badge = StatusBadge("Loaded")
 
-        filtering.layout.addWidget(
-            SettingsRow(
-                "Network Rules",
-                "Tracker and advertising filter lists.",
-                self.rules_badge
-            )
-        )
+        filtering.layout.addWidget(SettingsRow("Network Rules", "Tracker and advertising filter lists.", self.rules_badge))
 
         filtering.layout.addWidget(Divider())
 
         self.rule_count_badge = StatusBadge("0")
 
-        filtering.layout.addWidget(
-            SettingsRow(
-                "Rules Loaded",
-                "Current active filter rules.",
-                self.rule_count_badge
-            )
-        )
+        filtering.layout.addWidget(SettingsRow("Rules Loaded", "Current active filter rules.", self.rule_count_badge))
 
         self.layout.addWidget(filtering)
-        
+
     # ---------------------------------------------------------
     # Accent Synchronization
     # ---------------------------------------------------------
@@ -654,26 +516,21 @@ class PrivacyPage(QWidget):
         )
 
         badges = (
-
             self.javascript_badge,
             self.fp_badge,
             self.https_badge,
             self.webrtc_badge,
-
             self.cookies_badge,
             self.cache_badge,
             self.history_badge,
             self.profile_badge,
             self.bookmarks_badge,
             self.quantum_badge,
-
             self.tracker_badge,
             self.referrer_badge,
             self.miniai_badge,
-
             self.rules_badge,
             self.rule_count_badge,
-
         )
 
         for badge in badges:
@@ -688,7 +545,6 @@ class PrivacyPage(QWidget):
         engine = getattr(self.browser, "easy", None)
 
         if engine is None:
-
             profile = getattr(
                 self.browser,
                 "shared_profile",
@@ -711,36 +567,28 @@ class PrivacyPage(QWidget):
         cosmetic = 0
 
         if engine:
-
             if hasattr(engine, "network_rules"):
                 network = len(engine.network_rules)
 
             if hasattr(engine, "cosmetic"):
-
-                cosmetic = sum(
-                    len(v)
-                    for v in engine.cosmetic.values()
-                )
+                cosmetic = sum(len(v) for v in engine.cosmetic.values())
 
         total = network + cosmetic
 
-        self.rules_badge.setText(
-            "Loaded" if total else "Unavailable"
-        )
+        self.rules_badge.setText("Loaded" if total else "Unavailable")
 
-        self.rule_count_badge.setText(
-            f"{total:,}"
-        )
+        self.rule_count_badge.setText(f"{total:,}")
 
         self.applyAccent()
-        
+
+
 # ============================================================
 # Darkelf Quantum
 # Place directly ABOVE class AboutPage(QWidget)
 # ============================================================
 
-class QuantumPage(QWidget):
 
+class QuantumPage(QWidget):
     def __init__(self, browser):
 
         super().__init__()
@@ -775,10 +623,7 @@ class QuantumPage(QWidget):
         # =====================================================
 
         self.layout.addWidget(
-            SectionHeader(
-                "Darkelf Quantum",
-                "Runtime health, watchdog monitoring and post-quantum session integrity."
-            )
+            SectionHeader("Darkelf Quantum", "Runtime health, watchdog monitoring and post-quantum session integrity.")
         )
 
         # =====================================================
@@ -792,43 +637,19 @@ class QuantumPage(QWidget):
         self.integrity_badge = StatusBadge("Verified")
         self.session_badge = StatusBadge("Secure")
 
-        runtime.layout.addWidget(
-            SettingsRow(
-                "Quantum Engine",
-                "Current Quantum runtime status.",
-                self.status_badge
-            )
-        )
+        runtime.layout.addWidget(SettingsRow("Quantum Engine", "Current Quantum runtime status.", self.status_badge))
 
         runtime.layout.addWidget(Divider())
 
-        runtime.layout.addWidget(
-            SettingsRow(
-                "Watchdog",
-                "Continuously monitors Quantum runtime health.",
-                self.watchdog_badge
-            )
-        )
+        runtime.layout.addWidget(SettingsRow("Watchdog", "Continuously monitors Quantum runtime health.", self.watchdog_badge))
 
         runtime.layout.addWidget(Divider())
 
-        runtime.layout.addWidget(
-            SettingsRow(
-                "Integrity",
-                "Validates Quantum runtime integrity.",
-                self.integrity_badge
-            )
-        )
+        runtime.layout.addWidget(SettingsRow("Integrity", "Validates Quantum runtime integrity.", self.integrity_badge))
 
         runtime.layout.addWidget(Divider())
 
-        runtime.layout.addWidget(
-            SettingsRow(
-                "Session",
-                "Current Quantum session state.",
-                self.session_badge
-            )
-        )
+        runtime.layout.addWidget(SettingsRow("Session", "Current Quantum session state.", self.session_badge))
 
         self.layout.addWidget(runtime)
 
@@ -844,53 +665,23 @@ class QuantumPage(QWidget):
         self.tabs_badge = StatusBadge("0")
         self.seed_age_badge = StatusBadge("0s")
 
-        stats.layout.addWidget(
-            SettingsRow(
-                "Generation",
-                "Current Quantum generation.",
-                self.generation_badge
-            )
-        )
+        stats.layout.addWidget(SettingsRow("Generation", "Current Quantum generation.", self.generation_badge))
 
         stats.layout.addWidget(Divider())
 
-        stats.layout.addWidget(
-            SettingsRow(
-                "Rekeys",
-                "Quantum runtime resets.",
-                self.rekeys_badge
-            )
-        )
+        stats.layout.addWidget(SettingsRow("Rekeys", "Quantum runtime resets.", self.rekeys_badge))
 
         stats.layout.addWidget(Divider())
 
-        stats.layout.addWidget(
-            SettingsRow(
-                "Protected Requests",
-                "Observed protected requests.",
-                self.requests_badge
-            )
-        )
+        stats.layout.addWidget(SettingsRow("Protected Requests", "Observed protected requests.", self.requests_badge))
 
         stats.layout.addWidget(Divider())
 
-        stats.layout.addWidget(
-            SettingsRow(
-                "Protected Tabs",
-                "Tabs protected by Quantum.",
-                self.tabs_badge
-            )
-        )
+        stats.layout.addWidget(SettingsRow("Protected Tabs", "Tabs protected by Quantum.", self.tabs_badge))
 
         stats.layout.addWidget(Divider())
 
-        stats.layout.addWidget(
-            SettingsRow(
-                "Session Age",
-                "Age of the active Quantum seed.",
-                self.seed_age_badge
-            )
-        )
+        stats.layout.addWidget(SettingsRow("Session Age", "Age of the active Quantum seed.", self.seed_age_badge))
 
         self.layout.addWidget(stats)
 
@@ -901,42 +692,26 @@ class QuantumPage(QWidget):
         monitor = SettingsCard("Runtime Monitoring")
 
         monitor.layout.addWidget(
-            SettingsRow(
-                "Watchdog Monitoring",
-                "Continuously validates Quantum runtime.",
-                StatusBadge("Enabled")
-            )
+            SettingsRow("Watchdog Monitoring", "Continuously validates Quantum runtime.", StatusBadge("Enabled"))
         )
 
         monitor.layout.addWidget(Divider())
 
         monitor.layout.addWidget(
             SettingsRow(
-                "Automatic Recovery",
-                "Automatically restores runtime integrity when possible.",
-                StatusBadge("Enabled")
+                "Automatic Recovery", "Automatically restores runtime integrity when possible.", StatusBadge("Enabled")
             )
         )
 
         monitor.layout.addWidget(Divider())
 
         monitor.layout.addWidget(
-            SettingsRow(
-                "Chain Monitoring",
-                "Monitors Quantum chain consistency.",
-                StatusBadge("Enabled")
-            )
+            SettingsRow("Chain Monitoring", "Monitors Quantum chain consistency.", StatusBadge("Enabled"))
         )
 
         monitor.layout.addWidget(Divider())
 
-        monitor.layout.addWidget(
-            SettingsRow(
-                "Bounded Memory",
-                "Session-only bounded Quantum memory.",
-                StatusBadge("Enabled")
-            )
-        )
+        monitor.layout.addWidget(SettingsRow("Bounded Memory", "Session-only bounded Quantum memory.", StatusBadge("Enabled")))
 
         self.layout.addWidget(monitor)
 
@@ -1033,42 +808,26 @@ class QuantumPage(QWidget):
 
         healthy = bool(health.get("healthy", False))
 
-        self.status_badge.setText(
-            str(info.get("status", "Unknown")).title()
-        )
+        self.status_badge.setText(str(info.get("status", "Unknown")).title())
 
-        self.watchdog_badge.setText(
-            "Healthy" if healthy else "Warning"
-        )
+        self.watchdog_badge.setText("Healthy" if healthy else "Warning")
 
-        self.integrity_badge.setText(
-            "Verified" if healthy else "Recovered"
-        )
+        self.integrity_badge.setText("Verified" if healthy else "Recovered")
 
         self.session_badge.setText("Secure")
 
-        self.generation_badge.setText(
-            str(info.get("generation", 0))
-        )
+        self.generation_badge.setText(str(info.get("generation", 0)))
 
-        self.rekeys_badge.setText(
-            str(info.get("rekeys", 0))
-        )
+        self.rekeys_badge.setText(str(info.get("rekeys", 0)))
 
-        self.requests_badge.setText(
-            f"{int(info.get('requests', 0)):,}"
-        )
+        self.requests_badge.setText(f"{int(info.get('requests', 0)):,}")
 
-        self.tabs_badge.setText(
-            str(info.get("tabs", 0))
-        )
+        self.tabs_badge.setText(str(info.get("tabs", 0)))
 
-        self.seed_age_badge.setText(
-            f"{info.get('seed_age', 0)}s"
-        )
+        self.seed_age_badge.setText(f"{info.get('seed_age', 0)}s")
 
         self.applyAccent()
-        
+
     def _set_unavailable(self, status="Unavailable"):
         self.status_badge.setText(status)
         self.watchdog_badge.setText("Unavailable")
@@ -1081,19 +840,15 @@ class QuantumPage(QWidget):
         self.seed_age_badge.setText("--")
 
         self.applyAccent()
-        
-class AboutPage(QWidget):
 
+
+class AboutPage(QWidget):
     def __init__(self, browser):
         super().__init__()
 
         self.browser = browser
 
-        accent = (
-            browser.accent_color.name()
-            if isinstance(browser.accent_color, QColor)
-            else str(browser.accent_color)
-        )
+        accent = browser.accent_color.name() if isinstance(browser.accent_color, QColor) else str(browser.accent_color)
 
         root = QVBoxLayout(self)
         root.setContentsMargins(0, 0, 0, 0)
@@ -1115,10 +870,7 @@ class AboutPage(QWidget):
 
         content = QWidget()
         content.setMaximumWidth(800)
-        content.setSizePolicy(
-            QSizePolicy.Expanding,
-            QSizePolicy.Preferred
-        )
+        content.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
 
         layout = QVBoxLayout(content)
         layout.setContentsMargins(0, 0, 0, 0)
@@ -1133,12 +885,7 @@ class AboutPage(QWidget):
         # Header
         # -------------------------------------------------
 
-        layout.addWidget(
-            SectionHeader(
-                "About",
-                "Darkelf Shadow Privacy Browser"
-            )
-        )
+        layout.addWidget(SectionHeader("About", "Darkelf Shadow Privacy Browser"))
 
         # -------------------------------------------------
         # About Card
@@ -1255,7 +1002,6 @@ class AboutPage(QWidget):
         buttons = (github, pypi, issues, license_btn)
 
         for btn in buttons:
-
             btn.setCursor(Qt.PointingHandCursor)
 
             btn.setStyleSheet(f"""
@@ -1274,29 +1020,13 @@ class AboutPage(QWidget):
             }}
             """)
 
-        github.clicked.connect(
-            lambda: self.open_url(
-                QUrl("https://github.com/Darkelf2024/Darkelf-Shadow")
-            )
-        )
+        github.clicked.connect(lambda: self.open_url(QUrl("https://github.com/Darkelf2024/Darkelf-Shadow")))
 
-        pypi.clicked.connect(
-            lambda: self.open_url(
-                QUrl("https://pypi.org/project/darkelf-shadow/")
-            )
-        )
+        pypi.clicked.connect(lambda: self.open_url(QUrl("https://pypi.org/project/darkelf-shadow/")))
 
-        issues.clicked.connect(
-            lambda: self.open_url(
-                QUrl("https://github.com/Darkelf2024/Darkelf-Shadow/issues")
-            )
-        )
+        issues.clicked.connect(lambda: self.open_url(QUrl("https://github.com/Darkelf2024/Darkelf-Shadow/issues")))
 
-        license_btn.clicked.connect(
-            lambda: self.open_url(
-                QUrl("https://www.gnu.org/licenses/lgpl-3.0.html")
-            )
-        )
+        license_btn.clicked.connect(lambda: self.open_url(QUrl("https://www.gnu.org/licenses/lgpl-3.0.html")))
 
         row = QHBoxLayout()
 
@@ -1314,9 +1044,7 @@ class AboutPage(QWidget):
         # Footer
         # -------------------------------------------------
 
-        footer = QLabel(
-            "© 2025 Dr. Kevin Moore • TeeM • Darkelf Project • Shadow Edition"
-        )
+        footer = QLabel("© 2025 Dr. Kevin Moore • TeeM • Darkelf Project • Shadow Edition")
 
         footer.setAlignment(Qt.AlignCenter)
 
@@ -1369,12 +1097,14 @@ class AboutPage(QWidget):
 
     def refresh(self):
         pass
+
+
 # ------------------------------------------------------------
 # Section Card
 # ------------------------------------------------------------
 
-class SettingsCard(QFrame):
 
+class SettingsCard(QFrame):
     def __init__(self, title="", parent=None):
         super().__init__(parent)
 
@@ -1398,7 +1128,7 @@ class SettingsCard(QFrame):
         """)
 
         self.layout = QVBoxLayout(self)
-        self.layout.setContentsMargins(24,24,24,24)
+        self.layout.setContentsMargins(24, 24, 24, 24)
         self.layout.setSpacing(18)
 
         if title:
@@ -1415,8 +1145,8 @@ class SettingsCard(QFrame):
 # Accent Color Button
 # ------------------------------------------------------------
 
-class AccentButton(QPushButton):
 
+class AccentButton(QPushButton):
     clickedColor = Signal(str)
 
     def __init__(self, color):
@@ -1425,7 +1155,7 @@ class AccentButton(QPushButton):
         self.color = color
 
         self.setCursor(Qt.PointingHandCursor)
-        self.setFixedSize(42,42)
+        self.setFixedSize(42, 42)
 
         self.setStyleSheet(f"""
         QPushButton{{
@@ -1443,16 +1173,15 @@ class AccentButton(QPushButton):
         }}
         """)
 
-        self.clicked.connect(
-            lambda: self.clickedColor.emit(color)
-        )
+        self.clicked.connect(lambda: self.clickedColor.emit(color))
+
 
 # ------------------------------------------------------------
 # Theme Preview Card
 # ------------------------------------------------------------
 
-class ThemeCard(QFrame):
 
+class ThemeCard(QFrame):
     selected = Signal(str)
 
     def __init__(self, name, colors):
@@ -1511,7 +1240,7 @@ class ThemeCard(QFrame):
     def selectTheme(self, name):
         # Save the selected theme
         self.browser.homepage_theme = name
-        
+
         self.browser.refresh_homepage()
 
         # If the browser has a method to rebuild the homepage, use it
@@ -1527,23 +1256,19 @@ class ThemeCard(QFrame):
                 url = view.url().toString().lower()
 
                 # Adjust these conditions to match your homepage URL if needed
-                if (
-                    url == ""
-                    or url == "about:blank"
-                    or url.startswith("darkelf:")
-                    or "homepage" in url
-                ):
+                if url == "" or url == "about:blank" or url.startswith("darkelf:") or "homepage" in url:
                     view.reload()
         except Exception as e:
             print("Theme refresh:", e)
-        
+
+
 # ------------------------------------------------------------
 # Appearance
 # ------------------------------------------------------------
 
-class AppearancePage(QWidget):
 
-    def __init__(self,browser):
+class AppearancePage(QWidget):
+    def __init__(self, browser):
 
         super().__init__()
 
@@ -1551,7 +1276,7 @@ class AppearancePage(QWidget):
 
         root = QVBoxLayout(self)
 
-        root.setContentsMargins(0,0,0,0)
+        root.setContentsMargins(0, 0, 0, 0)
 
         root.setSpacing(24)
 
@@ -1563,9 +1288,7 @@ class AppearancePage(QWidget):
         font-weight:800;
         """)
 
-        subtitle = QLabel(
-            "Customize Darkelf's appearance."
-        )
+        subtitle = QLabel("Customize Darkelf's appearance.")
 
         subtitle.setStyleSheet("""
         color:#9aa5b2;
@@ -1599,12 +1322,9 @@ class AppearancePage(QWidget):
         row.setSpacing(12)
 
         for color in colors:
-
             btn = AccentButton(color)
 
-            btn.clickedColor.connect(
-                self.changeAccent
-            )
+            btn.clickedColor.connect(self.changeAccent)
 
             row.addWidget(btn)
 
@@ -1626,51 +1346,36 @@ class AppearancePage(QWidget):
         grid.setVerticalSpacing(18)
 
         themes = [
-
-            ("Aurora",
-             ["#2E026D","#A855F7","#34D399"]),
-
-            ("Nebula",
-             ["#000428","#004e92","#8E2DE2"]),
-
-            ("Void",
-             ["#050505","#111111","#2b2b2b"]),
-
-            ("Matrix",
-             ["#031403","#0B6E4F","#00ff66"]),
-
-            ("Circuit",
-             ["#07131F","#0F4C81","#4ADEDE"]),
-
-            ("Graded",
-             ["#1f2937","#374151","#9ca3af"])
+            ("Aurora", ["#2E026D", "#A855F7", "#34D399"]),
+            ("Nebula", ["#000428", "#004e92", "#8E2DE2"]),
+            ("Void", ["#050505", "#111111", "#2b2b2b"]),
+            ("Matrix", ["#031403", "#0B6E4F", "#00ff66"]),
+            ("Circuit", ["#07131F", "#0F4C81", "#4ADEDE"]),
+            ("Graded", ["#1f2937", "#374151", "#9ca3af"]),
         ]
 
-        r=0
-        c=0
+        r = 0
+        c = 0
 
-        for name,cols in themes:
+        for name, cols in themes:
+            card = ThemeCard(name, cols)
 
-            card = ThemeCard(name,cols)
+            card.selected.connect(self.selectTheme)
 
-            card.selected.connect(
-                self.selectTheme
-            )
+            grid.addWidget(card, r, c)
 
-            grid.addWidget(card,r,c)
+            c += 1
 
-            c+=1
-
-            if c==3:
-                c=0
-                r+=1
+            if c == 3:
+                c = 0
+                r += 1
 
         themeCard.layout.addLayout(grid)
 
         root.addWidget(themeCard)
 
         root.addStretch()
-        
+
     def applyAccent(self):
 
         c = accent(self.browser)
@@ -1690,7 +1395,7 @@ class AppearancePage(QWidget):
             border:1px solid {c};
         }}
         """)
-        
+
     # -------------------------------------------------
 
     def changeAccent(self, color):
@@ -1712,13 +1417,10 @@ class AppearancePage(QWidget):
         # Persist if using QSettings
         if hasattr(self.browser, "settings"):
             try:
-                self.browser.settings.setValue(
-                    "homepage_theme",
-                    name
-                )
+                self.browser.settings.setValue("homepage_theme", name)
             except Exception as e:
                 print(f"Unable to save homepage theme: {e}")
-                
+
         # Rebuild homepage immediately
         if hasattr(self.browser, "refresh_homepage"):
             self.browser.refresh_homepage()

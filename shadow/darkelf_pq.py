@@ -15,9 +15,7 @@ import time
 from collections import deque
 
 
-def darkelf_pq_fingerprint(
-    url: str, headers: dict | None = None, seed: bytes | None = None
-) -> str:
+def darkelf_pq_fingerprint(url: str, headers: dict | None = None, seed: bytes | None = None) -> str:
     h = hashlib.sha3_512()
     h.update(url.encode("utf-8", errors="ignore"))
 
@@ -119,9 +117,7 @@ class DarkelfPQ:
             seed = self.get_tab_seed(tab_id)
             counter = self.counters.get(tab_id, 0)
 
-            self.chain = hashlib.sha3_512(
-                seed + url.encode("utf-8", errors="ignore") + counter.to_bytes(8, "big")
-            ).hexdigest()
+            self.chain = hashlib.sha3_512(seed + url.encode("utf-8", errors="ignore") + counter.to_bytes(8, "big")).hexdigest()
 
             self.counters[tab_id] = counter + 1
             self.last_update = time.time()
@@ -149,9 +145,7 @@ class DarkelfPQ:
 
             self.total_requests += 1
 
-            self.chain = hashlib.sha3_512(
-                self.chain.encode("utf-8") + fp.encode("utf-8")
-            ).hexdigest()
+            self.chain = hashlib.sha3_512(self.chain.encode("utf-8") + fp.encode("utf-8")).hexdigest()
             self.last_update = time.time()
 
             if len(self.seen) > self.MAX_SEEN:
@@ -198,8 +192,6 @@ class DarkelfPQ:
                 "observed": len(self.seen),
             }
 
-
-
     def watchdog(self) -> dict:
         """
         Lightweight runtime integrity check.
@@ -237,7 +229,7 @@ class DarkelfPQ:
                 "generation": self.generation,
                 "status": self.status() if not self._destroyed else "destroyed",
             }
-            
+
     def destroy(self):
         """
         Destroy all session-only Quantum state.

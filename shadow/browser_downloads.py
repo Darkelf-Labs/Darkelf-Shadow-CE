@@ -7,18 +7,15 @@ from PySide6.QtWidgets import (
     QHBoxLayout,
     QMenu,
     QWidgetAction,
-    QGridLayout
+    QGridLayout,
 )
 
 from PySide6.QtGui import QColor
 
-from PySide6.QtWebEngineCore import (
-    QWebEngineDownloadRequest
-)
+from PySide6.QtWebEngineCore import QWebEngineDownloadRequest
 
 
 class DownloadItem(QWidget):
-
     def __init__(self, download):
         super().__init__()
 
@@ -64,7 +61,7 @@ class DownloadItem(QWidget):
 
         elif state == QWebEngineDownloadRequest.DownloadInterrupted:
             self.cancel.setText("Failed")
-            
+
     def _handle_click(self):
 
         state = self.download.state()
@@ -75,8 +72,8 @@ class DownloadItem(QWidget):
             self.setParent(None)
             self.deleteLater()
 
-class DownloadShelf(QWidget):
 
+class DownloadShelf(QWidget):
     def __init__(self):
         super().__init__()
 
@@ -93,7 +90,8 @@ class DownloadShelf(QWidget):
 
         if self.layout.count() == 0:
             self.hide()
-            
+
+
 def create_color_palette_menu(parent, callback):
 
     menu = QMenu(parent)
@@ -103,32 +101,41 @@ def create_color_palette_menu(parent, callback):
 
     grid = QGridLayout(palette)
     grid.setSpacing(2)
-    grid.setContentsMargins(4,4,4,4)
+    grid.setContentsMargins(4, 4, 4, 4)
 
     colors = [
         "#34C759",
-        "#444444","#666666","#999999",
-        "#ff4d4f","#ff7a45","#ffa940",
-        "#ffd666","#73d13d","#36cfc9","#40a9ff",
-        "#597ef7","#9254de","#f759ab","#bfbfbf",
-        "#FFFFFF",   # white
-        "#FFC0CB",   # baby pink
-        "#00BFA6",   # teal
-        "#FF6F61",   # coral
-        "#8BC34A",   # light green
-        "#FFB6C1",   # light pink
-        "#FFD700",   # gold
-        "#7B68EE",   # medium purple
-        "#20B2AA"    # light sea green
+        "#444444",
+        "#666666",
+        "#999999",
+        "#ff4d4f",
+        "#ff7a45",
+        "#ffa940",
+        "#ffd666",
+        "#73d13d",
+        "#36cfc9",
+        "#40a9ff",
+        "#597ef7",
+        "#9254de",
+        "#f759ab",
+        "#bfbfbf",
+        "#FFFFFF",  # white
+        "#FFC0CB",  # baby pink
+        "#00BFA6",  # teal
+        "#FF6F61",  # coral
+        "#8BC34A",  # light green
+        "#FFB6C1",  # light pink
+        "#FFD700",  # gold
+        "#7B68EE",  # medium purple
+        "#20B2AA",  # light sea green
     ]
 
     row = 0
     col = 0
 
     for color_hex in colors:
-
         btn = QPushButton()
-        btn.setFixedSize(20,20)
+        btn.setFixedSize(20, 20)
 
         btn.setStyleSheet(
             f"""

@@ -16,6 +16,7 @@ from PySide6.QtWebEngineCore import (
 
 from PySide6.QtWidgets import QMessageBox
 
+
 class HardenedWebPage(QWebEnginePage):
     def __init__(self, parent=None, profile=None, canvas_seed=None):
         view = parent
@@ -34,7 +35,6 @@ class HardenedWebPage(QWebEnginePage):
         self.inject_darkelf_letterboxing()
         self.hw_concurrency_spoof = secrets.choice([2, 4, 6, 8])
         self.inject_all_scripts()
-
 
     def inject_script(self, script_source, injection_point=None, subframes=True, name=None):
         scripts = self.scripts()
@@ -55,7 +55,7 @@ class HardenedWebPage(QWebEnginePage):
         script_obj.setRunsOnSubFrames(subframes)
         script_obj.setWorldId(QWebEngineScript.MainWorld)
         scripts.insert(script_obj)
-        
+
     def inject_darkelf_letterboxing(self):
         script = """
         (() => {
@@ -149,11 +149,7 @@ class HardenedWebPage(QWebEnginePage):
         })();
         """
 
-        self.inject_script(
-            script,
-            injection_point=QWebEngineScript.DocumentCreation,
-            subframes=True
-        )
+        self.inject_script(script, injection_point=QWebEngineScript.DocumentCreation, subframes=True)
 
     # --- Inject WebRTC block, geo override, and canvas noise all at DocumentCreation ---
     def stealth_webrtc_block(self):
@@ -202,7 +198,7 @@ class HardenedWebPage(QWebEnginePage):
         })();
         """
         self.inject_script(script, injection_point=QWebEngineScript.DocumentCreation, subframes=True)
-        
+
     def block_webrtc_sdp_logging(self):
         script = """
         (function() {
@@ -231,7 +227,7 @@ class HardenedWebPage(QWebEnginePage):
         })();
         """
         self.inject_script(script, injection_point=QWebEngineScript.DocumentCreation, subframes=True)
-        
+
     def inject_geolocation_override(self):
         script = """
         (function() {
@@ -375,11 +371,8 @@ class HardenedWebPage(QWebEnginePage):
 
         }})();
         """
-        self.inject_script(
-            script,
-            injection_point=QWebEngineScript.DocumentCreation,
-            subframes=True)
-                    
+        self.inject_script(script, injection_point=QWebEngineScript.DocumentCreation, subframes=True)
+
     def inject_fingerprint_hardware_protection(self):
         script = """
         (() => {
@@ -400,11 +393,8 @@ class HardenedWebPage(QWebEnginePage):
           } catch(e){}
         })();
         """
-        self.inject_script(
-            script,
-            injection_point=QWebEngineScript.DocumentCreation,
-            subframes=True)
-                        
+        self.inject_script(script, injection_point=QWebEngineScript.DocumentCreation, subframes=True)
+
     def inject_webgl_fingerprint_per_domain(self):
         script = """
         (() => {
@@ -499,11 +489,8 @@ class HardenedWebPage(QWebEnginePage):
             patchWebGL('WebGL2RenderingContext');
         })();
         """
-        self.inject_script(
-            script,
-            injection_point=QWebEngineScript.DocumentCreation,
-            subframes=True)
-            
+        self.inject_script(script, injection_point=QWebEngineScript.DocumentCreation, subframes=True)
+
     def inject_audio_randomized_defense(self):
         script = r"""
         (function() {
@@ -555,10 +542,7 @@ class HardenedWebPage(QWebEnginePage):
 
         })();
         """
-        self.inject_script(
-            script,
-            injection_point=QWebEngineScript.DocumentCreation,
-            subframes=True)
+        self.inject_script(script, injection_point=QWebEngineScript.DocumentCreation, subframes=True)
 
     def inject_battery_defense(self):
         script = r"""
@@ -577,11 +561,8 @@ class HardenedWebPage(QWebEnginePage):
           };
         }
         """
-        self.inject_script(
-            script,
-            injection_point=QWebEngineScript.DocumentCreation,
-            subframes=True)
-            
+        self.inject_script(script, injection_point=QWebEngineScript.DocumentCreation, subframes=True)
+
     def inject_font_protection(self):
         script = r"""
         (function() {
@@ -660,11 +641,8 @@ class HardenedWebPage(QWebEnginePage):
 
         })();
         """
-        self.inject_script(
-            script,
-            injection_point=QWebEngineScript.DocumentCreation,
-            subframes=True)
-                                    
+        self.inject_script(script, injection_point=QWebEngineScript.DocumentCreation, subframes=True)
+
     def inject_resize_observer_suppressor(self):
         suppressor_js = """
         try {
@@ -676,7 +654,7 @@ class HardenedWebPage(QWebEnginePage):
         }, true);
         """
         self.inject_script(suppressor_js, name="__darkelf_resize_observer_patch__")
-                    
+
     def inject_hw_concurrency_spoof(self):
         script = """
         (() => {
@@ -819,7 +797,7 @@ class HardenedWebPage(QWebEnginePage):
         }})();
         """
         self.inject_script(js, injection_point=QWebEngineScript.DocumentCreation, subframes=True)
-                
+
     def inject_stealth_chrome_environment(self):
         script = """
         (() => {
@@ -965,7 +943,7 @@ class HardenedWebPage(QWebEnginePage):
         })();
         """
         self.inject_script(script, injection_point=QWebEngineScript.DocumentCreation, subframes=True)
-        
+
     def inject_youtube_js_spoof(self):
         script = """
         (() => {
@@ -1006,12 +984,8 @@ class HardenedWebPage(QWebEnginePage):
         })();
         """
 
-        self.inject_script(
-            script,
-            injection_point=QWebEngineScript.DocumentCreation,
-            subframes=True
-        )
-        
+        self.inject_script(script, injection_point=QWebEngineScript.DocumentCreation, subframes=True)
+
     def inject_global_chrome_spoof(self):
         system = platform.system()
 
@@ -1027,11 +1001,7 @@ class HardenedWebPage(QWebEnginePage):
         else:
             platform_part = "X11; Linux x86_64"
 
-        chrome_ua = (
-            f"Mozilla/5.0 ({platform_part}) "
-            "AppleWebKit/537.36 (KHTML, like Gecko) "
-            "Chrome/140.0.0.0 Safari/537.36"
-        )
+        chrome_ua = f"Mozilla/5.0 ({platform_part}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"
 
         # IMPORTANT:
         self.profile().setHttpUserAgent(chrome_ua)
@@ -1065,12 +1035,8 @@ class HardenedWebPage(QWebEnginePage):
         }})();
         """
 
-        self.inject_script(
-            script,
-            injection_point=QWebEngineScript.DocumentCreation,
-            subframes=True
-        )
-        
+        self.inject_script(script, injection_point=QWebEngineScript.DocumentCreation, subframes=True)
+
     def inject_all_scripts(self):
         self.stealth_webrtc_block()
         self.block_webrtc_sdp_logging()
@@ -1096,11 +1062,7 @@ class HardenedWebPage(QWebEnginePage):
     def acceptNavigationRequest(self, url, navtype, isMainFrame):
 
         if url.scheme() == "file":
-            QMessageBox.warning(
-                None,
-                "Navigation blocked",
-                "File URLs are blocked for privacy."
-            )
+            QMessageBox.warning(None, "Navigation blocked", "File URLs are blocked for privacy.")
             return False
 
         current_host = self.url().host().lower()
@@ -1109,32 +1071,15 @@ class HardenedWebPage(QWebEnginePage):
 
         is_duckduckgo_page = self._host_matches_domain(current_host, "duckduckgo.com")
 
-        is_clicked_link = (
-            navtype == QWebEnginePage.NavigationTypeLinkClicked
-            and isMainFrame
+        is_clicked_link = navtype == QWebEnginePage.NavigationTypeLinkClicked and isMainFrame
+
+        is_external_host = target_host and not self._host_matches_domain(target_host, "duckduckgo.com")
+
+        is_ddg_result_redirect = self._host_matches_domain(target_host, "duckduckgo.com") and (
+            target_path.startswith("/l/") or "uddg=" in url.toString()
         )
 
-        is_external_host = (
-            target_host
-            and not self._host_matches_domain(target_host, "duckduckgo.com")
-        )
-
-        is_ddg_result_redirect = (
-            self._host_matches_domain(target_host, "duckduckgo.com")
-            and (
-                target_path.startswith("/l/")
-                or "uddg=" in url.toString()
-            )
-        )
-
-        if (
-            is_clicked_link
-            and is_duckduckgo_page
-            and (
-                is_external_host
-                or is_ddg_result_redirect
-            )
-        ):
+        if is_clicked_link and is_duckduckgo_page and (is_external_host or is_ddg_result_redirect):
             parent = getattr(self, "_parent_view", None)
             browser = parent.window() if parent else None
 
@@ -1142,21 +1087,13 @@ class HardenedWebPage(QWebEnginePage):
                 browser._add_tab(url=url.toString())
                 return False
 
-        return super().acceptNavigationRequest(
-            url,
-            navtype,
-            isMainFrame
-        )
+        return super().acceptNavigationRequest(url, navtype, isMainFrame)
 
     def createWindow(self, _type):
         parent_view = getattr(self, "_parent_view", None)
         main_window = parent_view.window() if parent_view else None
 
-        if (
-            main_window is not None
-            and hasattr(main_window, "_add_tab")
-            and hasattr(main_window, "tabs")
-        ):
+        if main_window is not None and hasattr(main_window, "_add_tab") and hasattr(main_window, "tabs"):
             main_window._add_tab(home=True)
 
             view = main_window.tabs.currentWidget()
@@ -1178,9 +1115,7 @@ class HardenedWebPage(QWebEnginePage):
         page._parent_view = view
 
         try:
-            page.fullScreenRequested.connect(
-                view.window().handle_fullscreen
-            )
+            page.fullScreenRequested.connect(view.window().handle_fullscreen)
         except Exception as e:
             print("createWindow fullscreen:", e)
 
@@ -1193,4 +1128,3 @@ class HardenedWebPage(QWebEnginePage):
         self._spawned_views.append(view)
 
         return page
-        

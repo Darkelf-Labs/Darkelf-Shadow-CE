@@ -26,7 +26,6 @@ from shadow.settings_pages import (
 )
 
 
-
 class SidebarButton(QPushButton):
     def __init__(self, text):
         super().__init__(text)
@@ -35,7 +34,7 @@ class SidebarButton(QPushButton):
         self.setCheckable(True)
         self.setMinimumHeight(44)
         self.setFixedWidth(200)
-        
+
         self.setStyleSheet("""
         QPushButton{
             background:transparent;
@@ -66,7 +65,6 @@ class SidebarButton(QPushButton):
 
 
 class DarkelfSettingsDialog(QDialog):
-
     WIDTH = 1280
     HEIGHT = 820
 
@@ -111,9 +109,9 @@ class DarkelfSettingsDialog(QDialog):
         self._build_ui()
 
         self._animate_open()
-        
+
         self.applyAccent()
-        
+
     def applyAccent(self):
 
         c = self.browser.accent_color
@@ -129,7 +127,6 @@ class DarkelfSettingsDialog(QDialog):
         # ----------------
 
         for btn in self.buttons:
-
             btn.setStyleSheet(f"""
             QPushButton {{
                 background: transparent;
@@ -168,10 +165,9 @@ class DarkelfSettingsDialog(QDialog):
         # ---------------
 
         for page in self.pages:
-
             if hasattr(page, "applyAccent"):
                 page.applyAccent()
-            
+
     ######################################################################
     # UI
     ######################################################################
@@ -217,7 +213,7 @@ class DarkelfSettingsDialog(QDialog):
         side_layout.addWidget(self.privacy_btn)
         side_layout.addWidget(self.quantum_btn)
         side_layout.addWidget(self.about_btn)
-        
+
         side_layout.addStretch()
 
         self.close_btn = QPushButton("Close")
@@ -293,10 +289,7 @@ class DarkelfSettingsDialog(QDialog):
         ]
 
         for i, button in enumerate(self.buttons):
-            button.clicked.connect(
-                lambda checked=False, index=i:
-                    self.set_page(index)
-            )
+            button.clicked.connect(lambda checked=False, index=i: self.set_page(index))
 
         self.close_btn.clicked.connect(self.accept)
 
@@ -330,10 +323,7 @@ class DarkelfSettingsDialog(QDialog):
             try:
                 page.refresh()
             except Exception as e:
-                print(
-                    f"[Settings] Failed to refresh "
-                    f"{type(page).__name__}: {e}"
-                )
+                print(f"[Settings] Failed to refresh {type(page).__name__}: {e}")
 
     ######################################################################
     # Animation

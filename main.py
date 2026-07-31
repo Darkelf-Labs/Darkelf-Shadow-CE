@@ -13,6 +13,7 @@ from shadow.boot import BootWorker, update_progress, boot_done
 
 # --- Chromium flags MUST be before Qt ---
 from shadow.utils import apply_chromium_flags
+
 apply_chromium_flags()
 
 # --- Create app ---
@@ -86,9 +87,7 @@ worker = BootWorker()
 worker.progress.connect(lambda v, t: update_progress(splash, v, t))
 
 # --- Connect completion ---
-worker.finished.connect(
-    lambda engine, ai: boot_done(splash, app, engine, ai)
-)
+worker.finished.connect(lambda engine, ai: boot_done(splash, app, engine, ai))
 
 # --- Start boot process ---
 worker.start()

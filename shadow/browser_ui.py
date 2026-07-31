@@ -90,6 +90,7 @@ from shadow.darkelf_inspector import DarkelfInspector
 # -----------------------------
 _icon_cache = {}
 
+
 def cached_icon(factory, color, size):
     key = (factory.__name__, color, size)
 
@@ -114,7 +115,7 @@ class BrowserUIMixin:
     # Context Menu
     def create_darkelf_menu(self):
         return DarkelfContextMenu(self, self)
-        
+
     def _update_urlbar_style(self):
         c = self.accent_color
 
@@ -136,7 +137,7 @@ class BrowserUIMixin:
             border: 1px solid {c};
         }}
         """)
-        
+
     def show_page_context_menu(self, view, pos):
 
         menu = self.create_darkelf_menu()
@@ -185,15 +186,11 @@ class BrowserUIMixin:
 
         copy_action = menu.addAction(make_copy_icon(self.accent_color, 18), "Copy")
 
-        copy_action.triggered.connect(
-            lambda: QApplication.clipboard().setText(view.selectedText())
-        )
+        copy_action.triggered.connect(lambda: QApplication.clipboard().setText(view.selectedText()))
 
         paste_action = menu.addAction(make_paste_icon(self.accent_color, 18), "Paste")
 
-        paste_action.triggered.connect(
-            lambda: view.page().triggerAction(QWebEnginePage.Paste)
-        )
+        paste_action.triggered.connect(lambda: view.page().triggerAction(QWebEnginePage.Paste))
 
         menu.addSeparator()
 
@@ -223,19 +220,13 @@ class BrowserUIMixin:
 
         menu.section()
 
-        menu.addAction(
-            make_cut_icon(self.accent_color, 18), "Cut", self.addr.cut
-        ).setEnabled(self.addr.hasSelectedText())
+        menu.addAction(make_cut_icon(self.accent_color, 18), "Cut", self.addr.cut).setEnabled(self.addr.hasSelectedText())
 
-        menu.addAction(
-            make_copy_icon(self.accent_color, 18), "Copy", self.addr.copy
-        ).setEnabled(self.addr.hasSelectedText())
+        menu.addAction(make_copy_icon(self.accent_color, 18), "Copy", self.addr.copy).setEnabled(self.addr.hasSelectedText())
 
         menu.addAction(make_paste_icon(self.accent_color, 18), "Paste", self.addr.paste)
 
-        menu.addAction(
-            make_delete_icon(self.accent_color, 18), "Delete", self.addr.del_
-        )
+        menu.addAction(make_delete_icon(self.accent_color, 18), "Delete", self.addr.del_)
 
         menu.section()
 
@@ -272,7 +263,7 @@ class BrowserUIMixin:
 
         p.end()
         return QIcon(pix)
-        
+
     def _make_clear_x_icon(self, color="#ffffff", size=24):
         pix = QPixmap(size, size)
         pix.fill(Qt.transparent)
@@ -291,7 +282,7 @@ class BrowserUIMixin:
 
         p.end()
         return QIcon(pix)
-        
+
     def _make_toolbar(self):
 
         tb = QToolBar()
@@ -356,9 +347,7 @@ class BrowserUIMixin:
         }
         """)
 
-        bookmark_action = menu.addAction(
-            make_bookmark_icon(self.accent_color, 20), "Bookmarks"
-        )
+        bookmark_action = menu.addAction(make_bookmark_icon(self.accent_color, 20), "Bookmarks")
 
         find_action = menu.addAction(make_find_icon(self.accent_color, 20), "Find")
 
@@ -372,18 +361,16 @@ class BrowserUIMixin:
         menu.addSeparator()
 
         js_action = menu.addAction(make_java_icon(self.accent_color, 16), "JavaScript")
-        
+
         developer_action = menu.addAction(
             make_inspector_icon(self.accent_color, 20),
             "Darkelf Inspector",
         )
-        
+
         self.developer_action = developer_action
-        
-        developer_action.triggered.connect(
-            self.show_darkelf_inspector
-        )
-        
+
+        developer_action.triggered.connect(self.show_darkelf_inspector)
+
         js_action.triggered.connect(lambda: self.java_action.trigger())
 
         menu.addSeparator()
@@ -399,9 +386,7 @@ class BrowserUIMixin:
 
         menu.addSeparator()
 
-        nuke_action = menu.addAction(
-            make_nuke_icon(self.accent_color, 22), "Nuke Browser"
-        )
+        nuke_action = menu.addAction(make_nuke_icon(self.accent_color, 22), "Nuke Browser")
 
         nuke_action.triggered.connect(self.nuke_all_data)
 
@@ -431,11 +416,9 @@ class BrowserUIMixin:
 
         if hasattr(self, "js_menu_action"):
             self.js_menu_action.setIcon(make_java_icon(c, 16))
-            
+
         if hasattr(self, "developer_action"):
-            self.developer_action.setIcon(
-                make_inspector_icon(c, 20)
-            )
+            self.developer_action.setIcon(make_inspector_icon(c, 20))
 
         if hasattr(self, "nuke_menu_action"):
             self.nuke_menu_action.setIcon(make_nuke_icon(c, 22))
@@ -446,9 +429,7 @@ class BrowserUIMixin:
         if hasattr(self, "settings_action"):
             self.settings_action.setIcon(make_settings_icon(c, 18))
 
-        self.java_action = QAction(
-            make_java_icon(self.accent_color, 22), "JavaScript", self
-        )
+        self.java_action = QAction(make_java_icon(self.accent_color, 22), "JavaScript", self)
 
         self.nuke_action = QAction(make_nuke_icon(self.accent_color, 22), "Nuke", self)
 
@@ -479,9 +460,7 @@ class BrowserUIMixin:
         self.addr.returnPressed.connect(self.on_url_entered)
 
         # ADD LOCK ICON HERE
-        self.lock_action = self.addr.addAction(
-            self.make_outline_lock_icon("#ffffff", 24), QLineEdit.LeadingPosition
-        )
+        self.lock_action = self.addr.addAction(self.make_outline_lock_icon("#ffffff", 24), QLineEdit.LeadingPosition)
         self.lock_action.setVisible(False)
 
         # Clear / X button — thin white X, no circle
@@ -489,24 +468,20 @@ class BrowserUIMixin:
             self._make_clear_x_icon(),
             QLineEdit.TrailingPosition,
         )
-        
+
         self.clear_action.triggered.connect(self.addr.clear)
 
         # Hide until text exists
         self.clear_action.setVisible(False)
 
         # Auto show/hide
-        self.addr.textChanged.connect(
-            lambda text: self.clear_action.setVisible(bool(text))
-        )
+        self.addr.textChanged.connect(lambda text: self.clear_action.setVisible(bool(text)))
 
         self._update_urlbar_style()
 
         # ---- Hotkey button ----
 
-        self.hotkey_action = QAction(
-            make_keyboard_icon(self.accent_color, 18), "Hotkeys", self
-        )
+        self.hotkey_action = QAction(make_keyboard_icon(self.accent_color, 18), "Hotkeys", self)
 
         self.java_action.setCheckable(True)
         self.java_action.setChecked(True)
@@ -584,9 +559,7 @@ class BrowserUIMixin:
 
         layout.addWidget(self.darkelf_inspector)
 
-        self.tabs.currentChanged.connect(
-            self._sync_inspector_webview
-        )
+        self.tabs.currentChanged.connect(self._sync_inspector_webview)
 
         dlg.exec()
 
@@ -635,7 +608,6 @@ class BrowserUIMixin:
         self.reload_action.setIcon(make_reload_icon(c, 22))
 
         if hasattr(self, "menu_btn"):
-
             self.menu_btn.setStyleSheet(f"""
             QToolButton {{
                 background: transparent;
@@ -717,15 +689,10 @@ class BrowserUIMixin:
         if hasattr(self, "bookmark_btn"):
             browser = self.current_view()
             bookmarked = browser is not None and any(
-                bm["url"] == browser.url().toString()
-                for bm in getattr(self, "bookmarks", [])
+                bm["url"] == browser.url().toString() for bm in getattr(self, "bookmarks", [])
             )
 
-            self.bookmark_btn.setIcon(
-                make_bookmark_filled_icon(c, 20)
-                if bookmarked
-                else make_bookmark_icon(c, 20)
-            )
+            self.bookmark_btn.setIcon(make_bookmark_filled_icon(c, 20) if bookmarked else make_bookmark_icon(c, 20))
 
         if hasattr(self, "plus_btn"):
             self.plus_btn.setStyleSheet(f"""
@@ -757,9 +724,9 @@ class BrowserUIMixin:
                 view.page().runJavaScript(js)
             except Exception as e:
                 print("Error:", e)
-                
+
         self._set_tab_style()
-        
+
     def _configure_tabbar_small(self):
         bar = self.tabs.tabBar()
         bar.setExpanding(False)
@@ -770,7 +737,7 @@ class BrowserUIMixin:
         bar.setStyleSheet("""
             QTabBar::tab { height: 22px; padding: 2px 8px; max-width: 140px; }
         """)
-        
+
     def _apply_global_stylesheet(self):
         QApplication.instance().setStyleSheet("""
             QMainWindow {
@@ -819,7 +786,7 @@ class BrowserUIMixin:
                 margin: 4px 6px;
             }
         """)
-        
+
     def update_tab_icon(self, view):
         index = self.tabs.indexOf(view)
 
@@ -828,19 +795,14 @@ class BrowserUIMixin:
 
         # Internal Darkelf Home page
         if getattr(view, "_is_homepage", False):
-            icon_path = resources.files("shadow.assets").joinpath(
-                "darkelf-mark-128.png"
-            )
+            icon_path = resources.files("shadow.assets").joinpath("darkelf-mark-128.png")
 
-            self.tabs.setTabIcon(
-                index,
-                QIcon(str(icon_path))
-            )
+            self.tabs.setTabIcon(index, QIcon(str(icon_path)))
             return
 
         # Website favicon
         self.tabs.setTabIcon(index, view.icon())
-            
+
     def _set_tab_style(self):
 
         if not hasattr(self, "tabs"):
@@ -928,10 +890,7 @@ class BrowserUIMixin:
         # Already bookmarked
         for bm in self.bookmarks:
             if bm["url"] == url:
-
-                self.bookmark_btn.setIcon(
-                    make_bookmark_filled_icon(self.accent_color, 20)
-                )
+                self.bookmark_btn.setIcon(make_bookmark_filled_icon(self.accent_color, 20))
 
                 self.bookmark_btn.setToolTip("Already bookmarked")
 
@@ -982,13 +941,11 @@ class BrowserUIMixin:
         bookmarked = any(bm["url"] == url for bm in getattr(self, "bookmarks", []))
 
         if bookmarked:
-
             self.bookmark_btn.setIcon(make_bookmark_filled_icon(self.accent_color, 20))
 
             self.bookmark_btn.setToolTip("Bookmarked")
 
         else:
-
             self.bookmark_btn.setIcon(make_bookmark_icon(self.accent_color, 20))
 
             self.bookmark_btn.setToolTip("Bookmark this page")

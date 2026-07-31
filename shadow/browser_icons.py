@@ -16,6 +16,7 @@ from PySide6.QtGui import (
 
 _ICON_CACHE = {}
 
+
 def _get_cached_icon(key, builder):
     """
     Return a cached QIcon or build it once.
@@ -30,7 +31,8 @@ def _get_cached_icon(key, builder):
         _ICON_CACHE[key] = icon
 
     return icon
-    
+
+
 # --- Custom Icon helpers ---
 def make_icon(color=None, size=24):
 
@@ -47,10 +49,11 @@ def make_icon(color=None, size=24):
     p.setBrush(QColor(color))
     p.setPen(Qt.PenStyle.NoPen)
 
-    p.drawEllipse(4, 4, size-8, size-8)
+    p.drawEllipse(4, 4, size - 8, size - 8)
 
     p.end()
     return QIcon(pix)
+
 
 def make_nav_arrow_icon(direction: str, color: str, size: int = 22) -> QIcon:
 
@@ -58,7 +61,7 @@ def make_nav_arrow_icon(direction: str, color: str, size: int = 22) -> QIcon:
 
     if key in _ICON_CACHE:
         return _ICON_CACHE[key]
-        
+
     pix = QPixmap(size * 2, size * 2)
     pix.setDevicePixelRatio(2)
     pix.fill(Qt.transparent)
@@ -78,14 +81,12 @@ def make_nav_arrow_icon(direction: str, color: str, size: int = 22) -> QIcon:
     p.setBrush(Qt.NoBrush)
 
     if direction == "left":
-
         path = QPainterPath()
         path.moveTo(size * 0.66, size * 0.18)
         path.lineTo(size * 0.36, size * 0.50)
         path.lineTo(size * 0.66, size * 0.82)
 
     else:
-
         path = QPainterPath()
         path.moveTo(size * 0.34, size * 0.18)
         path.lineTo(size * 0.64, size * 0.50)
@@ -94,11 +95,12 @@ def make_nav_arrow_icon(direction: str, color: str, size: int = 22) -> QIcon:
     p.drawPath(path)
 
     p.end()
-    
+
     icon = QIcon(pix)
     _ICON_CACHE[key] = icon
 
     return icon
+
 
 def make_reload_icon(color: str, size: int = 22) -> QIcon:
     dpr = 2.0
@@ -176,7 +178,8 @@ def make_reload_icon(color: str, size: int = 22) -> QIcon:
     p.end()
 
     return QIcon(pix)
-    
+
+
 def make_inspector_icon(color: str, size: int = 18) -> QIcon:
 
     pix = QPixmap(size * 2, size * 2)
@@ -189,13 +192,7 @@ def make_inspector_icon(color: str, size: int = 18) -> QIcon:
 
     accent = QColor(color)
 
-    pen = QPen(
-        accent,
-        max(2, int(size * 0.085)),
-        Qt.SolidLine,
-        Qt.RoundCap,
-        Qt.RoundJoin
-    )
+    pen = QPen(accent, max(2, int(size * 0.085)), Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin)
 
     p.setPen(pen)
     p.setBrush(Qt.NoBrush)
@@ -207,33 +204,38 @@ def make_inspector_icon(color: str, size: int = 18) -> QIcon:
     inner = size * 0.18
 
     # --- OUTER HEXAGON ---
-    outer_hex = QPolygonF([
-        QPointF(cx,                     cy - outer),
-        QPointF(cx + outer * 0.866,    cy - outer * 0.5),
-        QPointF(cx + outer * 0.866,    cy + outer * 0.5),
-        QPointF(cx,                     cy + outer),
-        QPointF(cx - outer * 0.866,    cy + outer * 0.5),
-        QPointF(cx - outer * 0.866,    cy - outer * 0.5),
-    ])
+    outer_hex = QPolygonF(
+        [
+            QPointF(cx, cy - outer),
+            QPointF(cx + outer * 0.866, cy - outer * 0.5),
+            QPointF(cx + outer * 0.866, cy + outer * 0.5),
+            QPointF(cx, cy + outer),
+            QPointF(cx - outer * 0.866, cy + outer * 0.5),
+            QPointF(cx - outer * 0.866, cy - outer * 0.5),
+        ]
+    )
 
     p.drawPolygon(outer_hex)
 
     # --- INNER HEXAGON ---
-    inner_hex = QPolygonF([
-        QPointF(cx,                     cy - inner),
-        QPointF(cx + inner * 0.866,    cy - inner * 0.5),
-        QPointF(cx + inner * 0.866,    cy + inner * 0.5),
-        QPointF(cx,                     cy + inner),
-        QPointF(cx - inner * 0.866,    cy + inner * 0.5),
-        QPointF(cx - inner * 0.866,    cy - inner * 0.5),
-    ])
+    inner_hex = QPolygonF(
+        [
+            QPointF(cx, cy - inner),
+            QPointF(cx + inner * 0.866, cy - inner * 0.5),
+            QPointF(cx + inner * 0.866, cy + inner * 0.5),
+            QPointF(cx, cy + inner),
+            QPointF(cx - inner * 0.866, cy + inner * 0.5),
+            QPointF(cx - inner * 0.866, cy - inner * 0.5),
+        ]
+    )
 
     p.drawPolygon(inner_hex)
 
     p.end()
 
     return QIcon(pix)
-    
+
+
 def make_cut_icon(color: str, size: int = 18) -> QIcon:
 
     pix = QPixmap(size * 2, size * 2)
@@ -277,6 +279,7 @@ def make_cut_icon(color: str, size: int = 18) -> QIcon:
 
     return QIcon(pix)
 
+
 def make_copy_icon(color: str, size: int = 18) -> QIcon:
 
     pix = QPixmap(size * 2, size * 2)
@@ -286,27 +289,22 @@ def make_copy_icon(color: str, size: int = 18) -> QIcon:
     p = QPainter(pix)
     p.setRenderHint(QPainter.Antialiasing)
 
-    pen = QPen(QColor(color), max(1.8, size*0.10))
+    pen = QPen(QColor(color), max(1.8, size * 0.10))
     pen.setCapStyle(Qt.RoundCap)
     pen.setJoinStyle(Qt.RoundJoin)
 
     p.setPen(pen)
     p.setBrush(Qt.NoBrush)
 
-    p.drawRoundedRect(
-        QRectF(size*0.18, size*0.18, size*0.44, size*0.52),
-        2,2
-    )
+    p.drawRoundedRect(QRectF(size * 0.18, size * 0.18, size * 0.44, size * 0.52), 2, 2)
 
-    p.drawRoundedRect(
-        QRectF(size*0.36, size*0.34, size*0.44, size*0.52),
-        2,2
-    )
+    p.drawRoundedRect(QRectF(size * 0.36, size * 0.34, size * 0.44, size * 0.52), 2, 2)
 
     p.end()
 
     return QIcon(pix)
-    
+
+
 def make_paste_icon(color: str, size: int = 18) -> QIcon:
 
     pix = QPixmap(size * 2, size * 2)
@@ -316,30 +314,25 @@ def make_paste_icon(color: str, size: int = 18) -> QIcon:
     p = QPainter(pix)
     p.setRenderHint(QPainter.Antialiasing)
 
-    pen = QPen(QColor(color), max(1.8, size*0.10))
+    pen = QPen(QColor(color), max(1.8, size * 0.10))
     pen.setCapStyle(Qt.RoundCap)
     pen.setJoinStyle(Qt.RoundJoin)
 
     p.setPen(pen)
     p.setBrush(Qt.NoBrush)
 
-    p.drawRoundedRect(
-        QRectF(size*0.22, size*0.22, size*0.56, size*0.60),
-        2,2
-    )
+    p.drawRoundedRect(QRectF(size * 0.22, size * 0.22, size * 0.56, size * 0.60), 2, 2)
 
-    p.drawRoundedRect(
-        QRectF(size*0.36, size*0.10, size*0.28, size*0.16),
-        2,2
-    )
+    p.drawRoundedRect(QRectF(size * 0.36, size * 0.10, size * 0.28, size * 0.16), 2, 2)
 
-    p.drawLine(size*0.34,size*0.42,size*0.66,size*0.42)
-    p.drawLine(size*0.34,size*0.56,size*0.60,size*0.56)
+    p.drawLine(size * 0.34, size * 0.42, size * 0.66, size * 0.42)
+    p.drawLine(size * 0.34, size * 0.56, size * 0.60, size * 0.56)
 
     p.end()
 
     return QIcon(pix)
-    
+
+
 def make_delete_icon(color: str, size: int = 18) -> QIcon:
 
     pix = QPixmap(size * 2, size * 2)
@@ -349,27 +342,26 @@ def make_delete_icon(color: str, size: int = 18) -> QIcon:
     p = QPainter(pix)
     p.setRenderHint(QPainter.Antialiasing)
 
-    pen = QPen(QColor(color), max(1.8, size*0.10))
+    pen = QPen(QColor(color), max(1.8, size * 0.10))
     pen.setCapStyle(Qt.RoundCap)
     pen.setJoinStyle(Qt.RoundJoin)
 
     p.setPen(pen)
     p.setBrush(Qt.NoBrush)
 
-    p.drawRect(
-        QRectF(size*0.28,size*0.30,size*0.44,size*0.48)
-    )
+    p.drawRect(QRectF(size * 0.28, size * 0.30, size * 0.44, size * 0.48))
 
-    p.drawLine(size*0.22,size*0.30,size*0.78,size*0.30)
-    p.drawLine(size*0.40,size*0.22,size*0.60,size*0.22)
+    p.drawLine(size * 0.22, size * 0.30, size * 0.78, size * 0.30)
+    p.drawLine(size * 0.40, size * 0.22, size * 0.60, size * 0.22)
 
-    p.drawLine(size*0.42,size*0.40,size*0.42,size*0.68)
-    p.drawLine(size*0.58,size*0.40,size*0.58,size*0.68)
+    p.drawLine(size * 0.42, size * 0.40, size * 0.42, size * 0.68)
+    p.drawLine(size * 0.58, size * 0.40, size * 0.58, size * 0.68)
 
     p.end()
 
     return QIcon(pix)
-    
+
+
 def make_select_all_icon(color: str, size: int = 18) -> QIcon:
 
     pix = QPixmap(size * 2, size * 2)
@@ -379,30 +371,28 @@ def make_select_all_icon(color: str, size: int = 18) -> QIcon:
     p = QPainter(pix)
     p.setRenderHint(QPainter.Antialiasing)
 
-    pen = QPen(QColor(color), max(1.8, size*0.10))
+    pen = QPen(QColor(color), max(1.8, size * 0.10))
     pen.setCapStyle(Qt.RoundCap)
     pen.setJoinStyle(Qt.RoundJoin)
 
     p.setPen(pen)
     p.setBrush(Qt.NoBrush)
 
-    p.drawRoundedRect(
-        QRectF(size*0.18,size*0.18,size*0.64,size*0.64),
-        2,2
-    )
+    p.drawRoundedRect(QRectF(size * 0.18, size * 0.18, size * 0.64, size * 0.64), 2, 2)
 
     path = QPainterPath()
 
-    path.moveTo(size*0.30,size*0.52)
-    path.lineTo(size*0.44,size*0.66)
-    path.lineTo(size*0.72,size*0.34)
+    path.moveTo(size * 0.30, size * 0.52)
+    path.lineTo(size * 0.44, size * 0.66)
+    path.lineTo(size * 0.72, size * 0.34)
 
     p.drawPath(path)
 
     p.end()
 
     return QIcon(pix)
-    
+
+
 def make_bookmark_icon(color: str, size: int = 18) -> QIcon:
 
     pix = QPixmap(size * 2, size * 2)
@@ -439,11 +429,9 @@ def make_bookmark_icon(color: str, size: int = 18) -> QIcon:
     p.end()
 
     return QIcon(pix)
-    
-def make_bookmark_filled_icon(
-    color: str,
-    size: int = 18
-) -> QIcon:
+
+
+def make_bookmark_filled_icon(color: str, size: int = 18) -> QIcon:
 
     pix = QPixmap(size * 2, size * 2)
     pix.setDevicePixelRatio(2)
@@ -452,10 +440,7 @@ def make_bookmark_filled_icon(
     p = QPainter(pix)
     p.setRenderHint(QPainter.Antialiasing, True)
 
-    pen = QPen(
-        QColor(color),
-        max(2, size // 10)
-    )
+    pen = QPen(QColor(color), max(2, size // 10))
 
     pen.setJoinStyle(Qt.RoundJoin)
     pen.setCapStyle(Qt.RoundCap)
@@ -485,21 +470,13 @@ def make_bookmark_filled_icon(
     p.setPen(Qt.NoPen)
     p.setBrush(highlight)
 
-    p.drawRoundedRect(
-        QRectF(
-            left + 2,
-            top + 2,
-            (right - left) - 4,
-            size * 0.14
-        ),
-        2,
-        2
-    )
+    p.drawRoundedRect(QRectF(left + 2, top + 2, (right - left) - 4, size * 0.14), 2, 2)
 
     p.end()
 
     return QIcon(pix)
-    
+
+
 def make_find_icon(color: str, size: int = 18) -> QIcon:
 
     pix = QPixmap(size * 2, size * 2)
@@ -509,34 +486,19 @@ def make_find_icon(color: str, size: int = 18) -> QIcon:
     p = QPainter(pix)
     p.setRenderHint(QPainter.Antialiasing, True)
 
-    pen = QPen(
-        QColor(color),
-        max(2, size // 10),
-        Qt.SolidLine,
-        Qt.RoundCap,
-        Qt.RoundJoin
-    )
+    pen = QPen(QColor(color), max(2, size // 10), Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin)
 
     p.setPen(pen)
     p.setBrush(Qt.NoBrush)
 
-    p.drawEllipse(
-        QRectF(
-            size * 0.15,
-            size * 0.15,
-            size * 0.45,
-            size * 0.45
-        )
-    )
+    p.drawEllipse(QRectF(size * 0.15, size * 0.15, size * 0.45, size * 0.45))
 
-    p.drawLine(
-        QPointF(size * 0.52, size * 0.52),
-        QPointF(size * 0.82, size * 0.82)
-    )
+    p.drawLine(QPointF(size * 0.52, size * 0.52), QPointF(size * 0.82, size * 0.82))
 
     p.end()
     return QIcon(pix)
-    
+
+
 def make_source_icon(color="#A855F7", size=18):
     if isinstance(color, QColor):
         color = color.name()
@@ -554,28 +516,17 @@ def make_source_icon(color="#A855F7", size=18):
     p.setPen(pen)
 
     # <
-    p.drawLine(
-        int(size * 0.42), int(size * 0.24),
-        int(size * 0.20), int(size * 0.50)
-    )
-    p.drawLine(
-        int(size * 0.20), int(size * 0.50),
-        int(size * 0.42), int(size * 0.76)
-    )
+    p.drawLine(int(size * 0.42), int(size * 0.24), int(size * 0.20), int(size * 0.50))
+    p.drawLine(int(size * 0.20), int(size * 0.50), int(size * 0.42), int(size * 0.76))
 
     # >
-    p.drawLine(
-        int(size * 0.58), int(size * 0.24),
-        int(size * 0.80), int(size * 0.50)
-    )
-    p.drawLine(
-        int(size * 0.80), int(size * 0.50),
-        int(size * 0.58), int(size * 0.76)
-    )
+    p.drawLine(int(size * 0.58), int(size * 0.24), int(size * 0.80), int(size * 0.50))
+    p.drawLine(int(size * 0.80), int(size * 0.50), int(size * 0.58), int(size * 0.76))
 
     p.end()
     return QIcon(pix)
-    
+
+
 def make_keyboard_icon(color: str, size: int = 18) -> QIcon:
 
     pix = QPixmap(size * 2, size * 2)
@@ -585,24 +536,13 @@ def make_keyboard_icon(color: str, size: int = 18) -> QIcon:
     p = QPainter(pix)
     p.setRenderHint(QPainter.Antialiasing, True)
 
-    pen = QPen(
-        QColor(color),
-        max(2, size // 10),
-        Qt.SolidLine,
-        Qt.RoundCap,
-        Qt.RoundJoin
-    )
+    pen = QPen(QColor(color), max(2, size // 10), Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin)
 
     p.setPen(pen)
     p.setBrush(Qt.NoBrush)
 
     # keyboard outer shell
-    rect = QRectF(
-        size * 0.12,
-        size * 0.22,
-        size * 0.76,
-        size * 0.56
-    )
+    rect = QRectF(size * 0.12, size * 0.22, size * 0.76, size * 0.56)
 
     p.drawRoundedRect(rect, 3, 3)
 
@@ -617,32 +557,19 @@ def make_keyboard_icon(color: str, size: int = 18) -> QIcon:
 
     for row in range(2):
         for col in range(5):
-
             x = start_x + col * (key_w + gap)
             y = start_y + row * (key_h + gap)
 
-            p.drawRoundedRect(
-                QRectF(x, y, key_w, key_h),
-                1.5,
-                1.5
-            )
+            p.drawRoundedRect(QRectF(x, y, key_w, key_h), 1.5, 1.5)
 
     # space bar
-    p.drawRoundedRect(
-        QRectF(
-            size * 0.30,
-            size * 0.58,
-            size * 0.40,
-            key_h
-        ),
-        1.5,
-        1.5
-    )
+    p.drawRoundedRect(QRectF(size * 0.30, size * 0.58, size * 0.40, key_h), 1.5, 1.5)
 
     p.end()
 
     return QIcon(pix)
-    
+
+
 def make_java_icon(color: str, size: int = 48) -> QIcon:
 
     pix = QPixmap(size * 2, size * 2)
@@ -654,19 +581,12 @@ def make_java_icon(color: str, size: int = 48) -> QIcon:
 
     accent = QColor(color)
 
-    pen = QPen(
-        accent,
-        int(size * 0.08),
-        Qt.PenStyle.SolidLine,
-        Qt.PenCapStyle.RoundCap,
-        Qt.PenJoinStyle.RoundJoin
-    )
+    pen = QPen(accent, int(size * 0.08), Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap, Qt.PenJoinStyle.RoundJoin)
 
     p.setPen(pen)
     p.setBrush(Qt.NoBrush)
 
     for i, offset in enumerate([-0.15, 0, 0.15]):
-
         path = QPainterPath()
 
         cx = size * 0.5 + offset * size
@@ -674,21 +594,14 @@ def make_java_icon(color: str, size: int = 48) -> QIcon:
 
         path.moveTo(cx, top)
 
-        path.cubicTo(
-            cx + size * 0.08,
-            top + size * 0.04,
-            cx - size * 0.08,
-            top + size * 0.10,
-            cx,
-            top + size * 0.18
-        )
+        path.cubicTo(cx + size * 0.08, top + size * 0.04, cx - size * 0.08, top + size * 0.10, cx, top + size * 0.18)
 
         p.drawPath(path)
 
-    cup_rect = QRectF(size*0.20, size*0.53, size*0.60, size*0.23)
-    body_rect = QRectF(size*0.28, size*0.63, size*0.44, size*0.18)
-    saucer_rect = QRectF(size*0.17, size*0.78, size*0.66, size*0.14)
-    handle_rect = QRectF(size*0.68, size*0.62, size*0.18, size*0.22)
+    cup_rect = QRectF(size * 0.20, size * 0.53, size * 0.60, size * 0.23)
+    body_rect = QRectF(size * 0.28, size * 0.63, size * 0.44, size * 0.18)
+    saucer_rect = QRectF(size * 0.17, size * 0.78, size * 0.66, size * 0.14)
+    handle_rect = QRectF(size * 0.68, size * 0.62, size * 0.18, size * 0.22)
 
     p.drawArc(cup_rect, 0, 16 * 180)
     p.drawArc(body_rect, 0, 16 * 180)
@@ -698,6 +611,7 @@ def make_java_icon(color: str, size: int = 48) -> QIcon:
     p.end()
 
     return QIcon(pix)
+
 
 def make_settings_icon(color: str, size: int = 18) -> QIcon:
     pix = QPixmap(size * 2, size * 2)
@@ -742,7 +656,8 @@ def make_settings_icon(color: str, size: int = 18) -> QIcon:
 
     p.end()
     return QIcon(pix)
-    
+
+
 def make_shield_icon(color, size=18):
 
     pix = QPixmap(size * 2, size * 2)
@@ -775,6 +690,7 @@ def make_shield_icon(color, size=18):
 
     return QIcon(pix)
 
+
 def make_nuke_icon(hex_color: str, size: int) -> QIcon:
 
     pix = QPixmap(size * 2, size * 2)
@@ -799,28 +715,14 @@ def make_nuke_icon(hex_color: str, size: int) -> QIcon:
     p.setPen(QPen(black, border_width))
     p.setBrush(QBrush(accent))
 
-    p.drawEllipse(
-        QRectF(
-            cx - radius,
-            cy - radius,
-            radius * 2,
-            radius * 2
-        )
-    )
+    p.drawEllipse(QRectF(cx - radius, cy - radius, radius * 2, radius * 2))
 
     hub_r = size * 0.12
 
     p.setPen(Qt.NoPen)
     p.setBrush(QBrush(black))
 
-    p.drawEllipse(
-        QRectF(
-            cx - hub_r,
-            cy - hub_r,
-            hub_r * 2,
-            hub_r * 2
-        )
-    )
+    p.drawEllipse(QRectF(cx - hub_r, cy - hub_r, hub_r * 2, hub_r * 2))
 
     # radiation blades
     blade_len = size * 0.30
@@ -830,27 +732,29 @@ def make_nuke_icon(hex_color: str, size: int) -> QIcon:
     p.setPen(Qt.NoPen)
 
     for i in range(3):
-
         p.save()
 
         p.translate(cx, cy)
         p.rotate(i * 120)
 
-        polygon = QPolygonF([
-            QPointF(-blade_w, -hub_r * 1.2),
-            QPointF(blade_w,  -hub_r * 1.2),
-            QPointF(blade_w * 0.55, -blade_len),
-            QPointF(-blade_w * 0.55, -blade_len),
-        ])
+        polygon = QPolygonF(
+            [
+                QPointF(-blade_w, -hub_r * 1.2),
+                QPointF(blade_w, -hub_r * 1.2),
+                QPointF(blade_w * 0.55, -blade_len),
+                QPointF(-blade_w * 0.55, -blade_len),
+            ]
+        )
 
         p.drawPolygon(polygon)
 
         p.restore()
-        
+
     p.end()
 
     return QIcon(pix)
-    
+
+
 def detect_nav_platform():
     system = _platform.system()
     machine = _platform.machine().lower()

@@ -88,9 +88,7 @@ def main():
     worker.progress.connect(lambda v, t: update_progress(splash, v, t))
 
     # --- Connect completion ---
-    worker.finished.connect(
-        lambda engine, ai: boot_done(splash, app, engine, ai)
-    )
+    worker.finished.connect(lambda engine, ai: boot_done(splash, app, engine, ai))
 
     # --- Start boot process ---
     worker.start()

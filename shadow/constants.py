@@ -18,13 +18,6 @@ elif system == "Linux":
 else:
     platform_part = "X11; Linux x86_64"
 
-CHROME_UA = (
-    f"Mozilla/5.0 ({platform_part}) "
-    "AppleWebKit/537.36 (KHTML, like Gecko) "
-    "Chrome/140.0.0.0 Safari/537.36"
-).encode()
+CHROME_UA = (f"Mozilla/5.0 ({platform_part}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36").encode()
 
-WEBKIT_UA = (
-    b"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-    b"AppleWebKit/605.1.15 (KHTML, like Gecko)"
-)
+WEBKIT_UA = b"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko)"

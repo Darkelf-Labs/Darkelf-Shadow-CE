@@ -15,13 +15,19 @@ from shadow.filters import EasyListEngine
 from shadow.utils import is_domain
 from shadow.darkelf_pq import DarkelfPQ
 
+
 class StealthInterceptor(QWebEngineUrlRequestInterceptor):
     SAFE_SCHEMES = {"data", "about", "chrome", "qrc", "blob", "view-source"}
 
     TRACKING_PARAMS = {
-        "utm_source", "utm_medium", "utm_campaign",
-        "utm_term", "utm_content",
-        "fbclid", "gclid", "mc_eid",
+        "utm_source",
+        "utm_medium",
+        "utm_campaign",
+        "utm_term",
+        "utm_content",
+        "fbclid",
+        "gclid",
+        "mc_eid",
     }
 
     def __init__(
@@ -42,10 +48,10 @@ class StealthInterceptor(QWebEngineUrlRequestInterceptor):
         self.hsts_hosts: set[str] = set()
 
         self.pq = DarkelfPQ()
-        
+
     def get_pq_status(self):
         return self.pq.status()
-        
+
     def interceptRequest(self, info):
         qurl = info.requestUrl()
         req_url = qurl.toString()
@@ -54,18 +60,18 @@ class StealthInterceptor(QWebEngineUrlRequestInterceptor):
 
         # Resolve type early so later logic can use it consistently
         req_type = self._detect_request_type(info)
-        
+
         method = bytes(info.requestMethod()).decode(
             "utf-8",
             errors="ignore",
         )
-        
+
         self._network_print(
             f"{method:6}",
             f"{req_type:16}",
             req_url,
         )
-        
+
         fp_url = info.firstPartyUrl().toString()
 
         # Early exits for schemes and local resources
@@ -76,7 +82,7 @@ class StealthInterceptor(QWebEngineUrlRequestInterceptor):
 
         seed = self.pq.get_tab_seed(tab_id)
         self.pq.update_chain(tab_id, req_url)
-        
+
         # Minimal targeted UA override only where explicitly desired
         self._apply_special_headers(info, host)
 
@@ -96,16 +102,11 @@ class StealthInterceptor(QWebEngineUrlRequestInterceptor):
             return
 
         # Lightweight replay observation for dynamic requests
-        self.pq.observe(
-            req_url,
-            req_type,
-            seed
-        )
+        self.pq.observe(req_url, req_type, seed)
 
         # Conservative blocking
         try:
             if self.engine and self.engine.should_block(req_url, fp_url, req_type):
-
                 self._network_print(
                     "BLOCKED:",
                     req_type,
@@ -119,7 +120,7 @@ class StealthInterceptor(QWebEngineUrlRequestInterceptor):
 
         except Exception as e:
             print("Interceptor error:", e)
-        
+
     def _extract_tab_id(self, info) -> str:
         try:
             url = info.requestUrl().toString()
@@ -137,10 +138,7 @@ class StealthInterceptor(QWebEngineUrlRequestInterceptor):
             host = (host or "").lower()
 
             if is_domain(host, "youtube.com") or is_domain(host, "youtu.be"):
-                ua = (
-                    b"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-                    b"AppleWebKit/605.1.15 (KHTML, like Gecko)"
-                )
+                ua = b"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko)"
                 info.setHttpHeader(b"User-Agent", ua)
 
         except Exception as e:
@@ -150,12 +148,12 @@ class StealthInterceptor(QWebEngineUrlRequestInterceptor):
     def _handle_miniai_lockdown(self, info, req_url: str) -> bool:
         if self.mini_ai and getattr(self.mini_ai, "panic_mode_active", False):
             print("🚨 PANIC MODE: Blocking request:", req_url[:120])
-            
+
             self._network_print(
                 "🚨 PANIC MODE: Blocking request:",
                 req_url[:120],
             )
-            
+
             info.block(True)
             return True
 
@@ -175,7 +173,7 @@ class StealthInterceptor(QWebEngineUrlRequestInterceptor):
                 self.mini_ai.monitor_network(req_url)
             except Exception as e:
                 print("MiniAI error:", e)
-                
+
     def _network_print(self, *parts):
         """
         Print to the terminal and mirror the same line
@@ -201,7 +199,7 @@ class StealthInterceptor(QWebEngineUrlRequestInterceptor):
             inspector.log_network_event(text)
         except Exception as e:
             print("Inspector network hook:", e)
-        
+
     def _handle_early_exits(self, info, scheme: str, host: str) -> bool:
         if scheme in self.SAFE_SCHEMES:
             return True
@@ -240,12 +238,12 @@ class StealthInterceptor(QWebEngineUrlRequestInterceptor):
                 except Exception as e:
                     print(e)
                     pass
-                    
+
             self._network_print(
                 "HTTPS UPGRADE:",
                 req_url,
             )
-            
+
             info.redirect(https_url)
             return True
 
@@ -272,7 +270,7 @@ class StealthInterceptor(QWebEngineUrlRequestInterceptor):
         if modified:
             clean_url = QUrl(qurl)
             clean_url.setQuery(query)
-            
+
             self._network_print(
                 "TRACKING CLEANUP:",
                 clean_url.toString(),
@@ -309,12 +307,12 @@ class StealthInterceptor(QWebEngineUrlRequestInterceptor):
                 return "document"
 
         return req_type or "other"
-        
+
+
 class DarkelfWebPage(QWebEnginePage):
     def __init__(self, tab_id, profile, parent=None):
         super().__init__(profile, parent)
         self.tab_id = tab_id
-
 
     def createRequest(self, *args, **kwargs):
         req = super().createRequest(*args, **kwargs)
@@ -324,8 +322,10 @@ class DarkelfWebPage(QWebEnginePage):
             print(e)
             pass
         return req
-        
+
+
 # ===================== Cosmetic injection helper =====================
+
 
 def js_inject_style_tag(style_id: str, css: str) -> str:
     # returns JS string that injects/updates a <style> with CSS

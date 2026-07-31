@@ -31,15 +31,12 @@ from PySide6.QtWidgets import (
 # Splash
 # ============================================================
 
-class BootSplash(QWidget):
 
+class BootSplash(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.setWindowFlags(
-            Qt.FramelessWindowHint |
-            Qt.WindowStaysOnTopHint
-        )
+        self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
 
         self.setAttribute(
             Qt.WA_TranslucentBackground,
@@ -90,30 +87,20 @@ class BootSplash(QWidget):
 
         self.logo.setAlignment(Qt.AlignCenter)
 
-        logo_path = (
-            Path(__file__).resolve().parent
-            / "assets"
-            / "darkelf-256.png"
-        )
+        logo_path = Path(__file__).resolve().parent / "assets" / "darkelf-256.png"
 
         pix = QPixmap(str(logo_path))
 
         if not pix.isNull():
-
             self.logo.setPixmap(
-
                 pix.scaled(
-
                     QSize(50, 50),
-
                     Qt.KeepAspectRatio,
-
                     Qt.SmoothTransformation,
                 )
             )
 
         else:
-
             self.logo.setText("Darkelf")
 
             self.logo.setStyleSheet("""
@@ -128,13 +115,9 @@ class BootSplash(QWidget):
         # Title
         # -----------------------------------------------------
 
-        self.title = QLabel(
-            "Darkelf Browser"
-        )
+        self.title = QLabel("Darkelf Browser")
 
-        self.title.setAlignment(
-            Qt.AlignCenter
-        )
+        self.title.setAlignment(Qt.AlignCenter)
 
         self.title.setFont(
             QFont(
@@ -144,25 +127,17 @@ class BootSplash(QWidget):
             )
         )
 
-        layout.addWidget(
-            self.title
-        )
+        layout.addWidget(self.title)
 
         # -----------------------------------------------------
         # Subtitle
         # -----------------------------------------------------
 
-        self.subtitle = QLabel(
-            "SHADOW • PRIVATE • HARDENED"
-        )
+        self.subtitle = QLabel("SHADOW • PRIVATE • HARDENED")
 
-        self.subtitle.setAlignment(
-            Qt.AlignCenter
-        )
+        self.subtitle.setAlignment(Qt.AlignCenter)
 
-        layout.addWidget(
-            self.subtitle
-        )
+        layout.addWidget(self.subtitle)
 
         layout.addSpacing(10)
 
@@ -175,22 +150,14 @@ class BootSplash(QWidget):
         chips.setSpacing(10)
 
         for text in (
-
             "Private",
-
             "Tracker Blocking",
-
             "HTTPS",
-
             "MiniAI",
-
         ):
-
             chip = QLabel(text)
 
-            chip.setAlignment(
-                Qt.AlignCenter
-            )
+            chip.setAlignment(Qt.AlignCenter)
 
             chip.setStyleSheet("""
             QLabel{
@@ -221,17 +188,11 @@ class BootSplash(QWidget):
         # Status
         # -----------------------------------------------------
 
-        self.status = QLabel(
-            "Initializing..."
-        )
+        self.status = QLabel("Initializing...")
 
-        self.status.setAlignment(
-            Qt.AlignCenter
-        )
+        self.status.setAlignment(Qt.AlignCenter)
 
-        layout.addWidget(
-            self.status
-        )
+        layout.addWidget(self.status)
 
         # -----------------------------------------------------
         # Progress Bar
@@ -250,14 +211,12 @@ class BootSplash(QWidget):
 
         self.bar.setFormat("%p%")
 
-        layout.addWidget(
-            self.bar
-        )
+        layout.addWidget(self.bar)
 
         # =====================================================
         # Part 2
         # =====================================================
-        
+
         #
         # Progress spacing
         #
@@ -407,7 +366,7 @@ class BootSplash(QWidget):
 
         padding-top:6px;
         """)
-        
+
         # -----------------------------------------------------
         # Fade-in Animation
         # -----------------------------------------------------
@@ -447,9 +406,7 @@ class BootSplash(QWidget):
 
         self.fadeAnim.setEndValue(1)
 
-        self.fadeAnim.setEasingCurve(
-            QEasingCurve.OutCubic
-        )
+        self.fadeAnim.setEasingCurve(QEasingCurve.OutCubic)
 
         self.fadeAnim.start()
 
@@ -463,9 +420,7 @@ class BootSplash(QWidget):
 
         self.logoTimer = QTimer(self)
 
-        self.logoTimer.timeout.connect(
-            self._animate_logo
-        )
+        self.logoTimer.timeout.connect(self._animate_logo)
 
         self.logoTimer.start(55)
 
@@ -477,12 +432,10 @@ class BootSplash(QWidget):
 
         self.miniTimer = QTimer(self)
 
-        self.miniTimer.timeout.connect(
-            self._animate_miniai
-        )
+        self.miniTimer.timeout.connect(self._animate_miniai)
 
         self.miniTimer.start(600)
-        
+
     # ---------------------------------------------------------
     # Logo Animation
     # ---------------------------------------------------------
@@ -490,24 +443,18 @@ class BootSplash(QWidget):
     def _animate_logo(self):
 
         if self._grow:
-
             self._logoSize += 1
 
             if self._logoSize >= 60:
                 self._grow = False
 
         else:
-
             self._logoSize -= 1
 
             if self._logoSize <= 50:
                 self._grow = True
 
-        logo_path = (
-            Path(__file__).resolve().parent
-            / "assets"
-            / "darkelf.png"
-        )
+        logo_path = Path(__file__).resolve().parent / "assets" / "darkelf.png"
 
         pix = QPixmap(str(logo_path))
 
@@ -515,17 +462,11 @@ class BootSplash(QWidget):
             return
 
         self.logo.setPixmap(
-
             pix.scaled(
-
                 self._logoSize,
-
                 self._logoSize,
-
                 Qt.KeepAspectRatio,
-
                 Qt.SmoothTransformation,
-
             )
         )
 
@@ -536,7 +477,6 @@ class BootSplash(QWidget):
     def _animate_miniai(self):
 
         if self._miniPulse:
-
             self.miniai.setStyleSheet("""
                 color:#C084FC;
                 font-size:11px;
@@ -545,7 +485,6 @@ class BootSplash(QWidget):
             """)
 
         else:
-
             self.miniai.setStyleSheet("""
                 color:#A855F7;
                 font-size:11px;

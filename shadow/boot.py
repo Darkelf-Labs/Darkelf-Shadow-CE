@@ -18,6 +18,7 @@ import traceback
 
 # ------------------ BOOT WORKER ------------------
 
+
 class BootWorker(QThread):
     progress = Signal(int, str)
     finished = Signal(object, object)  # engine, ai
@@ -54,6 +55,7 @@ class BootWorker(QThread):
 
 # ------------------ UI UPDATE ------------------
 
+
 def update_progress(splash, val, text):
     splash.status.setText(text)
 
@@ -67,6 +69,7 @@ def update_progress(splash, val, text):
 
 
 # ------------------ BOOT DONE ------------------
+
 
 def boot_done(splash, app, engine, ai):
 
@@ -95,19 +98,15 @@ def boot_done(splash, app, engine, ai):
         settings.setAttribute(QWebEngineSettings.LocalContentCanAccessRemoteUrls, False)
         settings.setAttribute(QWebEngineSettings.LocalContentCanAccessFileUrls, False)
         settings.setAttribute(QWebEngineSettings.FullScreenSupportEnabled, True)
-        
+
         # -----------------------------
         # GLOBAL SCRIPT INJECTION
         # -----------------------------
         script = QWebEngineScript()
 
         script.setName("darkelf_global_patch")
-        script.setInjectionPoint(
-            QWebEngineScript.DocumentCreation
-        )
-        script.setWorldId(
-            QWebEngineScript.MainWorld
-        )
+        script.setInjectionPoint(QWebEngineScript.DocumentCreation)
+        script.setWorldId(QWebEngineScript.MainWorld)
         script.setRunsOnSubFrames(True)
 
         #
@@ -117,7 +116,7 @@ def boot_done(splash, app, engine, ai):
         script.setSourceCode("")
 
         profile.scripts().insert(script)
-        
+
         # -----------------------------
         # INTERCEPTOR
         # -----------------------------
@@ -180,9 +179,7 @@ def boot_done(splash, app, engine, ai):
         fade.start()
 
         splash._fade = fade
-        
 
     except Exception as e:
         print("BROWSER CRASH:", e)
         traceback.print_exc()
-
