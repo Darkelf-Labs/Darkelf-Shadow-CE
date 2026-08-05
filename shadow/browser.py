@@ -1,15 +1,12 @@
 # shadow/browser.py
 
 # --- Standard ---
-import os
-import sys
 import json
 import re
 import secrets
 import urllib.request
 from urllib.parse import quote_plus
 import urllib.parse
-import urllib.request
 
 # --- Qt Core ---
 from PySide6.QtCore import (
