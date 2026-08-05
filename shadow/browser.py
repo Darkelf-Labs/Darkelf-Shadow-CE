@@ -65,8 +65,8 @@ from shadow.browser_homepage import HOMEPAGE
 from shadow.browser_ui import BrowserUIMixin
 from shadow.browser_features import BrowserFeaturesMixin
 
-devnull = open(os.devnull, "w")
-os.dup2(devnull.fileno(), sys.stderr.fileno())
+#devnull = open(os.devnull, "w")
+#os.dup2(devnull.fileno(), sys.stderr.fileno())
 
 # --------------------------------------------------
 # Homepage Themes
