@@ -27,8 +27,6 @@ class HardenedWebPage(QWebEnginePage):
         "capitalone.com",
         "citi.com",
         "sourceforge.net",
-        "fsharetv.com",
-        "rophimx.net",
         "duckduckgo.com",
     }
 
