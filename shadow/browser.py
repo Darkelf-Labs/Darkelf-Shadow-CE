@@ -1,7 +1,6 @@
 # shadow/browser.py
 
 # --- Standard ---
-import os
 import json
 import re
 import secrets
