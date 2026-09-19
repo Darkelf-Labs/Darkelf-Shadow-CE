@@ -1,20 +1,23 @@
 # main.py
 
 # --- Qt ---
-from PySide6.QtWidgets import QApplication
-from PySide6.QtGui import QPalette, QColor
+# main.py
 
 # --- Standard ---
 import sys
 
-from shadow.splash import BootSplash
-
-from shadow.boot import BootWorker, update_progress, boot_done
-
-# --- Chromium flags MUST be before Qt ---
+# --- Chromium flags MUST be set BEFORE importing PySide6 ---
 from shadow.utils import apply_chromium_flags
 
 apply_chromium_flags()
+
+# --- Qt ---
+from PySide6.QtWidgets import QApplication
+from PySide6.QtGui import QPalette, QColor
+
+# --- Darkelf ---
+from shadow.splash import BootSplash
+from shadow.boot import BootWorker, update_progress, boot_done
 
 # --- Create app ---
 app = QApplication(sys.argv)
@@ -87,7 +90,9 @@ worker = BootWorker()
 worker.progress.connect(lambda v, t: update_progress(splash, v, t))
 
 # --- Connect completion ---
-worker.finished.connect(lambda engine, ai: boot_done(splash, app, engine, ai))
+worker.finished.connect(
+    lambda engine, ai: boot_done(splash, app, engine, ai)
+)
 
 # --- Start boot process ---
 worker.start()
