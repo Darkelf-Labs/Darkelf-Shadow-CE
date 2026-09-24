@@ -2,15 +2,12 @@
 requires = ["setuptools>=82.0.1"]
 build-backend = "setuptools.build_meta"
 
-
 [tool.setuptools]
 include-package-data = true
-
 
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["shadow*"]
-
 
 [tool.setuptools.package-data]
 shadow = [
@@ -20,26 +17,19 @@ shadow = [
     "assets/*.jpg",
 ]
 
-
 [project]
 name = "darkelf-shadow"
 version = "7.0.9"
-
 description = "Darkelf Shadow — Cross-platform privacy browser with hardened off-the-record browsing and MiniAI Sentinel"
-
 authors = [
     { name = "Dr. Kevin Moore" }
 ]
-
 readme = "README.md"
 license = { file = "LICENSE.md" }
-
 requires-python = ">=3.11"
-
 dependencies = [
     "PySide6>=6.5,<7",
 ]
-
 keywords = [
     "browser",
     "privacy",
@@ -51,23 +41,17 @@ keywords = [
     "pyside6",
     "webengine",
 ]
-
 classifiers = [
     "Development Status :: 5 - Production/Stable",
-
     "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)",
-
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.11",
-
     "Operating System :: MacOS",
     "Operating System :: Microsoft :: Windows",
     "Operating System :: POSIX :: Linux",
-
     "Topic :: Security",
     "Topic :: Internet :: WWW/HTTP :: Browsers",
 ]
-
 
 [project.urls]
 Homepage = "https://github.com/Darkelf-Labs/Darkelf-Shadow-CE"
@@ -75,20 +59,22 @@ Repository = "https://github.com/Darkelf-Labs/Darkelf-Shadow-CE"
 Issues = "https://github.com/Darkelf-Labs/Darkelf-Shadow-CE/issues"
 Releases = "https://github.com/Darkelf-Labs/Darkelf-Shadow-CE/releases"
 
-
-# Makes `darkelf-shadow` runnable from terminal
 [project.scripts]
 darkelf-shadow = "shadow.cli:main"
-
 
 [tool.ruff]
 line-length = 127
 target-version = "py311"
-
+exclude = [
+    "build",
+    "dist",
+    "*.egg-info",
+]
 
 [tool.ruff.lint]
 select = ["E", "F"]
 
-
 [tool.ruff.lint.per-file-ignores]
 "main.py" = ["E402"]
+"shadow/browser_page.py" = ["E501"]
+
