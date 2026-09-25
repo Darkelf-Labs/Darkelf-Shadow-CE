@@ -10,6 +10,18 @@ Darkelf Shadow is a defense-in-depth, privacy-hardened web browser engineered to
 
 ---
 
+## Custom QtWebEngine — macOS
+
+The native macOS ARM64 build of Darkelf Shadow 7.0.9 uses a customized
+QtWebEngine 6.11.2 build providing native Touch ID/WebAuthn integration
+and expanded media codec support.
+
+Source patches and build documentation are available here:
+
+**Darkelf QtWebEngine:** https://github.com/Darkelf-Labs/Darkelf-QtWebEngine
+
+---
+
 ## 📦 Installation
 
 ### Python / PyPI
