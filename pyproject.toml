@@ -19,7 +19,7 @@ shadow = [
 
 [project]
 name = "darkelf-shadow"
-version = "7.0.9"
+version = "7.0.10"
 description = "Darkelf Shadow — Cross-platform privacy browser with hardened off-the-record browsing and MiniAI Sentinel"
 authors = [
     { name = "Dr. Kevin Moore" }
