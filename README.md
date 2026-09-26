@@ -1,4 +1,4 @@
-# 🕶️ Darkelf Shadow — Community Edition 7.0.9 Stable
+# 🕶️ Darkelf Shadow — Community Edition 7.0.10 Stable
 
 [![PyPI Downloads](https://static.pepy.tech/personalized-badge/darkelf-shadow?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=GREEN&left_text=downloads)](https://pepy.tech/projects/darkelf-shadow)
 
@@ -6,19 +6,7 @@
 
 Darkelf Shadow is a defense-in-depth, privacy-hardened web browser engineered to minimize persistent tracking, reduce attack surface, and actively defend against modern web threats — while maintaining an ephemeral browsing environment.
 
-**Version 7.0.9 Stable** expands native macOS integration with a custom Darkelf Qt WebEngine 6.11.2 build, Touch ID/passkey support, improved H.264/AVC media compatibility, and hardened release packaging while preserving the cross-platform privacy, filtering, canvas, and MiniAI improvements introduced in 7.0.8.
-
----
-
-## Custom QtWebEngine — macOS
-
-The native macOS ARM64 build of Darkelf Shadow 7.0.9 uses a customized
-QtWebEngine 6.11.2 build providing native Touch ID/WebAuthn integration
-and expanded media codec support.
-
-Source patches and build documentation are available here:
-
-**Darkelf QtWebEngine:** https://github.com/Darkelf-Labs/Darkelf-QtWebEngine
+**Version 7.0.10 Stable** focuses on browser responsiveness, website compatibility, secondary-navigation handling, and filtering efficiency while retaining the custom Darkelf Qt WebEngine 6.11.2 macOS ARM64 build, Touch ID/passkey support, H.264/AVC media compatibility, and the privacy, filtering, canvas, and MiniAI architecture from 7.0.9.
 
 ---
 
@@ -41,11 +29,49 @@ The macOS release includes a SHA-256 checksum for independent download verificat
 
 ---
 
-# ✨ What's New in 7.0.9
+# ✨ What's New in 7.0.10
+
+### ⚡ Compatibility-Mode Performance Improvements
+
+Darkelf Shadow 7.0.10 improves responsiveness on websites that require Darkelf's compatibility mode.
+
+Compatibility-mode websites now bypass unnecessary EasyList cosmetic stylesheet injection. This prevents very large collections of cosmetic selectors from imposing unnecessary CSS parsing, selector-matching, and rendering overhead on websites where Darkelf has already deliberately prioritized compatibility.
+
+This provides:
+
+- Faster rendering on compatibility-mode websites
+- Reduced cosmetic-filter CSS processing
+- Reduced selector-matching overhead
+- Improved page responsiveness
+- Reduced risk of sluggish or temporarily unresponsive pages
+- Preservation of Darkelf's network-level filtering architecture
+- Scoped compatibility behavior rather than globally weakening protection
+
+Network-level request filtering remains separate from this optimization and continues to protect normal browsing traffic.
+
+### 🪟 Improved Secondary Navigation & Popup Handling
+
+Darkelf Shadow 7.0.10 improves handling of website-created secondary windows and navigation.
+
+- User-clicked `target="_blank"` links can remain in the current Shadow tab.
+- Script-generated popup and popunder navigation is blocked.
+- Reduced unwanted blank or Home tabs caused by secondary-window requests.
+- Legitimate user navigation is distinguished from script-created secondary navigation.
+- Popup handling no longer requires site-specific exceptions for supported cases.
+
+This improves compatibility with websites that use secondary navigation while retaining protection against unwanted advertising popups and popunders.
+
+### 🔑 WebAuthn Diagnostic Cleanup
+
+Temporary WebAuthn capability diagnostics used during development have been removed from normal page loads.
+
+This reduces unnecessary JavaScript capability checks, delayed diagnostic callbacks, terminal output, and development overhead while leaving Darkelf's actual WebAuthn/passkey implementation intact.
+
+Touch ID, passkeys, security keys, and the native Qt WebEngine WebAuthn integration remain part of the supported macOS architecture.
 
 ### 🍎 Custom Darkelf Qt WebEngine 6.11.2 for macOS ARM64
 
-The native macOS ARM64 release now bundles a custom Darkelf build of Qt WebEngine 6.11.2.
+The native macOS ARM64 release bundles a custom Darkelf build of Qt WebEngine 6.11.2.
 
 This platform-specific engine adds:
 
@@ -61,8 +87,8 @@ Windows and Linux continue to use the standard PySide6 / Qt WebEngine platform d
 
 ### 🔑 Touch ID, Passkeys & WebAuthn
 
-- Added native Touch ID support for compatible WebAuthn/passkey authentication on the custom macOS build.
-- Added the persistent platform configuration required by the macOS authenticator while keeping browser-session privacy controls scoped appropriately.
+- Native Touch ID support for compatible WebAuthn/passkey authentication on the custom macOS build.
+- Persistent platform configuration required by the macOS authenticator while keeping browser-session privacy controls scoped appropriately.
 - WebAuthn secret material is generated locally with restricted file permissions.
 - Integrated the macOS application with the required keychain access group and Developer ID provisioning.
 - Passkey creation and subsequent passkey sign-in have been tested with a WebAuthn-enabled service.
@@ -86,10 +112,9 @@ Darkelf Shadow remains cross-platform through Python/PyPI.
 
 The macOS-specific enhancements therefore do not change Shadow's core cross-platform filtering, MiniAI, fingerprint-protection, and ephemeral-browsing design.
 
-
 ### ⚡ Declarative Tracker Blocking
 
-Darkelf Shadow's network engine now combines its existing EasyList/uBlock-compatible filtering architecture with a fast declarative tracker layer.
+Darkelf Shadow's network engine combines its existing EasyList/uBlock-compatible filtering architecture with a fast declarative tracker layer.
 
 Frequently encountered tracker and advertising infrastructure can be rejected through fast hostname matching before falling back to the larger filter-rule engine.
 
@@ -120,7 +145,7 @@ This provides stronger protection while allowing sites that legitimately depend 
 
 ### 🧩 Improved Website Compatibility
 
-7.0.8 expands compatibility handling for complex modern web applications, including:
+7.0.10 continues compatibility handling for complex modern web applications, including:
 
 - Authentication services
 - Microsoft / Outlook web applications
@@ -128,6 +153,8 @@ This provides stronger protection while allowing sites that legitimately depend 
 - Media-heavy websites
 - Dynamic JavaScript applications
 - Embedded authentication flows
+- Websites using secondary-window navigation
+- Sites sensitive to large cosmetic-filter stylesheets
 
 Compatibility exceptions remain deliberately scoped rather than globally disabling Darkelf's protections.
 
@@ -139,10 +166,12 @@ This reduces CAPTCHA loops while preserving normal privacy protections outside t
 
 ### 🍎 macOS Improvements
 
-- Updated application metadata for 7.0.9
+- Updated application metadata for 7.0.10
 - Custom Darkelf Qt WebEngine 6.11.2 framework on macOS ARM64
 - Native Touch ID/passkey WebAuthn integration
 - Expanded H.264/AVC media compatibility
+- Improved compatibility-mode rendering performance
+- Improved secondary-navigation and popup handling
 - Improved browser URL/document registration
 - High-resolution display support
 - Automatic graphics-switching support
@@ -256,8 +285,11 @@ Darkelf Shadow combines multiple filtering techniques:
 - ✔ Known tracker-domain blocking
 - ✔ Third-party request classification
 - ✔ Compatibility-aware exceptions
+- ✔ Compatibility-aware cosmetic filtering
 
 The fast declarative layer handles known tracker infrastructure while the larger rule engine remains available for complex matching.
+
+Cosmetic filtering is applied separately from network filtering so that compatibility-mode sites can avoid unnecessary stylesheet overhead without disabling Darkelf's broader network protection architecture.
 
 ---
 
@@ -360,17 +392,20 @@ All MiniAI analysis is performed locally.
 
 # ⚡ PERFORMANCE
 
-Version 7.0.9 preserves the optimized network-filtering architecture from 7.0.8 while expanding native macOS integration, WebAuthn/passkey support, and media compatibility.
+Version 7.0.10 preserves the optimized network-filtering architecture while reducing cosmetic-filter overhead on compatibility-mode sites and retaining the native macOS, WebAuthn/passkey, and media improvements from 7.0.9.
 
 - ⚙️ PySide6 + Qt WebEngine
 - 🚀 Chromium rendering core
 - ⚡ Fast declarative hostname matching
 - 🔎 Indexed filter-rule evaluation
+- 🎨 Compatibility-aware cosmetic filtering
 - 🧠 In-memory operation
 - 💾 Reduced persistent disk activity
 - 🚀 Fast startup and clean shutdown
 
 The declarative layer allows many known tracker requests to be decided without unnecessarily traversing the complete filter-rule set.
+
+Compatibility-mode sites can additionally bypass unnecessary large cosmetic-filter stylesheets, reducing CSS processing and rendering overhead while leaving Darkelf's network architecture intact.
 
 ---
 
@@ -412,13 +447,13 @@ The macOS release includes a SHA-256 checksum.
 ### Verify on macOS
 
 ```bash
-shasum -a 256 -c Darkelf-Shadow-7.0.9.dmg.sha256
+shasum -a 256 -c Darkelf-Shadow-7.0.10.dmg.sha256
 ```
 
 A successful verification should report:
 
 ```text
-Darkelf-Shadow-7.0.9.dmg: OK
+Darkelf-Shadow-7.0.10.dmg: OK
 ```
 
 The macOS application and DMG release workflow uses Developer ID signing, Apple notarization, and stapling for Gatekeeper verification.
@@ -453,7 +488,7 @@ Darkelf Shadow:
 
 # 👤 AUTHOR
 
-**Dr. Kevin Moore (2025–2026)**  
+**Dr. Kevin Moore (2025–2026)**
 **Darkelf Project — Shadow Edition**
 
 ---
@@ -469,5 +504,5 @@ for their support and contributions to the Darkelf project.
 
 ---
 
-**Darkelf Shadow Community Edition 7.0.9 Stable**  
+**Darkelf Shadow Community Edition 7.0.10 Stable**
 *Ephemeral by design. Hardened in depth. Privacy without persistence.*
