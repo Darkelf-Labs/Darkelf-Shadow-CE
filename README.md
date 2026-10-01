@@ -15,7 +15,7 @@ ephemeral browsing environment.
 macOS ARM64 build with native Blink/WebGL identity handling and
 additional native macOS WebAuthn integration, while retaining the
 responsiveness, compatibility, filtering, canvas, MiniAI, Touch
-ID/passkey, and H.264/AVC improvements from the 7.0.x series.
+ID/passkey, and H.264/AVC improvements retained in 7.0.11.
 
 ------------------------------------------------------------------------
 
@@ -40,7 +40,7 @@ verification.
 
 ------------------------------------------------------------------------
 
-# ✨ What's New in 7.0.10
+# ✨ What's New in 7.0.11
 
 ### ⚡ Compatibility-Mode Performance Improvements
 
