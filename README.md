@@ -1,616 +1,109 @@
-# 🕶️ Darkelf Shadow --- Community Edition 7.0.11 Stable
+# Darkelf Shadow — Community Edition 7.0.12
 
-[![PyPI
-Downloads](https://static.pepy.tech/personalized-badge/darkelf-shadow?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=GREEN&left_text=downloads)](https://pepy.tech/projects/darkelf-shadow)
+[![PyPI Downloads](https://static.pepy.tech/personalized-badge/darkelf-shadow?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=GREEN&left_text=downloads)](https://pepy.tech/projects/darkelf-shadow)
 
-**Fully Hardened • Ephemeral • Zero-Trace Browser (Qt WebEngine /
-Chromium Core)**
+**Privacy-focused browsing with Qt WebEngine, local MiniAI analysis and Smart Canvas protection.**
 
-Darkelf Shadow is a defense-in-depth, privacy-hardened web browser
-engineered to minimize persistent tracking, reduce attack surface, and
-actively defend against modern web threats --- while maintaining an
-ephemeral browsing environment.
+Darkelf Shadow combines network filtering, fingerprint defenses and session-focused browsing. Available through Python/PyPI and as a native macOS ARM64 application.
 
-**Version 7.0.11 Stable** extends the custom Darkelf Qt WebEngine 6.11.2
-macOS ARM64 build with native Blink/WebGL identity handling and
-additional native macOS WebAuthn integration, while retaining the
-responsiveness, compatibility, filtering, canvas, MiniAI, Touch
-ID/passkey, and H.264/AVC improvements retained in 7.0.11.
+## What's new in 7.0.12
 
-------------------------------------------------------------------------
+- **Faster filter startup:** cached list downloads and merged subscriptions, direct matching for simple rules, and regex compilation for complex rules. Local filter startup fell from approximately 38 seconds to 6 seconds with about 417,000 network rules; timings vary by system and cache state.
+- **CNN playback fix:** unsupported cookie-modification rules are skipped instead of blocking requests. Scriptlet and other unsupported page-action rules no longer become network blockers. CNN10 playback was verified in developer testing.
+- **Independent Darkelf site boundaries:** embedded rules replace the copied Public Suffix List, with no separate `.dat` file or suffix download. Coverage is curated rather than worldwide; unknown namespaces use exact-host comparison and can cause extra blocking between related subdomains. Unlisted shared-hosting boundaries remain a coverage gap.
+- **Browser usability:** video fullscreen hides browser controls and restores them on exit; delayed keyboard-filter installation checks for deleted Qt views.
+- **Quieter operation:** repeated canvas messages are reduced and automatic terminal threat reports are removed. Optional diagnostics expose website JavaScript warnings/errors and matched network blockers.
 
-## 📦 Installation
+## Installation
 
 ### Python / PyPI
 
-If you already have Python 3.11 or newer:
+Requires Python 3.11 or newer.
 
-``` bash
-pip install darkelf-shadow
+```bash
+pip install --upgrade darkelf-shadow
 darkelf-shadow
 ```
 
-### macOS
+### Native macOS ARM64
 
-Darkelf Shadow Community Edition is also distributed as a signed and
-notarized macOS application.
+Download the DMG and matching checksum from [GitHub Releases](https://github.com/Darkelf-Labs/Darkelf-Shadow-CE/releases). The native release workflow includes Developer ID signing, hardened runtime, notarization and stapling.
 
-The macOS release includes a SHA-256 checksum for independent download
-verification.
+| Distribution | Engine and session model |
+|---|---|
+| Python / PyPI | Platform PySide6 / Qt WebEngine; off-the-record profile. The custom macOS engine is not included. |
+| macOS ARM64 DMG | Custom Darkelf Qt WebEngine 6.11.2; named profile for native authentication, memory HTTP cache and nonpersistent cookies. |
 
-------------------------------------------------------------------------
+The DMG's named profile is **not off the record**. Native authentication configuration and credentials can persist separately from browsing-session cookies. Downloads, filter caches and other saved files can also remain on disk.
 
-# ✨ What's New in 7.0.11
+## Privacy and filtering
 
-### ⚡ Compatibility-Mode Performance Improvements
+- Indexed filtering using EasyList, EasyPrivacy and uBlock-derived sources, plus declarative tracker-host checks and scoped compatibility exceptions.
+- URL tracking-parameter cleanup and compatibility-aware cosmetic filtering.
+- Local MiniAI threat scoring, fingerprint-event monitoring and response modes, without a cloud AI dependency.
+- Canvas, WebGL, audio and other fingerprint mitigations. The custom DMG engine includes native WebGL modifications and disabled WebRTC; engine-specific patches do not transfer through standard PyPI dependencies.
 
-Darkelf Shadow 7.0.11 improves responsiveness on websites that require
-Darkelf's compatibility mode.
+The filter engine supports a subset of upstream rule syntax. Unsupported actions are skipped rather than implemented as request blockers.
 
-Compatibility-mode websites now bypass unnecessary EasyList cosmetic
-stylesheet injection. This prevents very large collections of cosmetic
-selectors from imposing unnecessary CSS parsing, selector-matching, and
-rendering overhead on websites where Darkelf has already deliberately
-prioritized compatibility.
+### Smart Canvas
 
-This provides:
+| Mode | Behavior |
+|---|---|
+| **BLOCKED** | Canvas readback is disabled. |
+| **PROTECTED** | Readback uses Darkelf's domain-sensitive noise. |
+| **TRUSTED** | Native readback is permitted for trusted compatibility cases. |
 
--   Faster rendering on compatibility-mode websites
--   Reduced cosmetic-filter CSS processing
--   Reduced selector-matching overhead
--   Improved page responsiveness
--   Reduced risk of sluggish or temporarily unresponsive pages
--   Preservation of Darkelf's network-level filtering architecture
--   Scoped compatibility behavior rather than globally weakening
-    protection
+Supported human-verification flows can receive an automatic, temporary session trust grant to reduce verification loops. Closing Darkelf clears that grant.
 
-Network-level request filtering remains separate from this optimization
-and continues to protect normal browsing traffic.
+### Authentication and media
 
-### 🪟 Improved Secondary Navigation & Popup Handling
+The custom macOS engine includes native WebAuthn integration and H.264/AVC support. Touch ID/passkey availability depends on the signed app's keychain access group, provisioning, platform and website compatibility. Apple-specific authentication issues are not claimed resolved by 7.0.12.
 
-Darkelf Shadow 7.0.11 improves handling of website-created secondary
-windows and navigation.
+H.264 support does not supply DRM support. Protected streams may require a compatible DRM module; Widevine is not bundled with Darkelf.
 
--   User-clicked `target="_blank"` links can remain in the current
-    Shadow tab.
--   Script-generated popup and popunder navigation is blocked.
--   Reduced unwanted blank or Home tabs caused by secondary-window
-    requests.
--   Legitimate user navigation is distinguished from script-created
-    secondary navigation.
--   Popup handling no longer requires site-specific exceptions for
-    supported cases.
+## Optional diagnostics
 
-This improves compatibility with websites that use secondary navigation
-while retaining protection against unwanted advertising popups and
-popunders.
+Normal launches keep routine diagnostics quiet. To investigate website failures:
 
-### 🔑 WebAuthn Diagnostic Cleanup
-
-Temporary WebAuthn capability diagnostics used during development have
-been removed from normal page loads.
-
-This reduces unnecessary JavaScript capability checks, delayed
-diagnostic callbacks, terminal output, and development overhead while
-leaving Darkelf's actual WebAuthn/passkey implementation intact.
-
-Touch ID, passkeys, security keys, and the native Qt WebEngine WebAuthn
-integration remain part of the supported macOS architecture.
-
-### 🍎 Custom Darkelf Qt WebEngine 6.11.2 for macOS ARM64
-
-The native macOS ARM64 release bundles a custom Darkelf build of Qt
-WebEngine 6.11.2.
-
-This platform-specific engine adds:
-
--   Native macOS WebAuthn integration
--   Touch ID/passkey platform-authenticator support
--   Native Cocoa-window integration for Chromium's macOS WebAuthn
-    discovery path
--   Darkelf-specific WebAuthn configuration
--   Native Blink/WebGL identity handling
--   Expanded H.264/AVC media compatibility
--   WebRTC disabled in the custom native macOS engine
--   Dedicated QtWebEngineProcess and QtWebEngineCore signing
--   Apple Hardened Runtime integration
--   Developer ID signing, notarization, stapling, and Gatekeeper
-    validation
-
-Windows and Linux continue to use the standard PySide6 / Qt WebEngine
-platform distribution while retaining Shadow's off-the-record and
-privacy architecture.
-
-### 🔑 Touch ID, Passkeys & WebAuthn
-
--   Native Touch ID support for compatible WebAuthn/passkey
-    authentication on the custom macOS build.
--   Persistent platform configuration required by the macOS
-    authenticator while keeping browser-session privacy controls scoped
-    appropriately.
--   WebAuthn secret material is generated locally with restricted file
-    permissions.
--   Integrated the macOS application with the required keychain access
-    group and Developer ID provisioning.
--   Passkey creation and subsequent passkey sign-in have been tested
-    with a WebAuthn-enabled service.
--   Bluetooth privacy declarations remain available for compatible
-    Bluetooth-enabled security keys and devices.
-
-### 🎬 Expanded macOS Media Compatibility
-
--   Enabled Qt WebEngine proprietary-codec support in the custom macOS
-    engine.
--   Added H.264/AVC playback capability through the custom Qt
-    WebEngine/Chromium media configuration.
--   Improved compatibility with web video sources that depend on H.264.
--   Codec support is independent of Darkelf's tracker blocking,
-    fingerprint protections, and MiniAI security layers.
--   H.264/AVC and third-party licensing information is documented in the
-    packaged third-party notices.
-
-### 🌐 Cross-Platform Distribution
-
-Darkelf Shadow remains cross-platform through Python/PyPI.
-
--   **macOS ARM64 native DMG:** custom Darkelf Qt WebEngine 6.11.2 with
-    macOS-specific WebAuthn/Touch ID integration, native WebGL handling,
-    expanded media support, and WebRTC disabled at build time.
--   **Windows / Linux:** standard platform PySide6 / Qt WebEngine with
-    Shadow's off-the-record browsing and privacy architecture.
--   **Python/PyPI:** installs the platform PySide6 / Qt WebEngine
-    dependency rather than the custom Qt WebEngine framework bundled
-    with the native macOS DMG.
-
-The macOS-specific enhancements therefore do not change Shadow's core
-cross-platform filtering, MiniAI, fingerprint-protection, and
-ephemeral-browsing design.
-
-### ⚡ Declarative Tracker Blocking
-
-Darkelf Shadow's network engine combines its existing
-EasyList/uBlock-compatible filtering architecture with a fast
-declarative tracker layer.
-
-Frequently encountered tracker and advertising infrastructure can be
-rejected through fast hostname matching before falling back to the
-larger filter-rule engine.
-
-This provides:
-
--   Faster request evaluation
--   Reduced large-rule scanning
--   Improved page responsiveness
--   Lower filtering overhead
--   Strong tracker blocking without sacrificing the existing filter
-    engine
--   Indexed fallback evaluation for complex rules
-
-The traditional EasyList/uBlock-style engine remains available for rules
-requiring more complex evaluation.
-
-### 🎭 Improved Canvas Protection
-
-Darkelf Shadow retains its randomized canvas protection system with
-domain-sensitive noise generation.
-
-Canvas access follows three protection states:
-
-  -----------------------------------------------------------------------
-  Mode                       Behavior
-  -------------------------- --------------------------------------------
-  🔴 BLOCKED                 Canvas readback is disabled
-
-  🟡 PROTECTED               Readback receives Darkelf's randomized
-                             protection
-
-  🟢 TRUSTED                 Native readback is permitted for explicitly
-                             trusted compatibility cases
-  -----------------------------------------------------------------------
-
-This provides stronger protection while allowing sites that legitimately
-depend on canvas functionality to remain usable.
-
-### 🧩 Improved Website Compatibility
-
-7.0.11 continues compatibility handling for complex modern web
-applications, including:
-
--   Authentication services
--   Microsoft / Outlook web applications
--   CAPTCHA and human-verification systems
--   Media-heavy websites
--   Dynamic JavaScript applications
--   Embedded authentication flows
--   Websites using secondary-window navigation
--   Sites sensitive to large cosmetic-filter stylesheets
-
-Compatibility exceptions remain deliberately scoped rather than globally
-disabling Darkelf's protections.
-
-### 🤖 Human Verification Handling
-
-Darkelf can detect supported human-verification and authentication
-workflows and temporarily permit the functionality necessary to complete
-them.
-
-This reduces CAPTCHA loops while preserving normal privacy protections
-outside the verification flow.
-
-### 🍎 macOS Improvements
-
--   Updated application metadata for 7.0.11
--   Custom Darkelf Qt WebEngine 6.11.2 framework on macOS ARM64
--   Native Touch ID/passkey WebAuthn integration
--   Native Cocoa-window integration for Chromium's macOS WebAuthn
-    discovery path
--   Native Blink/WebGL identity handling
--   Expanded H.264/AVC media compatibility
--   WebRTC disabled in the custom native macOS engine
--   Improved compatibility-mode rendering performance
--   Improved secondary-navigation and popup handling
--   Improved browser URL/document registration
--   High-resolution display support
--   Automatic graphics-switching support
--   Bluetooth privacy declaration for Bluetooth-enabled security keys
-    and devices
--   Developer ID signing
--   Apple Hardened Runtime integration
--   Apple notarization and stapling
--   Gatekeeper validation
--   SHA-256 release verification
--   Embedded open-source and third-party licensing notices
-
-Bluetooth access is not automatically granted. macOS remains responsible
-for requesting user permission if Bluetooth functionality is actually
-requested.
-
-------------------------------------------------------------------------
-
-## 🧱 HARDENED BY DESIGN
-
-Darkelf Shadow is architecturally hardened using multiple independent
-protection layers.
-
-### 🔥 Zero Persistence Architecture
-
--   No persistent browsing profile
--   Memory-oriented browsing lifecycle
--   Ephemeral cookies and browser state
--   Automatic cleanup on process exit
-
-### 🛡️ Network-Level Enforcement
-
--   Deep request interception
--   Pre-render request blocking
--   Third-party classification
--   Declarative tracker blocking
--   Indexed EasyList/uBlock-style filtering
--   Compatibility-aware request handling
-
-### 🧠 Autonomous Threat Detection --- MiniAI
-
--   On-device behavioral analysis
--   No cloud AI dependency
--   Real-time adaptive defense
--   Local threat scoring
-
-### 🚫 Telemetry-Free Core
-
--   No Darkelf analytics
--   No Darkelf tracking
--   No hidden Darkelf telemetry service
-
-------------------------------------------------------------------------
-
-# 🚀 HARDENED FEATURE SET
-
-## 🔐 Ephemeral Session Engine
-
-Ephemeral handling of:
-
--   Cookies
--   Cache
--   LocalStorage
--   IndexedDB
--   Session state
-
-Designed to minimize recoverable browsing residue after termination.
-
-------------------------------------------------------------------------
-
-## 🧠 MiniAI Sentinel
-
-Darkelf Shadow includes an on-device security analysis and response
-layer.
-
-### 🚨 Intrusion Detection
-
-Detection logic covers patterns associated with:
-
--   SQL injection
--   Cross-site scripting (XSS)
--   Command injection
--   Path traversal
-
-### 🦠 Detection Capabilities
-
--   Suspicious request detection
--   Tracker and surveillance detection
--   Fingerprinting monitoring
--   Behavioral anomaly detection
--   Burst/flood analysis
-
-------------------------------------------------------------------------
-
-## ⚡ Automated Response Modes
-
-  Mode            Behavior
-  --------------- ---------------------------
-  🟢 Standby      Passive monitoring
-  🔴 Lockdown     Blocks suspicious traffic
-  🚨 Panic Mode   Network shutdown
-
-------------------------------------------------------------------------
-
-## 🌐 Advanced Network Filtering
-
-Darkelf Shadow combines multiple filtering techniques:
-
--   ✔ EasyList
--   ✔ EasyPrivacy
--   ✔ uBlock-derived filter sources
--   ✔ ABP-compatible rule processing
--   ✔ Declarative tracker blocking
--   ✔ Indexed rule evaluation
--   ✔ Heuristic tracker detection
--   ✔ Known tracker-domain blocking
--   ✔ Third-party request classification
--   ✔ Compatibility-aware exceptions
--   ✔ Compatibility-aware cosmetic filtering
-
-The fast declarative layer handles known tracker infrastructure while
-the larger rule engine remains available for complex matching.
-
-Cosmetic filtering is applied separately from network filtering so that
-compatibility-mode sites can avoid unnecessary stylesheet overhead
-without disabling Darkelf's broader network protection architecture.
-
-------------------------------------------------------------------------
-
-## 🔍 Anti-Tracking & URL Sanitization
-
-Darkelf removes common tracking parameters such as:
-
--   `utm_*`
--   `fbclid`
--   `gclid`
--   Campaign and tracking identifiers
-
-This helps reduce cross-site correlation through URL-based tracking.
-
-------------------------------------------------------------------------
-
-## 🔐 HTTPS Enforcement Layer
-
--   Automatic HTTP → HTTPS upgrade
--   In-memory HTTPS/HSTS-style tracking
--   Downgrade protection
-
-------------------------------------------------------------------------
-
-# 🎭 Fingerprint Resistance Layer
-
-Darkelf Shadow includes defenses against several browser-fingerprinting
-techniques.
-
-### Canvas
-
--   Domain-sensitive randomized noise
--   Protected canvas readback
--   Explicit trusted-site compatibility
--   Readback blocking where appropriate
-
-### Additional Protections
-
--   WebGL protection
--   AudioContext protection
--   Font fingerprint mitigation
--   WebRTC disabled in the custom native macOS Qt WebEngine build;
-    platform restrictions apply elsewhere
--   Geolocation restrictions
-
-The objective is to reduce passive fingerprinting without claiming that
-any browser can guarantee anonymity or fingerprint uniqueness
-prevention.
-
-------------------------------------------------------------------------
-
-## 📥 Secure Download Handling
-
--   Controlled download directory
--   Filename handling protections
--   Optional ephemeral workflows
--   Reduced persistence exposure
-
-------------------------------------------------------------------------
-
-## ⚙️ Chromium / QtWebEngine Hardening
-
-Darkelf disables or restricts unnecessary browser functionality,
-including:
-
--   ❌ Browser synchronization services
--   ❌ Metrics collection
--   ❌ Crash-reporting telemetry
--   ❌ First-run tracking behavior
-
-Privacy-sensitive functionality is additionally controlled through
-Darkelf's QtWebEngine configuration and request-interception layers.
-
-------------------------------------------------------------------------
-
-# 🧩 DEFENSE-IN-DEPTH MODEL
-
-Darkelf Shadow combines:
-
-1.  Request Interception Layer
-2.  Declarative Tracker Blocking
-3.  EasyList/uBlock-Compatible Filter Engine
-4.  Third-Party Classification
-5.  MiniAI Behavioral Analysis
-6.  Fingerprint Protection
-7.  Ephemeral Storage Model
-8.  Compatibility and Authentication Handling
-
-Each layer addresses a different portion of the browser's attack and
-tracking surface.
-
-------------------------------------------------------------------------
-
-# 🧪 THREAT INTELLIGENCE CAPABILITIES
-
-MiniAI provides:
-
--   📊 Threat scoring
--   📈 Real-time event monitoring
--   🧠 Domain risk caching
--   📋 Threat reporting
--   🔄 Adaptive escalation logic
-
-All MiniAI analysis is performed locally.
-
-------------------------------------------------------------------------
-
-# ⚡ PERFORMANCE
-
-Version 7.0.11 preserves the optimized network-filtering and
-compatibility architecture while adding native WebGL handling and
-expanded macOS WebAuthn integration to the custom Qt WebEngine 6.11.2
-build.
-
--   ⚙️ PySide6 + Qt WebEngine
--   🚀 Chromium rendering core
--   ⚡ Fast declarative hostname matching
--   🔎 Indexed filter-rule evaluation
--   🎨 Compatibility-aware cosmetic filtering
--   🧠 In-memory operation
--   💾 Reduced persistent disk activity
--   🚀 Fast startup and clean shutdown
-
-The declarative layer allows many known tracker requests to be decided
-without unnecessarily traversing the complete filter-rule set.
-
-Compatibility-mode sites can additionally bypass unnecessary large
-cosmetic-filter stylesheets, reducing CSS processing and rendering
-overhead while leaving Darkelf's network architecture intact.
-
-------------------------------------------------------------------------
-
-# 🔒 SECURITY POSTURE SUMMARY
-
-  Category                       Status
-  ------------------------------ ------------------------------------
-  Persistent Browser Profile     ❌ None
-  Darkelf Telemetry              ❌ None
-  Tracking Resistance            ✅ Active
-  Declarative Tracker Blocking   ✅ Active
-  EasyList/uBlock Filtering      ✅ Active
-  Fingerprint Defense            ✅ Active
-  Canvas Protection              ✅ BLOCKED / PROTECTED / TRUSTED
-  Native macOS WebGL Handling    ✅ Custom Qt WebEngine build
-  Native macOS WebAuthn          ✅ Touch ID / platform integration
-  Native macOS WebRTC            ❌ Disabled at build time
-  Threat Detection               ✅ Real-time
-  Network Control                ✅ Enforced
-  Session Model                  ✅ Ephemeral
-
-------------------------------------------------------------------------
-
-# ⚠️ OPERATIONAL SECURITY NOTES
-
-For stronger system-level protection, Darkelf Shadow can be combined
-with:
-
--   🔐 Full-disk encryption (FileVault / LUKS)
--   🔥 OS-level firewall rules
--   🧱 Sandboxed runtime environments
--   🌐 Trusted VPN or network isolation
--   🔑 Hardware security keys where appropriate
-
-Darkelf Shadow is one component of a broader security model and does not
-guarantee anonymity.
-
-------------------------------------------------------------------------
-
-# 🔒 Security & Verification
-
-The macOS release includes a SHA-256 checksum.
-
-### Verify on macOS
-
-``` bash
-shasum -a 256 -c Darkelf-Shadow-7.0.11.dmg.sha256
+```bash
+DARKELF_DIAGNOSTICS=1 darkelf-shadow
 ```
 
-A successful verification should report:
+For a source checkout:
 
-``` text
-Darkelf-Shadow-7.0.11.dmg: OK
+```bash
+DARKELF_DIAGNOSTICS=1 python3.11 main.py
 ```
 
-The macOS application and DMG release workflow uses Developer ID
-signing, Apple notarization, and stapling for Gatekeeper verification.
+This prints website JavaScript warnings/errors and blocked requests with their matching rules. Launch without the variable to return to quiet operation.
 
-------------------------------------------------------------------------
+## Verify the macOS download
 
-# 📜 LICENSE
+Place the DMG and checksum in the same directory, then run:
 
-Licensed under **LGPL-3.0-or-later**
+```bash
+shasum -a 256 -c Darkelf-Shadow-7.0.12.dmg.sha256
+```
 
-The native macOS application also includes Darkelf and third-party
-notices under:
+Expected result:
 
-`Darkelf Shadow.app/Contents/Resources/licenses/`
+```text
+Darkelf-Shadow-7.0.12.dmg: OK
+```
 
-Qt, Qt WebEngine, Chromium, FFmpeg, and other bundled components remain
-subject to their respective licenses. H.264/AVC intellectual-property
-considerations are documented separately in the third-party notices.
+## License and scope
 
-------------------------------------------------------------------------
+Darkelf Shadow is licensed under **LGPL-3.0-or-later**. The native app packages notices at:
 
-# ⚠️ DISCLAIMER
+- `Darkelf Shadow.app/Contents/Resources/LICENSE`
+- `Darkelf Shadow.app/Contents/Resources/THIRD_PARTY_NOTICES.txt`
 
-This software is provided **"AS IS"** without warranty.
+Bundled Qt, Chromium, FFmpeg and other components retain their respective licensing requirements.
 
-Darkelf Shadow:
+Provided **AS IS**, without warranty. Darkelf does not guarantee anonymity, zero disk traces or protection against every threat, and does not replace operating-system security.
 
--   Does not guarantee anonymity
--   Does not guarantee protection against every tracking technique
--   Does not replace operating-system security
--   Does not replace good operational-security practices
--   Is intended for privacy-conscious and advanced users
+## Author and acknowledgments
 
-------------------------------------------------------------------------
+**Dr. Kevin Moore · Darkelf Project — Shadow Edition · 2025–2026**
 
-# 👤 AUTHOR
-
-**Dr. Kevin Moore (2025--2026)** **Darkelf Project --- Shadow Edition**
-
-------------------------------------------------------------------------
-
-# 🤝 Special Thanks
-
-Thank you to:
-
--   **Mecha Comet Team**
--   **Tim Burns**
-
-for their support and contributions to the Darkelf project.
-
-------------------------------------------------------------------------
-
-**Darkelf Shadow Community Edition 7.0.11 Stable** *Ephemeral by design.
-Hardened in depth. Privacy without persistence.*
-
+Thanks to the **Mecha Comet Team** and **Tim Burns** for their support and contributions.
