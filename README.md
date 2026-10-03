@@ -1,18 +1,22 @@
-# Darkelf Shadow — Community Edition 7.0.12
+# Darkelf Shadow — Community Edition 7.0.13
 
 [![PyPI Downloads](https://static.pepy.tech/personalized-badge/darkelf-shadow?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=GREEN&left_text=downloads)](https://pepy.tech/projects/darkelf-shadow)
 
 **Privacy-focused browsing with Qt WebEngine, local MiniAI analysis and Smart Canvas protection.**
 
-Darkelf Shadow combines network filtering, fingerprint defenses and session-focused browsing. Available through Python/PyPI and as a native macOS ARM64 application.
+Available through Python/PyPI and as a native macOS ARM64 application.
 
-## What's new in 7.0.12
+## What's new in 7.0.13
 
-- **Faster filter startup:** cached list downloads and merged subscriptions, direct matching for simple rules, and regex compilation for complex rules. Local filter startup fell from approximately 38 seconds to 6 seconds with about 417,000 network rules; timings vary by system and cache state.
-- **CNN playback fix:** unsupported cookie-modification rules are skipped instead of blocking requests. Scriptlet and other unsupported page-action rules no longer become network blockers. CNN10 playback was verified in developer testing.
-- **Independent Darkelf site boundaries:** embedded rules replace the copied Public Suffix List, with no separate `.dat` file or suffix download. Coverage is curated rather than worldwide; unknown namespaces use exact-host comparison and can cause extra blocking between related subdomains. Unlisted shared-hosting boundaries remain a coverage gap.
-- **Browser usability:** video fullscreen hides browser controls and restores them on exit; delayed keyboard-filter installation checks for deleted Qt views.
-- **Quieter operation:** repeated canvas messages are reduced and automatic terminal threat reports are removed. Optional diagnostics expose website JavaScript warnings/errors and matched network blockers.
+- **Session cleanup:** normal application exit—including the red close button, Cmd+Q and Delete and Quit—schedules named-profile website-storage cleanup after the browser releases its files. Authentication files are retained.
+- **Profile selection:** Python/PyPI and direct source launches use an off-the-record profile. The recognized native macOS app uses the named `Darkelf` profile.
+- **Fullscreen navigation:** opening or switching tabs during video fullscreen restores browser controls.
+- **View Source:** HTTP(S) fetches have an 8 MiB response limit; oversized responses show a clear error.
+- **Panic and lockdown:** blocking takes priority over redirects, CAPTCHA resources and local-address exemptions. Private-address matching no longer mistakes public hostname prefixes for local IP addresses.
+- **Accurate settings:** profile, cookie, cache and JavaScript badges reflect live settings. Smart Canvas compatibility labels and Quantum health descriptions are clearer.
+- **Security checks:** the Bandit workflow runs directly, fails on findings and retains its reports.
+
+The filter-startup optimizations and CNN compatibility fixes introduced in 7.0.12 remain included.
 
 ## Installation
 
@@ -27,43 +31,63 @@ darkelf-shadow
 
 ### Native macOS ARM64
 
-Download the DMG and matching checksum from [GitHub Releases](https://github.com/Darkelf-Labs/Darkelf-Shadow-CE/releases). The native release workflow includes Developer ID signing, hardened runtime, notarization and stapling.
+Download the DMG and matching checksum from [GitHub Releases](https://github.com/Darkelf-Labs/Darkelf-Shadow-CE/releases).
+
+The native release process includes Developer ID signing, hardened runtime, notarization and stapling.
 
 | Distribution | Engine and session model |
 |---|---|
 | Python / PyPI | Platform PySide6 / Qt WebEngine; off-the-record profile. The custom macOS engine is not included. |
-| macOS ARM64 DMG | Custom Darkelf Qt WebEngine 6.11.2; named profile for native authentication, memory HTTP cache and nonpersistent cookies. |
+| macOS ARM64 DMG | Custom Darkelf Qt WebEngine 6.11.2; named `Darkelf` profile, memory HTTP cache and nonpersistent cookies. |
 
-The DMG's named profile is **not off the record**. Native authentication configuration and credentials can persist separately from browsing-session cookies. Downloads, filter caches and other saved files can also remain on disk.
+The DMG's named profile is **not off the record**. Website storage—including localStorage, IndexedDB and service-worker data—is scheduled for cleanup after normal application exit. The cleanup preserves the WebAuthn secret and macOS Keychain credentials.
+
+Cleanup can fail if files remain in use or access is denied. Crashes and forced termination cannot guarantee cleanup. Filter caches, saved snapshots and other intentionally saved files can remain on disk.
 
 ## Privacy and filtering
 
-- Indexed filtering using EasyList, EasyPrivacy and uBlock-derived sources, plus declarative tracker-host checks and scoped compatibility exceptions.
+- Indexed filtering using EasyList, EasyPrivacy and uBlock-derived sources.
 - URL tracking-parameter cleanup and compatibility-aware cosmetic filtering.
-- Local MiniAI threat scoring, fingerprint-event monitoring and response modes, without a cloud AI dependency.
-- Canvas, WebGL, audio and other fingerprint mitigations. The custom DMG engine includes native WebGL modifications and disabled WebRTC; engine-specific patches do not transfer through standard PyPI dependencies.
+- Local MiniAI threat scoring, fingerprint-event monitoring, panic and lockdown modes.
+- Canvas, WebGL, audio and other fingerprint mitigations.
+- Native WebGL modifications and disabled WebRTC in the custom DMG engine. Standard PyPI installations use JavaScript defenses, with compatibility exceptions.
 
-The filter engine supports a subset of upstream rule syntax. Unsupported actions are skipped rather than implemented as request blockers.
+The filter engine supports a subset of upstream rule syntax. Unsupported actions are skipped rather than treated as network blockers.
+
+Embedded Darkelf site-boundary rules require no separate `.dat` file or suffix download. Coverage is curated; unknown namespaces use exact-host comparison, and unlisted shared-hosting boundaries remain a coverage gap.
 
 ### Smart Canvas
+
+**Smart Canvas adapts protection by site, with compatibility exceptions.**
 
 | Mode | Behavior |
 |---|---|
 | **BLOCKED** | Canvas readback is disabled. |
 | **PROTECTED** | Readback uses Darkelf's domain-sensitive noise. |
-| **TRUSTED** | Native readback is permitted for trusted compatibility cases. |
+| **COMPATIBLE** | Native readback is permitted; the compatibility guard bypasses injected canvas protection. |
+| **TRUSTED** | Native readback is permitted for trusted sites or temporary verification grants. |
 
-Supported human-verification flows can receive an automatic, temporary session trust grant to reduce verification loops. Closing Darkelf clears that grant.
+Automatic human-verification detection grants temporary canvas trust to the exact hostname to reduce verification loops. Closing Darkelf clears the grant.
+
+Detection uses a page-console signal rather than authenticated proof of a challenge; website scripts can imitate that signal. Compatibility exceptions may also bypass other injected fingerprint defenses. Native engine patches operate separately.
+
+### Darkelf Quantum
+
+Quantum maintains session seeds, SHA3 hash chaining, bounded state and watchdog health checks. Its state is cleared when the session ends.
+
+Runtime health indicators do not certify browser security, and state cleanup does not guarantee physical memory zeroization.
 
 ### Authentication and media
 
-The custom macOS engine includes native WebAuthn integration and H.264/AVC support. Touch ID/passkey availability depends on the signed app's keychain access group, provisioning, platform and website compatibility. Apple-specific authentication issues are not claimed resolved by 7.0.12.
+The custom macOS engine includes native WebAuthn integration and H.264/AVC support.
 
-H.264 support does not supply DRM support. Protected streams may require a compatible DRM module; Widevine is not bundled with Darkelf.
+Touch ID/passkey availability depends on the signed app's keychain access group, provisioning, required Apple authorization, platform and website compatibility. Apple-specific authentication issues are **not claimed resolved by 7.0.13**.
+
+H.264 support does not provide DRM support. Widevine is not bundled with Darkelf.
 
 ## Optional diagnostics
 
-Normal launches keep routine diagnostics quiet. To investigate website failures:
+To investigate website failures:
 
 ```bash
 DARKELF_DIAGNOSTICS=1 darkelf-shadow
@@ -75,20 +99,26 @@ For a source checkout:
 DARKELF_DIAGNOSTICS=1 python3.11 main.py
 ```
 
-This prints website JavaScript warnings/errors and blocked requests with their matching rules. Launch without the variable to return to quiet operation.
+This enables website JavaScript warnings/errors and matched network-blocking diagnostics. Launch without the variable to disable optional diagnostics.
+
+## Testing
+
+The [Darkelf-Pytests](https://github.com/Darkelf-Labs/Darkelf-Pytests) repository provides Shadow regression tests and ecosystem checks.
+
+Automated linting, security scans and tests complement developer testing; they are not an independent professional security audit or verification of every DMG engine patch.
 
 ## Verify the macOS download
 
-Place the DMG and checksum in the same directory, then run:
+Place the DMG and its matching checksum in the same directory:
 
 ```bash
-shasum -a 256 -c Darkelf-Shadow-7.0.12.dmg.sha256
+shasum -a 256 -c Darkelf-Shadow-7.0.13.dmg.sha256
 ```
 
 Expected result:
 
 ```text
-Darkelf-Shadow-7.0.12.dmg: OK
+Darkelf-Shadow-7.0.13.dmg: OK
 ```
 
 ## License and scope
