@@ -1,4 +1,4 @@
-# Darkelf Shadow — Community Edition 7.0.13
+# Darkelf Shadow — Community Edition 7.0.14
 
 [![PyPI Downloads](https://static.pepy.tech/personalized-badge/darkelf-shadow?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=GREEN&left_text=downloads)](https://pepy.tech/projects/darkelf-shadow)
 
@@ -6,17 +6,17 @@
 
 Available through Python/PyPI and as a native macOS ARM64 application.
 
-## What's new in 7.0.13
+## What's new in 7.0.14
 
-- **Session cleanup:** normal application exit—including the red close button, Cmd+Q and Delete and Quit—schedules named-profile website-storage cleanup after the browser releases its files. Authentication files are retained.
-- **Profile selection:** Python/PyPI and direct source launches use an off-the-record profile. The recognized native macOS app uses the named `Darkelf` profile.
-- **Fullscreen navigation:** opening or switching tabs during video fullscreen restores browser controls.
-- **View Source:** HTTP(S) fetches have an 8 MiB response limit; oversized responses show a clear error.
-- **Panic and lockdown:** blocking takes priority over redirects, CAPTCHA resources and local-address exemptions. Private-address matching no longer mistakes public hostname prefixes for local IP addresses.
-- **Accurate settings:** profile, cookie, cache and JavaScript badges reflect live settings. Smart Canvas compatibility labels and Quantum health descriptions are clearer.
-- **Security checks:** the Bandit workflow runs directly, fails on findings and retains its reports.
+- **Normal shutdown cleanup:** replaces the detached cleanup worker with cleanup inside the application. WebEngine pages and the profile are destroyed before selected website-session stores are removed.
+- **No detached cleanup task:** session wiping no longer starts a worker that continues running after application exit.
+- **Authentication retained:** cleanup preserves native authentication configuration, including the WebAuthn secret, and does not delete macOS Keychain credentials.
+- **Security checks:** the storage check uses a synchronous Qt process. Updated browser features passed Bandit with no findings or suppressions.
+- **WebAuthn request handling:** guards against duplicate requests, reentrant polling and stale request cleanup. These changes do not resolve Apple entitlement requirements or guarantee passkey compatibility.
 
-The filter-startup optimizations and CNN compatibility fixes introduced in 7.0.12 remain included.
+Developer testing confirmed website-session stores were removed after a native DMG shutdown. Crashes, forced termination, locked files and access failures can still prevent cleanup.
+
+The filter-startup, playback, fullscreen, View Source and privacy-status improvements from earlier 7.x releases remain included.
 
 ## Installation
 
@@ -38,11 +38,11 @@ The native release process includes Developer ID signing, hardened runtime, nota
 | Distribution | Engine and session model |
 |---|---|
 | Python / PyPI | Platform PySide6 / Qt WebEngine; off-the-record profile. The custom macOS engine is not included. |
-| macOS ARM64 DMG | Custom Darkelf Qt WebEngine 6.11.2; named `Darkelf` profile, memory HTTP cache and nonpersistent cookies. |
+| macOS ARM64 DMG | Custom Darkelf Qt WebEngine 6.11.2; named `Darkelf` profile, web-content caching in memory and nonpersistent cookies. |
 
-The DMG's named profile is **not off the record**. Website storage—including localStorage, IndexedDB and service-worker data—is scheduled for cleanup after normal application exit. The cleanup preserves the WebAuthn secret and macOS Keychain credentials.
+The DMG's named profile is **not off the record**. During normal shutdown, Darkelf destroys WebEngine pages and the profile, checks that storage files are closed, then removes selected website stores—including localStorage, IndexedDB, service-worker data, history and caches.
 
-Cleanup can fail if files remain in use or access is denied. Crashes and forced termination cannot guarantee cleanup. Filter caches, saved snapshots and other intentionally saved files can remain on disk.
+Authentication configuration and macOS Keychain credentials are retained. Cleanup failures are reported rather than treated as successful wipes. Filter caches, saved snapshots and other intentionally saved files can remain on disk.
 
 ## Privacy and filtering
 
@@ -50,7 +50,7 @@ Cleanup can fail if files remain in use or access is denied. Crashes and forced 
 - URL tracking-parameter cleanup and compatibility-aware cosmetic filtering.
 - Local MiniAI threat scoring, fingerprint-event monitoring, panic and lockdown modes.
 - Canvas, WebGL, audio and other fingerprint mitigations.
-- Native WebGL modifications and disabled WebRTC in the custom DMG engine. Standard PyPI installations use JavaScript defenses, with compatibility exceptions.
+- Native WebGL modifications and disabled WebRTC in the custom DMG engine. Standard PyPI installations use application-level defenses, with compatibility exceptions.
 
 The filter engine supports a subset of upstream rule syntax. Unsupported actions are skipped rather than treated as network blockers.
 
@@ -81,7 +81,7 @@ Runtime health indicators do not certify browser security, and state cleanup doe
 
 The custom macOS engine includes native WebAuthn integration and H.264/AVC support.
 
-Touch ID/passkey availability depends on the signed app's keychain access group, provisioning, required Apple authorization, platform and website compatibility. Apple-specific authentication issues are **not claimed resolved by 7.0.13**.
+Touch ID/passkey availability depends on the signed app's keychain access group, provisioning, applicable Apple authorization, platform and website compatibility. **Apple-specific authentication issues are not claimed resolved by 7.0.14.**
 
 H.264 support does not provide DRM support. Widevine is not bundled with Darkelf.
 
@@ -112,13 +112,13 @@ Automated linting, security scans and tests complement developer testing; they a
 Place the DMG and its matching checksum in the same directory:
 
 ```bash
-shasum -a 256 -c Darkelf-Shadow-7.0.13.dmg.sha256
+shasum -a 256 -c Darkelf-Shadow-7.0.14.dmg.sha256
 ```
 
 Expected result:
 
 ```text
-Darkelf-Shadow-7.0.13.dmg: OK
+Darkelf-Shadow-7.0.14.dmg: OK
 ```
 
 ## License and scope
