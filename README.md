@@ -1,4 +1,4 @@
-# Darkelf Shadow — Community Edition 7.0.14
+# Darkelf Shadow — Community Edition 7.0.15
 
 [![PyPI Downloads](https://static.pepy.tech/personalized-badge/darkelf-shadow?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=GREEN&left_text=downloads)](https://pepy.tech/projects/darkelf-shadow)
 
@@ -6,17 +6,15 @@
 
 Available through Python/PyPI and as a native macOS ARM64 application.
 
-## What's new in 7.0.14
+## What's new in 7.0.15
 
-- **Normal shutdown cleanup:** replaces the detached cleanup worker with cleanup inside the application. WebEngine pages and the profile are destroyed before selected website-session stores are removed.
-- **No detached cleanup task:** session wiping no longer starts a worker that continues running after application exit.
-- **Authentication retained:** cleanup preserves native authentication configuration, including the WebAuthn secret, and does not delete macOS Keychain credentials.
-- **Security checks:** the storage check uses a synchronous Qt process. Updated browser features passed Bandit with no findings or suppressions.
-- **WebAuthn request handling:** guards against duplicate requests, reentrant polling and stale request cleanup. These changes do not resolve Apple entitlement requirements or guarantee passkey compatibility.
+- **Hovered-link preview:** displays a link's destination in the bottom-left corner before you click. The preview adjusts to the available width and clears when navigating or switching tabs.
+- **Google Maps navigation:** limits Google's forced language/region URL rewriting to homepage and search paths. Maps and other Google applications retain their own parameters and redirects.
+- **Preserved language preferences:** English request headers and YouTube's language/region settings remain enabled.
 
-Developer testing confirmed website-session stores were removed after a native DMG shutdown. Crashes, forced termination, locked files and access failures can still prevent cleanup.
+Developer testing confirmed the link preview displayed correctly and the previously failing Google Maps URL loaded after the interceptor correction.
 
-The filter-startup, playback, fullscreen, View Source and privacy-status improvements from earlier 7.x releases remain included.
+Normal shutdown cleanup, authentication retention, faster filter startup, playback fixes, fullscreen navigation and bounded View Source downloads remain included.
 
 ## Installation
 
@@ -42,7 +40,9 @@ The native release process includes Developer ID signing, hardened runtime, nota
 
 The DMG's named profile is **not off the record**. During normal shutdown, Darkelf destroys WebEngine pages and the profile, checks that storage files are closed, then removes selected website stores—including localStorage, IndexedDB, service-worker data, history and caches.
 
-Authentication configuration and macOS Keychain credentials are retained. Cleanup failures are reported rather than treated as successful wipes. Filter caches, saved snapshots and other intentionally saved files can remain on disk.
+Authentication configuration and macOS Keychain credentials are retained. Cleanup failures are reported rather than treated as successful wipes. Crashes, forced termination, locked files and access failures can prevent cleanup. Filter caches, saved snapshots and other intentionally saved files can remain on disk.
+
+Session cleanup does not automatically remove historical profiles created by older builds.
 
 ## Privacy and filtering
 
@@ -81,7 +81,7 @@ Runtime health indicators do not certify browser security, and state cleanup doe
 
 The custom macOS engine includes native WebAuthn integration and H.264/AVC support.
 
-Touch ID/passkey availability depends on the signed app's keychain access group, provisioning, applicable Apple authorization, platform and website compatibility. **Apple-specific authentication issues are not claimed resolved by 7.0.14.**
+Touch ID/passkey availability depends on the signed app's keychain access group, provisioning, applicable Apple authorization, platform and website compatibility. **Apple-specific authentication issues are not claimed resolved by 7.0.15.**
 
 H.264 support does not provide DRM support. Widevine is not bundled with Darkelf.
 
@@ -112,13 +112,13 @@ Automated linting, security scans and tests complement developer testing; they a
 Place the DMG and its matching checksum in the same directory:
 
 ```bash
-shasum -a 256 -c Darkelf-Shadow-7.0.14.dmg.sha256
+shasum -a 256 -c Darkelf-Shadow-7.0.15.dmg.sha256
 ```
 
 Expected result:
 
 ```text
-Darkelf-Shadow-7.0.14.dmg: OK
+Darkelf-Shadow-7.0.15.dmg: OK
 ```
 
 ## License and scope
