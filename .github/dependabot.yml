@@ -1,45 +1,79 @@
 version: 2
 
-# Pull Python dependency updates only from the official Python Package Index.
-# replaces-base means Dependabot resolves against this index and no other.
-registries:
-  pypi:
-    type: python-index
-    url: https://pypi.org/simple/
-    replaces-base: true
-
 updates:
-  # ---- Python packages, from PyPI ----------------------------------------
-  # Covers requirements.txt, requirements.lock, and pyproject.toml in the root.
-  - package-ecosystem: "pip"
+  - package-ecosystem: "npm"
     directory: "/"
-    registries:
-      - pypi
-    schedule:
-      interval: "weekly"
-    open-pull-requests-limit: 5
-    labels: ["dependencies", "python"]
-    # Let a release settle before proposing it, so a freshly published (and
-    # possibly yanked or compromised) version is not pulled in on day one.
-    cooldown:
-      default-days: 7
-      semver-major-days: 14
-      semver-minor-days: 7
-      semver-patch-days: 3
-    # One combined PR per run instead of a separate PR per package.
-    groups:
-      python-dependencies:
-        patterns: ["*"]
 
-  # ---- GitHub Actions ----------------------------------------------------
-  - package-ecosystem: "github-actions"
-    directory: "/"
     schedule:
-      interval: "weekly"
-    open-pull-requests-limit: 5
-    labels: ["ci", "dependencies"]
-    cooldown:
-      default-days: 7
+      interval: "monthly"
+      time: "03:00"
+      timezone: "UTC"
+
+    open-pull-requests-limit: 1
+
+    versioning-strategy: increase
+
+    labels:
+      - dependencies
+      - automated
+
+    commit-message:
+      prefix: "deps"
+      include: "scope"
+
+    assignees:
+      - Darkelf2024
+
+    reviewers:
+      - Darkelf2024
+
+    allow:
+      - dependency-type: "direct"
+      - dependency-type: "indirect"
+
     groups:
-      github-actions:
-        patterns: ["*"]
+      nextjs:
+        patterns:
+          - "next"
+          - "@next/*"
+
+      react:
+        patterns:
+          - "react"
+          - "react-dom"
+
+      eslint:
+        patterns:
+          - "eslint*"
+          - "@eslint/*"
+
+      typescript:
+        patterns:
+          - "typescript"
+          - "@types/*"
+
+      build-tools:
+        patterns:
+          - "sharp"
+          - "postcss"
+          - "@babel/*"
+
+      remaining:
+        patterns:
+          - "*"
+
+    ignore:
+      - dependency-name: "node"
+
+      - dependency-name: "eslint"
+        update-types:
+          - "version-update:semver-major"
+
+      - dependency-name: "typescript"
+        update-types:
+          - "version-update:semver-major"
+
+      - dependency-name: "next"
+        update-types:
+          - "version-update:semver-major"
+
