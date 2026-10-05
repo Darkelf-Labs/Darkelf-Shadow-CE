@@ -1,4 +1,4 @@
-# Darkelf Shadow — Community Edition 7.0.15
+# Darkelf Shadow — Community Edition 7.0.16
 
 [![PyPI Downloads](https://static.pepy.tech/personalized-badge/darkelf-shadow?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=GREEN&left_text=downloads)](https://pepy.tech/projects/darkelf-shadow)
 
@@ -6,15 +6,17 @@
 
 Available through Python/PyPI and as a native macOS ARM64 application.
 
-## What's new in 7.0.15
+## What's new in 7.0.16
 
-- **Hovered-link preview:** displays a link's destination in the bottom-left corner before you click. The preview adjusts to the available width and clears when navigating or switching tabs.
-- **Google Maps navigation:** limits Google's forced language/region URL rewriting to homepage and search paths. Maps and other Google applications retain their own parameters and redirects.
-- **Preserved language preferences:** English request headers and YouTube's language/region settings remain enabled.
+- **Find bar alignment:** centered chevrons and close icons replace font characters. Buttons and the input field use matching heights, and the close icon follows the selected accent color.
+- **Cleaner Inspector:** removed redundant Requests and Blocked counters from the bottom status strip.
+- **Clearer MiniAI status:** inactive Lockdown and Panic modes display **STANDBY**; triggered modes display **ACTIVE**.
+- **Updated Inspector documentation:** removed obsolete Network tab instructions and header references. The shortcut guide now documents Cmd+Q and closing the last browser window.
+- **About correction:** corrected the acknowledgment name to **Tim Burns**.
 
-Developer testing confirmed the link preview displayed correctly and the previously failing Google Maps URL loaded after the interceptor correction.
+Developer testing confirmed the updated Find bar alignment. These interface changes preserve existing filtering, protection and shutdown behavior.
 
-Normal shutdown cleanup, authentication retention, faster filter startup, playback fixes, fullscreen navigation and bounded View Source downloads remain included.
+Hovered-link previews, corrected Google Maps navigation, English language preferences, normal shutdown cleanup, faster filter startup, playback fixes, fullscreen navigation and bounded View Source downloads remain included.
 
 ## Installation
 
@@ -71,6 +73,18 @@ Automatic human-verification detection grants temporary canvas trust to the exac
 
 Detection uses a page-console signal rather than authenticated proof of a challenge; website scripts can imitate that signal. Compatibility exceptions may also bypass other injected fingerprint defenses. Native engine patches operate separately.
 
+### Darkelf Inspector
+
+The Inspector provides **Console, Quantum, MiniAI, Shortcuts and Help** tabs.
+
+- **Console:** inspect results and execute JavaScript in the active page.
+- **Quantum:** view session-state and runtime-health telemetry.
+- **MiniAI:** view threat statistics and defensive states.
+- **Shortcuts:** review browser keyboard controls, including Cmd+Q.
+- **Help:** read documentation matching the current Inspector interface.
+
+**STANDBY** means Lockdown or Panic blocking is inactive while MiniAI continues monitoring. **ACTIVE** means that defensive mode has been triggered.
+
 ### Darkelf Quantum
 
 Quantum maintains session seeds, SHA3 hash chaining, bounded state and watchdog health checks. Its state is cleared when the session ends.
@@ -81,7 +95,7 @@ Runtime health indicators do not certify browser security, and state cleanup doe
 
 The custom macOS engine includes native WebAuthn integration and H.264/AVC support.
 
-Touch ID/passkey availability depends on the signed app's keychain access group, provisioning, applicable Apple authorization, platform and website compatibility. **Apple-specific authentication issues are not claimed resolved by 7.0.15.**
+Touch ID/passkey availability depends on the signed app's keychain access group, provisioning, applicable Apple authorization, platform and website compatibility. **Apple-specific authentication issues are not claimed resolved by 7.0.16.**
 
 H.264 support does not provide DRM support. Widevine is not bundled with Darkelf.
 
@@ -105,6 +119,8 @@ This enables website JavaScript warnings/errors and matched network-blocking dia
 
 The [Darkelf-Pytests](https://github.com/Darkelf-Labs/Darkelf-Pytests) repository provides Shadow regression tests and ecosystem checks.
 
+The updated Find bar, Inspector and About files passed syntax checks. Targeted Ruff checks passed for the Find bar and Inspector changes.
+
 Automated linting, security scans and tests complement developer testing; they are not an independent professional security audit or verification of every DMG engine patch.
 
 ## Verify the macOS download
@@ -112,13 +128,13 @@ Automated linting, security scans and tests complement developer testing; they a
 Place the DMG and its matching checksum in the same directory:
 
 ```bash
-shasum -a 256 -c Darkelf-Shadow-7.0.15.dmg.sha256
+shasum -a 256 -c Darkelf-Shadow-7.0.16.dmg.sha256
 ```
 
 Expected result:
 
 ```text
-Darkelf-Shadow-7.0.15.dmg: OK
+Darkelf-Shadow-7.0.16.dmg: OK
 ```
 
 ## License and scope
