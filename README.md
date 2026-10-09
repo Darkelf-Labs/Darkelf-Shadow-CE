@@ -1,4 +1,4 @@
-# 🕶️ Darkelf Shadow CE v7.0.26
+# 🕶️ Darkelf Shadow CE v7.0.26 [![PyPI Downloads](https://static.pepy.tech/personalized-badge/darkelf-shadow?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=GREEN&left_text=downloads)](https://pepy.tech/projects/darkelf-shadow)
 
 **A privacy-focused web browser for macOS, powered by a customized QtWebEngine and Chromium foundation.**
 
