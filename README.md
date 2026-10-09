@@ -1,8 +1,12 @@
-# 🕶️ Darkelf Shadow CE v7.0.26 
+
+# 🕶️ Darkelf Shadow CE v7.0.26
 
 [![Monthly Downloads](https://img.shields.io/pypi/dm/darkelf-shadow?label=Monthly%20Downloads&color=brightgreen)](https://pypistats.org/packages/darkelf-shadow)
 
-[![Total Downloads](https://img.shields.io/pepy/dt/darkelf-shadow?label=Total%20Downloads&color=brightgreen)](https://pepy.tech/projects/darkelf-shadow)
+[![Weekly Downloads](https://img.shields.io/pypi/dw/darkelf-shadow?label=Weekly%20Downloads&color=brightgreen)](https://pypistats.org/packages/darkelf-shadow)
+
+[![Daily Downloads](https://img.shields.io/pypi/dd/darkelf-shadow?label=Daily%20Downloads&color=brightgreen)](https://pypistats.org/packages/darkelf-shadow)
+
 
 **A privacy-focused web browser for macOS, powered by a customized QtWebEngine and Chromium foundation.**
 
