@@ -270,7 +270,7 @@ class BootSplash(QWidget):
 
         footer = QHBoxLayout()
 
-        self.version = QLabel("Version 7.0.27")
+        self.version = QLabel("Version 7.0.28")
 
         self.version.setObjectName("VersionLabel")
 
