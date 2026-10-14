@@ -1234,7 +1234,7 @@ class AboutPage(QWidget):
         font-weight:800;
         """)
 
-        version = SettingsChip("Version 7.0.27", accent)
+        version = SettingsChip("Version 7.0.28", accent)
         license_chip = SettingsChip("LGPL-3.0", accent)
 
         badges = QHBoxLayout()
