@@ -1,150 +1,118 @@
+# Darkelf Shadow — Community Edition 7.0.27
 
-# 🕶️ Darkelf Shadow CE v7.0.26
+[![PyPI Downloads](https://static.pepy.tech/personalized-badge/darkelf-shadow?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=GREEN&left_text=downloads)](https://pepy.tech/projects/darkelf-shadow)
 
-[![Weekly Downloads](https://img.shields.io/pypi/dw/darkelf-shadow?label=Weekly%20Downloads&color=brightgreen)](https://pypistats.org/packages/darkelf-shadow)
+**Privacy-focused browsing with Qt WebEngine, local MiniAI analysis and Smart Canvas protection.**
 
-**A privacy-focused web browser for macOS, powered by a customized QtWebEngine and Chromium foundation.**
+Darkelf Shadow combines network filtering, fingerprint defenses and session-focused browsing. Available through Python/PyPI and as a native macOS ARM64 application.
 
-Darkelf Shadow CE is an independent, open-source browser developed by **Darkelf Labs**, focused on tracking protection, fingerprinting resistance, integrated ad blocking, and native macOS browsing.
+## What's new in 7.0.27
 
-## ✨ Features
+- **Native-looking black macOS window:** a frameless Qt main window replaces the gray system title bar with custom red, yellow and green traffic-light controls. The browser retains its existing toolbar and tabs.
+- **Window arrangements:** click the green button to toggle fullscreen, or hover for approximately 1.8 seconds to open a dark rounded arrangement panel. Position the current Shadow window in the left or right half, any of three columns, or one of four screen quarters. Maximizing/restoring is also available. This does not automatically tile other applications.
+- **Floating panels:** Settings and Darkelf Inspector now use separate black rounded panels instead of traditional dialog-style windows.
+- **Refined Settings:** Appearance layouts fit the floating panel, and About uses the available width more effectively. The About version label displays **7.0.27**.
+- **Accent-aware controls:** the arrangement panel reflects the selected browser accent, with custom-painted traffic lights and a delayed hover menu to prevent accidental opening.
 
-### 🛡️ Privacy & Fingerprinting Protection
+### Earlier 7.x improvements retained
 
-- Canvas readback protection and site-specific controls
-- WebGL fingerprinting resistance
-- WebRTC disabled to reduce potential IP exposure
-- Geolocation restrictions
-- Battery API fingerprinting protections
-- Media-device enumeration protections
-- Tracker and advertising-domain blocking
-- Privacy-oriented browsing sessions
+- **Faster filter startup:** cached list downloads and merged subscriptions, direct matching for simple rules, and regex compilation for complex rules. Local filter startup fell from approximately 38 seconds to 6 seconds with about 417,000 network rules; timings vary by system and cache state.
+- **CNN playback fix:** unsupported cookie-modification rules are skipped instead of blocking requests. Scriptlet and other unsupported page-action rules no longer become network blockers. CNN10 playback was verified in developer testing.
+- **Independent Darkelf site boundaries:** embedded rules replace the copied Public Suffix List, with no separate `.dat` file or suffix download. Coverage is curated rather than worldwide; unknown namespaces use exact-host comparison and can cause extra blocking between related subdomains. Unlisted shared-hosting boundaries remain a coverage gap.
+- **Browser usability:** video fullscreen hides browser controls and restores them on exit; delayed keyboard-filter installation checks for deleted Qt views.
+- **Quieter operation:** repeated canvas messages are reduced and automatic terminal threat reports are removed. Optional diagnostics expose website JavaScript warnings/errors and matched network blockers.
 
-Privacy defenses may affect some websites and cannot guarantee anonymity.
+## Installation
 
-### 🚫 Integrated Ad & Tracker Blocking
+### Python / PyPI
 
-- Network request filtering
-- Advertising and tracker blocking
-- Cosmetic filtering
-- Custom Darkelf filtering rules
-- Site compatibility exceptions
-- Optimized rule compilation and loading
+Requires Python 3.11 or newer.
 
-No separate ad-blocking extension is required.
-
-### ⚙️ Customized QtWebEngine
-
-Darkelf Shadow uses a customized **QtWebEngine 6.11.2** framework with Chromium-based rendering, native macOS WebAuthn integration, H.264 codec support, WebRTC restrictions, and privacy modifications.
-
-### 🔐 WebAuthn & Touch ID
-
-- WebAuthn authentication on compatible websites
-- Native macOS authentication dialogs
-- Touch ID where supported
-- macOS Keychain integration
-
-**Compatibility:** GitHub Touch ID authentication has been tested during development. Passkey support may vary by website and macOS configuration. Apple's additional browser passkey entitlement is pending approval and is not included.
-
-### 🍎 Native macOS Experience
-
-- Apple Silicon (ARM64) support
-- Native application menus and windows
-- Keyboard shortcuts and fullscreen browsing
-- Custom browser interface
-- Developer ID signing and Apple notarization workflow
-
-## 🆕 What's New in v7.0.26
-
-- Continued WebAuthn and Touch ID integration work
-- Updated Developer ID provisioning and signing checks
-- Additional validation of application entitlements
-- Custom QtWebEngine packaging and runtime refinements
-- Continued privacy and site compatibility improvements
-- Updated macOS distribution workflow
-
-## 💻 System Requirements
-
-| Component | Requirement |
-|---|---|
-| Operating system | macOS |
-| Processor | Apple Silicon (ARM64) |
-| Rendering engine | Custom QtWebEngine 6.11.2 |
-| Application framework | Python 3.11 / PySide6 |
-| Distribution | DMG |
-
-## 📦 Installation
-
-1. Visit the [official releases page](https://github.com/Darkelf-Labs/Darkelf-Shadow-CE/releases).
-2. Download `Darkelf-Shadow-7.0.26.dmg` **once the release is published**.
-3. Open the DMG and drag **Darkelf Shadow.app** into **Applications**.
-4. Launch Darkelf Shadow from Applications.
-
-Only install releases distributed through the official Darkelf Labs repository.
-
-## 🧪 Privacy Testing
-
-- [EFF Cover Your Tracks](https://coveryourtracks.eff.org/)
-- [CreepJS](https://abrahamjuliot.github.io/creepjs/)
-- [BrowserLeaks](https://browserleaks.com/)
-- [AmIUnique](https://amiunique.org/)
-- [Speedometer 3](https://browserbench.org/Speedometer3.0/)
-
-Results vary by hardware, operating system, configuration, and test methodology.
-
-## 🏗️ Architecture
-
-```text
-Darkelf Shadow CE
-├── Native macOS Application
-│   ├── Python 3.11 / PySide6
-│   └── macOS Integration
-├── Custom QtWebEngine 6.11.2
-│   ├── Chromium Rendering
-│   ├── WebAuthn Integration
-│   ├── H.264 Media Support
-│   └── Privacy Modifications
-├── Darkelf Privacy Engine
-│   ├── Canvas / WebGL Protection
-│   ├── WebRTC Restrictions
-│   └── Device API Protections
-├── Darkelf Filtering Engine
-│   ├── Network / Cosmetic Filtering
-│   └── Compatibility Rules
-└── macOS Distribution
-    ├── Nuitka Build
-    ├── Developer ID Signing
-    ├── Provisioning Profile
-    └── Apple Notarization
+```bash
+pip install --upgrade darkelf-shadow
+darkelf-shadow
 ```
 
-## 🔍 Security & Privacy Philosophy
+### Native macOS ARM64
 
-Darkelf Shadow emphasizes privacy by default, integrated protection, transparency, compatibility, and user control.
+Download the DMG and matching checksum from [GitHub Releases](https://github.com/Darkelf-Labs/Darkelf-Shadow-CE/releases). The native release workflow is designed to include Developer ID signing, hardened runtime, notarization and stapling; verify these steps for the published build.
 
-## ⚠️ Known Limitations
+| Distribution | Engine and session model |
+|---|---|
+| Python / PyPI | Platform PySide6 / Qt WebEngine; off-the-record profile. The custom macOS engine is not included. |
+| macOS ARM64 DMG | Custom Darkelf Qt WebEngine 6.11.2; named profile for native authentication, memory HTTP cache and nonpersistent cookies. |
 
-- Some sites may require compatibility exceptions.
-- Strict fingerprinting protection can interfere with website features.
-- WebRTC-dependent applications may not function.
-- Widevine DRM is not bundled; protected streaming media may not play.
-- Touch ID and WebAuthn support depend on the authentication provider.
-- The macOS build targets Apple Silicon.
+The DMG's named profile is **not off the record**. Native authentication configuration and credentials can persist separately from browsing-session cookies. Downloads, filter caches and other saved files can also remain on disk.
 
-## 📥 Downloads & Source Code
+## Privacy and filtering
 
-- **Repository:** https://github.com/Darkelf-Labs/Darkelf-Shadow-CE
-- **Releases:** https://github.com/Darkelf-Labs/Darkelf-Shadow-CE/releases
-- **Darkelf Labs:** https://github.com/Darkelf-Labs
+- Indexed filtering using EasyList, EasyPrivacy and uBlock-derived sources, plus declarative tracker-host checks and scoped compatibility exceptions.
+- URL tracking-parameter cleanup and compatibility-aware cosmetic filtering.
+- Local MiniAI threat scoring, fingerprint-event monitoring and response modes, without a cloud AI dependency.
+- Canvas, WebGL, audio and other fingerprint mitigations. The custom DMG engine includes native WebGL modifications and disabled WebRTC; engine-specific patches do not transfer through standard PyPI dependencies.
 
-## 📜 License & Third-Party Notices
+The filter engine supports a subset of upstream rule syntax. Unsupported actions are skipped rather than implemented as request blockers.
 
-Darkelf Shadow CE is distributed under the license included in its repository. Third-party technologies, including Qt, PySide6, QtWebEngine, and Chromium-related components, remain subject to their respective licenses. Consult `LICENSE` and `THIRD_PARTY_NOTICES.txt`.
+### Smart Canvas
 
-## 🚀 Project Status
+| Mode | Behavior |
+|---|---|
+| **BLOCKED** | Canvas readback is disabled. |
+| **PROTECTED** | Readback uses Darkelf's domain-sensitive noise. |
+| **TRUSTED** | Native readback is permitted for trusted compatibility cases. |
 
-**Version: 7.0.26 — release build in progress.** Publish the DMG only after successful signature verification and Apple notarization.
+Supported human-verification flows can receive an automatic, temporary session trust grant to reduce verification loops. Closing Darkelf clears that grant.
 
-**Developed by Darkelf Labs**
+### Authentication and media
 
-*Privacy. Security. Independence.*
+The custom macOS engine includes native WebAuthn integration and H.264/AVC support. Touch ID/passkey availability depends on the signed app's keychain access group, provisioning, platform and website compatibility. Apple-specific authentication issues are not claimed resolved by 7.0.27.
+
+H.264 support does not supply DRM support. Protected streams may require a compatible DRM module; Widevine is not bundled with Darkelf.
+
+## Optional diagnostics
+
+Normal launches keep routine diagnostics quiet. To investigate website failures:
+
+```bash
+DARKELF_DIAGNOSTICS=1 darkelf-shadow
+```
+
+For a source checkout:
+
+```bash
+DARKELF_DIAGNOSTICS=1 python3.11 main.py
+```
+
+This prints website JavaScript warnings/errors and blocked requests with their matching rules. Launch without the variable to return to quiet operation.
+
+## Verify the macOS download
+
+Place the DMG and checksum in the same directory, then run:
+
+```bash
+shasum -a 256 -c Darkelf-Shadow-7.0.27.dmg.sha256
+```
+
+Expected result:
+
+```text
+Darkelf-Shadow-7.0.27.dmg: OK
+```
+
+## License and scope
+
+Darkelf Shadow is licensed under **LGPL-3.0-or-later**. The native app packages notices at:
+
+- `Darkelf Shadow.app/Contents/Resources/LICENSE`
+- `Darkelf Shadow.app/Contents/Resources/THIRD_PARTY_NOTICES.txt`
+
+Bundled Qt, Chromium, FFmpeg and other components retain their respective licensing requirements.
+
+Provided **AS IS**, without warranty. Darkelf does not guarantee anonymity, zero disk traces or protection against every threat, and does not replace operating-system security.
+
+## Author and acknowledgments
+
+**Dr. Kevin Moore · Darkelf Project — Shadow Edition · 2025–2026**
+
+Thanks to the **Mecha Comet Team** and everyone testing and supporting Darkelf Shadow.
+
