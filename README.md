@@ -1,4 +1,4 @@
-# Darkelf Shadow — Community Edition 7.0.27
+# Darkelf Shadow — Community Edition 7.0.28
 
 [![PyPI Downloads](https://static.pepy.tech/personalized-badge/darkelf-shadow?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=GREEN&left_text=downloads)](https://pepy.tech/projects/darkelf-shadow)
 
@@ -6,12 +6,21 @@
 
 Darkelf Shadow combines network filtering, fingerprint defenses and session-focused browsing. Available through Python/PyPI and as a native macOS ARM64 application.
 
-## What's new in 7.0.27
+## What's new in 7.0.28
+
+- **Refined macOS window appearance:** improved rounded-corner rendering on startup, with consistent corner handling during window resizing, restoration and fullscreen transitions.
+- **Improved window dragging:** refined the frameless title-bar movement implementation to avoid conflicting native and manual drag operations and reduce macOS window-management warnings.
+- **Navigation and tab cursor fixes:** corrected unwanted resize-cursor behavior over browser navigation buttons and the tab bar.
+- **Faster window closing:** refined shutdown handling to make the browser window disappear promptly while preserving its cleanup process.
+- **Redesigned browsing-data confirmation:** the Nuke/Wipe confirmation now uses a black rounded panel consistent with Darkelf's native macOS interface. The underlying browsing-data cleanup behavior remains unchanged.
+- **Code quality:** removed an unused import from the browser module to satisfy Ruff's F401 lint check.
+
+### Previous 7.0.27 improvements retained
 
 - **Native-looking black macOS window:** a frameless Qt main window replaces the gray system title bar with custom red, yellow and green traffic-light controls. The browser retains its existing toolbar and tabs.
 - **Window arrangements:** click the green button to toggle fullscreen, or hover for approximately 1.8 seconds to open a dark rounded arrangement panel. Position the current Shadow window in the left or right half, any of three columns, or one of four screen quarters. Maximizing/restoring is also available. This does not automatically tile other applications.
-- **Floating panels:** Settings and Darkelf Inspector now use separate black rounded panels instead of traditional dialog-style windows.
-- **Refined Settings:** Appearance layouts fit the floating panel, and About uses the available width more effectively. The About version label displays **7.0.27**.
+- **Floating panels:** Settings and Darkelf Inspector use separate black rounded panels instead of traditional dialog-style windows.
+- **Refined Settings:** Appearance layouts fit the floating panel, and About uses the available width more effectively.
 - **Accent-aware controls:** the arrangement panel reflects the selected browser accent, with custom-painted traffic lights and a delayed hover menu to prevent accidental opening.
 
 ### Earlier 7.x improvements retained
@@ -35,7 +44,9 @@ darkelf-shadow
 
 ### Native macOS ARM64
 
-Download the DMG and matching checksum from [GitHub Releases](https://github.com/Darkelf-Labs/Darkelf-Shadow-CE/releases). The native release workflow is designed to include Developer ID signing, hardened runtime, notarization and stapling; verify these steps for the published build.
+Download the DMG and matching checksum from [GitHub Releases](https://github.com/Darkelf-Labs/Darkelf-Shadow-CE/releases).
+
+The native release workflow includes Developer ID signing, hardened runtime, Apple notarization and stapling. Verify the published build before installation.
 
 | Distribution | Engine and session model |
 |---|---|
@@ -65,7 +76,7 @@ Supported human-verification flows can receive an automatic, temporary session t
 
 ### Authentication and media
 
-The custom macOS engine includes native WebAuthn integration and H.264/AVC support. Touch ID/passkey availability depends on the signed app's keychain access group, provisioning, platform and website compatibility. Apple-specific authentication issues are not claimed resolved by 7.0.27.
+The custom macOS engine includes native WebAuthn integration and H.264/AVC support. Touch ID/passkey availability depends on the signed app's keychain access group, provisioning, platform and website compatibility. Version 7.0.28 does not introduce additional authentication-engine changes.
 
 H.264 support does not supply DRM support. Protected streams may require a compatible DRM module; Widevine is not bundled with Darkelf.
 
@@ -90,13 +101,13 @@ This prints website JavaScript warnings/errors and blocked requests with their m
 Place the DMG and checksum in the same directory, then run:
 
 ```bash
-shasum -a 256 -c Darkelf-Shadow-7.0.27.dmg.sha256
+shasum -a 256 -c Darkelf-Shadow-7.0.28.dmg.sha256
 ```
 
 Expected result:
 
 ```text
-Darkelf-Shadow-7.0.27.dmg: OK
+Darkelf-Shadow-7.0.28.dmg: OK
 ```
 
 ## License and scope
@@ -115,4 +126,3 @@ Provided **AS IS**, without warranty. Darkelf does not guarantee anonymity, zero
 **Dr. Kevin Moore · Darkelf Project — Shadow Edition · 2025–2026**
 
 Thanks to the **Mecha Comet Team** and everyone testing and supporting Darkelf Shadow.
-
