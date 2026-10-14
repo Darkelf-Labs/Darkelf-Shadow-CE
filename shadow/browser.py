@@ -6,7 +6,6 @@ import json
 import re
 import secrets
 import http.client
-import sys
 
 from urllib.parse import (
     quote_plus,
