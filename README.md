@@ -1,4 +1,5 @@
-# Darkelf Shadow — Community Edition 7.0.28
+
+# Darkelf Shadow — Community Edition 7.0.29
 
 [![PyPI Downloads](https://static.pepy.tech/personalized-badge/darkelf-shadow?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=GREEN&left_text=downloads)](https://pepy.tech/projects/darkelf-shadow)
 
@@ -6,13 +7,24 @@
 
 Darkelf Shadow combines network filtering, fingerprint defenses and session-focused browsing. Available through Python/PyPI and as a native macOS ARM64 application.
 
-## What's new in 7.0.28
+## What's new in 7.0.29
+
+- **Refined floating panels:** Settings and Darkelf Inspector now use a cleaner, unified black rounded-panel design. Removed the redundant outer glass-like layer and excess inset spacing for a more consistent macOS appearance.
+- **Redesigned Bookmarks panel:** the Bookmarks manager now uses a matching frameless floating panel instead of the previous traditional dialog-style window, while preserving existing bookmark-management functionality.
+- **Improved application shutdown:** corrected red-button closing behavior so the browser exits completely instead of leaving the application running in the macOS Dock.
+- **Cleaner WebEngine shutdown:** refined tab and WebEngine cleanup to prevent the browser from creating a replacement homepage tab while the application is closing.
+- **Faster visual window closing:** improved the shutdown sequence so the main browser window hides before remaining cleanup operations finish, reducing the appearance of a delayed close.
+- **Improved DMG presentation:** refined native macOS release packaging to support a custom mounted-volume icon instead of the generic disk-image icon.
+- **More reliable release builds:** strengthened Nuitka module inclusion and build validation to prevent missing browser-module errors in packaged applications.
+- **Release verification:** maintained Developer ID signing, hardened runtime, Apple notarization, stapling and SHA-256 checksum verification for the native macOS distribution.
+
+### Previous 7.0.28 improvements retained
 
 - **Refined macOS window appearance:** improved rounded-corner rendering on startup, with consistent corner handling during window resizing, restoration and fullscreen transitions.
 - **Improved window dragging:** refined the frameless title-bar movement implementation to avoid conflicting native and manual drag operations and reduce macOS window-management warnings.
 - **Navigation and tab cursor fixes:** corrected unwanted resize-cursor behavior over browser navigation buttons and the tab bar.
 - **Faster window closing:** refined shutdown handling to make the browser window disappear promptly while preserving its cleanup process.
-- **Redesigned browsing-data confirmation:** the Nuke/Wipe confirmation now uses a black rounded panel consistent with Darkelf's native macOS interface. The underlying browsing-data cleanup behavior remains unchanged.
+- **Redesigned browsing-data confirmation:** the Nuke/Wipe confirmation uses a black rounded panel consistent with Darkelf's native macOS interface. The underlying browsing-data cleanup behavior remains unchanged.
 - **Code quality:** removed an unused import from the browser module to satisfy Ruff's F401 lint check.
 
 ### Previous 7.0.27 improvements retained
@@ -76,7 +88,9 @@ Supported human-verification flows can receive an automatic, temporary session t
 
 ### Authentication and media
 
-The custom macOS engine includes native WebAuthn integration and H.264/AVC support. Touch ID/passkey availability depends on the signed app's keychain access group, provisioning, platform and website compatibility. Version 7.0.28 does not introduce additional authentication-engine changes.
+The custom macOS engine includes native WebAuthn integration and H.264/AVC support. Touch ID/passkey availability depends on the signed app's keychain access group, provisioning, platform and website compatibility.
+
+Version 7.0.29 focuses on browser interface, application shutdown and native distribution improvements. It does not introduce additional authentication-engine changes.
 
 H.264 support does not supply DRM support. Protected streams may require a compatible DRM module; Widevine is not bundled with Darkelf.
 
@@ -101,14 +115,16 @@ This prints website JavaScript warnings/errors and blocked requests with their m
 Place the DMG and checksum in the same directory, then run:
 
 ```bash
-shasum -a 256 -c Darkelf-Shadow-7.0.28.dmg.sha256
+shasum -a 256 -c Darkelf-Shadow-7.0.29.dmg.sha256
 ```
 
 Expected result:
 
 ```text
-Darkelf-Shadow-7.0.28.dmg: OK
+Darkelf-Shadow-7.0.29.dmg: OK
 ```
+
+The checksum verifies that the downloaded DMG matches the published checksum file. It does not independently establish the identity or trustworthiness of the publisher.
 
 ## License and scope
 
@@ -125,4 +141,5 @@ Provided **AS IS**, without warranty. Darkelf does not guarantee anonymity, zero
 
 **Dr. Kevin Moore · Darkelf Project — Shadow Edition · 2025–2026**
 
-Thanks to the **Mecha Comet Team** and everyone testing and supporting Darkelf Shadow.
+Thanks to the **Mecha Comet Team**.
+
