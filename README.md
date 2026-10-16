@@ -1,145 +1,50 @@
+# Darkelf QtWebEngine — macOS Patch Kit
 
-# Darkelf Shadow — Community Edition 7.0.29
+Custom QtWebEngine integration for **Darkelf Shadow**, a native macOS privacy browser.
 
-[![PyPI Downloads](https://static.pepy.tech/personalized-badge/darkelf-shadow?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=GREEN&left_text=downloads)](https://pepy.tech/projects/darkelf-shadow)
+## Darkelf Shadow 7.0.30 highlights
 
-**Privacy-focused browsing with Qt WebEngine, local MiniAI analysis and Smart Canvas protection.**
+- **Python 3.14.8** application runtime.
+- **Qt / PySide6 6.12.0** and a custom **QtWebEngine 6.12.0 ARM64** framework.
+- **Nuitka 4.1.3** for macOS application packaging.
+- Refined splash-to-homepage transition to avoid the startup black screen.
+- Developer ID signing, Touch ID/passkey entitlements, and Apple notarization in the macOS release workflow.
 
-Darkelf Shadow combines network filtering, fingerprint defenses and session-focused browsing. Available through Python/PyPI and as a native macOS ARM64 application.
+**Previous release:** Darkelf Shadow 7.0.29 used Python 3.11, Nuitka 4.1.3, and custom QtWebEngine 6.11.2.
 
-## What's new in 7.0.29
+## Custom engine features
 
-- **Refined floating panels:** Settings and Darkelf Inspector now use a cleaner, unified black rounded-panel design. Removed the redundant outer glass-like layer and excess inset spacing for a more consistent macOS appearance.
-- **Redesigned Bookmarks panel:** the Bookmarks manager now uses a matching frameless floating panel instead of the previous traditional dialog-style window, while preserving existing bookmark-management functionality.
-- **Improved application shutdown:** corrected red-button closing behavior so the browser exits completely instead of leaving the application running in the macOS Dock.
-- **Cleaner WebEngine shutdown:** refined tab and WebEngine cleanup to prevent the browser from creating a replacement homepage tab while the application is closing.
-- **Faster visual window closing:** improved the shutdown sequence so the main browser window hides before remaining cleanup operations finish, reducing the appearance of a delayed close.
-- **Improved DMG presentation:** refined native macOS release packaging to support a custom mounted-volume icon instead of the generic disk-image icon.
-- **More reliable release builds:** strengthened Nuitka module inclusion and build validation to prevent missing browser-module errors in packaged applications.
-- **Release verification:** maintained Developer ID signing, hardened runtime, Apple notarization, stapling and SHA-256 checksum verification for the native macOS distribution.
+The Darkelf patch-kit work covers macOS Touch ID / platform WebAuthn, iCloud/WebAuthn integration, native WebGL changes, and proprietary-codec build configuration including H.264-related support. The checked-in **6.11.2** build script disables WebRTC. These settings must be verified separately for each **6.12.0** binary; codec enablement does not imply DRM support.
 
-### Previous 7.0.28 improvements retained
+## Repository contents
 
-- **Refined macOS window appearance:** improved rounded-corner rendering on startup, with consistent corner handling during window resizing, restoration and fullscreen transitions.
-- **Improved window dragging:** refined the frameless title-bar movement implementation to avoid conflicting native and manual drag operations and reduce macOS window-management warnings.
-- **Navigation and tab cursor fixes:** corrected unwanted resize-cursor behavior over browser navigation buttons and the tab bar.
-- **Faster window closing:** refined shutdown handling to make the browser window disappear promptly while preserving its cleanup process.
-- **Redesigned browsing-data confirmation:** the Nuke/Wipe confirmation uses a black rounded panel consistent with Darkelf's native macOS interface. The underlying browsing-data cleanup behavior remains unchanged.
-- **Code quality:** removed an unused import from the browser module to satisfy Ruff's F401 lint check.
+| Path | Purpose |
+| --- | --- |
+| `patches/` | Touch ID, iCloud/WebAuthn, and native WebGL patches for the documented 6.11.2 line |
+| `apply-patch.sh` | Apply the documented patch series |
+| `build-darkelf-qtwebengine.sh` | Build the documented QtWebEngine 6.11.2 line |
+| `darkelf-webauthn.entitlements.plist` | macOS signing entitlement reference |
+| `verify-darkelf-webauthn.sh` | WebAuthn verification |
+| `BUILDING.md`, `QT_SOURCE.md` | Build and corresponding-source details |
+| `QT_RELINKING.md` | LGPL library replacement guidance |
+| `LICENSE.md`, `THIRD_PARTY_NOTICES.md` | Licensing and third-party notices |
 
-### Previous 7.0.27 improvements retained
+## Build documentation
 
-- **Native-looking black macOS window:** a frameless Qt main window replaces the gray system title bar with custom red, yellow and green traffic-light controls. The browser retains its existing toolbar and tabs.
-- **Window arrangements:** click the green button to toggle fullscreen, or hover for approximately 1.8 seconds to open a dark rounded arrangement panel. Position the current Shadow window in the left or right half, any of three columns, or one of four screen quarters. Maximizing/restoring is also available. This does not automatically tile other applications.
-- **Floating panels:** Settings and Darkelf Inspector use separate black rounded panels instead of traditional dialog-style windows.
-- **Refined Settings:** Appearance layouts fit the floating panel, and About uses the available width more effectively.
-- **Accent-aware controls:** the arrangement panel reflects the selected browser accent, with custom-painted traffic lights and a delayed hover menu to prevent accidental opening.
+The checked-in scripts and patches document **QtWebEngine 6.11.2**. Do **not** apply them to 6.12.0 without a separately validated port. For the documented 6.11.2 build:
 
-### Earlier 7.x improvements retained
-
-- **Faster filter startup:** cached list downloads and merged subscriptions, direct matching for simple rules, and regex compilation for complex rules. Local filter startup fell from approximately 38 seconds to 6 seconds with about 417,000 network rules; timings vary by system and cache state.
-- **CNN playback fix:** unsupported cookie-modification rules are skipped instead of blocking requests. Scriptlet and other unsupported page-action rules no longer become network blockers. CNN10 playback was verified in developer testing.
-- **Independent Darkelf site boundaries:** embedded rules replace the copied Public Suffix List, with no separate `.dat` file or suffix download. Coverage is curated rather than worldwide; unknown namespaces use exact-host comparison and can cause extra blocking between related subdomains. Unlisted shared-hosting boundaries remain a coverage gap.
-- **Browser usability:** video fullscreen hides browser controls and restores them on exit; delayed keyboard-filter installation checks for deleted Qt views.
-- **Quieter operation:** repeated canvas messages are reduced and automatic terminal threat reports are removed. Optional diagnostics expose website JavaScript warnings/errors and matched network blockers.
-
-## Installation
-
-### Python / PyPI
-
-Requires Python 3.11 or newer.
-
-```bash
-pip install --upgrade darkelf-shadow
-darkelf-shadow
+```sh
+./apply-patch.sh "$HOME/Desktop/qtwebengine-everywhere-src-6.11.2"
+export QT_PREFIX="/path/to/Qt/6.11.2/macos"
+./build-darkelf-qtwebengine.sh
 ```
 
-### Native macOS ARM64
+The patch-kit build script does not create or notarize a Darkelf Shadow DMG. The 7.0.30 macOS release workflow is separate. A reproducible 6.12.0 patch series and exact corresponding-source manifest should be published before treating this repository as complete 6.12.0 build instructions.
 
-Download the DMG and matching checksum from [GitHub Releases](https://github.com/Darkelf-Labs/Darkelf-Shadow-CE/releases).
+## WebAuthn and licensing
 
-The native release workflow includes Developer ID signing, hardened runtime, Apple notarization and stapling. Verify the published build before installation.
+The macOS integration uses the Keychain access group `C7352X2Z2S.com.darkelfbrowser.shadow`; signed entitlements must match the compiled configuration. Verify real passkey registration and authentication, not just API detection.
 
-| Distribution | Engine and session model |
-|---|---|
-| Python / PyPI | Platform PySide6 / Qt WebEngine; off-the-record profile. The custom macOS engine is not included. |
-| macOS ARM64 DMG | Custom Darkelf Qt WebEngine 6.11.2; named profile for native authentication, memory HTTP cache and nonpersistent cookies. |
+Darkelf's original contributions are described under LGPL-3.0 in [LICENSE.md](LICENSE.md). Qt, Chromium, FFmpeg, and other dependencies retain their respective licenses; see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md), [QT_SOURCE.md](QT_SOURCE.md), and [QT_RELINKING.md](QT_RELINKING.md). H.264 codec support does not grant patent rights.
 
-The DMG's named profile is **not off the record**. Native authentication configuration and credentials can persist separately from browsing-session cookies. Downloads, filter caches and other saved files can also remain on disk.
-
-## Privacy and filtering
-
-- Indexed filtering using EasyList, EasyPrivacy and uBlock-derived sources, plus declarative tracker-host checks and scoped compatibility exceptions.
-- URL tracking-parameter cleanup and compatibility-aware cosmetic filtering.
-- Local MiniAI threat scoring, fingerprint-event monitoring and response modes, without a cloud AI dependency.
-- Canvas, WebGL, audio and other fingerprint mitigations. The custom DMG engine includes native WebGL modifications and disabled WebRTC; engine-specific patches do not transfer through standard PyPI dependencies.
-
-The filter engine supports a subset of upstream rule syntax. Unsupported actions are skipped rather than implemented as request blockers.
-
-### Smart Canvas
-
-| Mode | Behavior |
-|---|---|
-| **BLOCKED** | Canvas readback is disabled. |
-| **PROTECTED** | Readback uses Darkelf's domain-sensitive noise. |
-| **TRUSTED** | Native readback is permitted for trusted compatibility cases. |
-
-Supported human-verification flows can receive an automatic, temporary session trust grant to reduce verification loops. Closing Darkelf clears that grant.
-
-### Authentication and media
-
-The custom macOS engine includes native WebAuthn integration and H.264/AVC support. Touch ID/passkey availability depends on the signed app's keychain access group, provisioning, platform and website compatibility.
-
-Version 7.0.29 focuses on browser interface, application shutdown and native distribution improvements. It does not introduce additional authentication-engine changes.
-
-H.264 support does not supply DRM support. Protected streams may require a compatible DRM module; Widevine is not bundled with Darkelf.
-
-## Optional diagnostics
-
-Normal launches keep routine diagnostics quiet. To investigate website failures:
-
-```bash
-DARKELF_DIAGNOSTICS=1 darkelf-shadow
-```
-
-For a source checkout:
-
-```bash
-DARKELF_DIAGNOSTICS=1 python3.11 main.py
-```
-
-This prints website JavaScript warnings/errors and blocked requests with their matching rules. Launch without the variable to return to quiet operation.
-
-## Verify the macOS download
-
-Place the DMG and checksum in the same directory, then run:
-
-```bash
-shasum -a 256 -c Darkelf-Shadow-7.0.29.dmg.sha256
-```
-
-Expected result:
-
-```text
-Darkelf-Shadow-7.0.29.dmg: OK
-```
-
-The checksum verifies that the downloaded DMG matches the published checksum file. It does not independently establish the identity or trustworthiness of the publisher.
-
-## License and scope
-
-Darkelf Shadow is licensed under **LGPL-3.0-or-later**. The native app packages notices at:
-
-- `Darkelf Shadow.app/Contents/Resources/LICENSE`
-- `Darkelf Shadow.app/Contents/Resources/THIRD_PARTY_NOTICES.txt`
-
-Bundled Qt, Chromium, FFmpeg and other components retain their respective licensing requirements.
-
-Provided **AS IS**, without warranty. Darkelf does not guarantee anonymity, zero disk traces or protection against every threat, and does not replace operating-system security.
-
-## Author and acknowledgments
-
-**Dr. Kevin Moore · Darkelf Project — Shadow Edition · 2025–2026**
-
-Thanks to the **Mecha Comet Team**.
-
+The standard cross-platform PyPI distribution uses stock PySide6/QtWebEngine packages rather than this custom macOS framework.
