@@ -1,50 +1,109 @@
-# Darkelf QtWebEngine 6.12.0 — macOS Patch Kit
+# 🕶️ Darkelf Shadow CE
 
-Custom **QtWebEngine 6.12.0 ARM64** integration for **Darkelf Shadow 7.0.30**, a native macOS privacy browser.
+**Version 7.1.0 | macOS ARM64 | Qt 6.12 | Chromium Engine**
 
-## What's new in 7.0.30
+Darkelf Shadow CE is a privacy-focused desktop web browser for macOS, developed by **Darkelf Labs** and powered by PySide6 and a customized QtWebEngine/Chromium architecture.
 
-- **Qt / PySide6 6.12.0** with a custom **QtWebEngine 6.12.0** framework for Apple Silicon.
-- **Python 3.14.8** application runtime, packaged with **Nuitka 4.1.3**.
-- Improved splash-to-homepage transition, eliminating the observed black-screen startup delay.
-- Native macOS Developer ID signing, Touch ID/passkey entitlements, and Apple notarization workflow.
+Designed for users who value privacy, control, and native desktop functionality, Darkelf Shadow combines Chromium web compatibility with browser-level privacy defenses and macOS integration.
 
-## Darkelf engine integration
+## ✨ Features
 
-Darkelf's macOS engine work includes:
+### 🛡️ Privacy & Tracking Protection
 
-- Touch ID and platform WebAuthn/passkey integration.
-- iCloud/WebAuthn integration changes.
-- Native WebGL modifications.
-- Custom media-codec build configuration, including H.264-related support.
+- Integrated content-blocking architecture.
+- Browser fingerprinting resistance.
+- Canvas and WebGL privacy protections.
+- WebRTC restrictions designed to reduce network information exposure.
+- Privacy-oriented Chromium runtime configuration.
+- Controls intended to reduce unnecessary browser tracking.
 
-**Note:** Codec support does not imply DRM support. WebRTC and other compile-time settings should be confirmed against the distributed 6.12.0 binary.
+### 🌐 Chromium-Based Web Engine
 
-## Repository files
+- Customized QtWebEngine 6.12 integration.
+- Chromium-powered website rendering.
+- JavaScript and modern web application support.
+- Hardware-accelerated rendering where supported.
+- Support for proprietary media codecs in the custom engine build.
+- Native QtWebEngine resource and subprocess integration.
 
-| Path | Purpose |
-| --- | --- |
-| `patches/` | Darkelf engine patch sources |
-| `apply-patch.sh` | Patch application helper |
-| `build-darkelf-qtwebengine.sh` | Custom QtWebEngine build helper |
-| `darkelf-webauthn.entitlements.plist` | macOS signing entitlement reference |
-| `verify-darkelf-webauthn.sh` | WebAuthn verification helper |
-| `BUILDING.md`, `QT_SOURCE.md` | Build and corresponding-source documentation |
-| `QT_RELINKING.md` | LGPL library replacement guidance |
-| `LICENSE.md`, `THIRD_PARTY_NOTICES.md` | Licensing and third-party notices |
+### 🍎 Native macOS Integration
 
-## Building
+- Native macOS application bundle.
+- Apple Silicon ARM64 support.
+- Developer ID application signing.
+- Hardened Runtime configuration.
+- Apple notarization and distribution packaging.
+- Native window management and fullscreen integration.
 
-The **7.0.30 macOS browser release uses QtWebEngine 6.12.0**. Build and patch instructions must target the matching 6.12.0 source tree and Qt installation. Verify that the checked-in scripts and patches have been ported to 6.12.0 before running them; do not use 6.11.2-specific commands against 6.12.0 source.
+### 🔐 Authentication & Web Compatibility
 
-The engine build and the Darkelf Shadow application-signing/notarization workflow are separate processes. Publish the exact 6.12.0 source revision, applied patches, build configuration, and corresponding-source information for reproducible distribution.
+- WebAuthn integration.
+- macOS Touch ID authenticator support through the customized QtWebEngine implementation.
+- Support for compatible passkey authentication workflows.
+- Modern HTTPS and browser authentication capabilities.
 
-## Security and licensing
+Authentication compatibility depends on the website, macOS configuration, and authenticator support.
 
-macOS WebAuthn integration uses the Keychain access group `C7352X2Z2S.com.darkelfbrowser.shadow`. Signed entitlements must match the compiled application. Verify actual passkey registration and authentication.
+## 🚀 What's New in 7.1.0
 
-Darkelf's original contributions are described under LGPL-3.0 in [LICENSE.md](LICENSE.md). Qt, Chromium, FFmpeg, and other components retain their applicable licenses. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md), [QT_SOURCE.md](QT_SOURCE.md), and [QT_RELINKING.md](QT_RELINKING.md). H.264 support does not grant patent rights.
+Darkelf Shadow 7.1.0 focuses on improvements to macOS runtime integration, browser subprocess isolation, release validation, and packaging reliability.
 
-The standard cross-platform PyPI edition uses stock PySide6/QtWebEngine packages; this repository documents the custom macOS engine integration.
+Highlights include:
 
-**Previous engine:** Darkelf Shadow 7.0.29 used QtWebEngine 6.11.2.
+- Refined QtWebEngine renderer process initialization.
+- Updated Nuitka integration for macOS framework packaging.
+- Improved runtime security configuration and validation.
+- Continued support for the custom QtWebEngine 6.12 framework.
+- Maintained WebAuthn and Touch ID integration.
+- Improved release verification procedures.
+
+## 📦 Installation
+
+Download the latest release from the project's GitHub Releases page.
+
+1. Download the Darkelf Shadow DMG.
+2. Open the disk image.
+3. Drag Darkelf Shadow into Applications.
+4. Launch the application from Applications.
+
+**Platform:** macOS on Apple Silicon (ARM64).
+
+## 🔧 Architecture
+
+Darkelf Shadow combines several components:
+
+| Component | Technology |
+|---|---|
+| Application | Python / PySide6 |
+| Browser engine | Customized QtWebEngine / Chromium |
+| Desktop framework | Qt 6.12 |
+| Compilation and packaging | Nuitka |
+| Platform | macOS ARM64 |
+| Distribution | Developer ID signed and Apple notarized |
+
+The customized engine and application-level privacy defenses are maintained as part of the Darkelf Shadow development process.
+
+## 🔒 Security
+
+Darkelf Shadow uses multiple security and privacy mechanisms, including macOS Hardened Runtime, application signing, QtWebEngine's Chromium security architecture, and browser-level content protections.
+
+No browser can guarantee complete anonymity, immunity from malicious websites, or protection from every vulnerability.
+
+Users should keep Darkelf Shadow and macOS updated and exercise appropriate caution when browsing unfamiliar websites.
+
+## 📄 Licensing & Third-Party Software
+
+Darkelf Shadow includes or depends on third-party open-source components, including Qt, QtWebEngine, Chromium, PySide6, and supporting libraries.
+
+Refer to the repository's licensing and third-party notice files for applicable terms and source information.
+
+## 🔗 Project Links
+
+- **GitHub Organization:** https://github.com/Darkelf-Labs
+- **Darkelf Shadow CE:** https://github.com/Darkelf-Labs/Darkelf-Shadow-CE
+
+---
+
+**Developed by Darkelf Labs.**
+
+*Privacy-focused browsing, powered by a customized Chromium architecture.*
