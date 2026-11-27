@@ -26,7 +26,7 @@ Darkelf Shadow combines several components:
 |---|---|
 | Application | Python / PySide6 |
 | Browser engine | Customized QtWebEngine / Chromium |
-| Desktop framework | Qt 6.12 |
+| Desktop framework | Qt 6.12.1 |
 | Compilation and packaging | Nuitka |
 | Platform | macOS ARM64 |
 | Distribution | Developer ID signed and Apple notarized |
