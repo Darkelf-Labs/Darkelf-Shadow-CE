@@ -2,7 +2,7 @@
 
 Darkelf Shadow CE is a privacy-focused macOS browser built with Python, PySide6, and a customized QtWebEngine/Chromium framework.
 
-- Continued support for the custom QtWebEngine 6.12 framework.
+- Continued support for the custom QtWebEngine 6.12.1 framework.
 - Maintained native WebAuthn/FIDO2 and macOS Touch ID integration.
 - Support for locally registered passkeys using macOS Keychain.
 - Improved release verification procedures.
